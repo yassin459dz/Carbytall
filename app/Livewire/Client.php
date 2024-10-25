@@ -10,6 +10,7 @@ class Client extends Component
 {
 
     public $clients;
+
     public function mount(){
 
         $this->clients = clients::all();
@@ -20,13 +21,6 @@ class Client extends Component
         return view('livewire.clients.client');
     }
 
-
-    public function delete(clients $clients){
-        $clients->delete();
-        session()->flash('status-delete', 'Client Deleted'); // Change this to 'delete' for alert color differentiation
-        return $this->redirect('/client', navigate:true);
-
-    }
 
     #[On('refresh-clients')]
     public function refreshClient(){

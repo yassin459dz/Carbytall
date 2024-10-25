@@ -15,6 +15,9 @@ class CreateEditClient extends Component
     #[Rule('required')]
     public $name;
 
+    #[Rule('required')]
+    public $phone;
+
 
 
     public function render()
@@ -28,11 +31,14 @@ class CreateEditClient extends Component
         $this->dispatch('refresh-clients');
         session()->flash('status', 'Client Created');
 
-        // session()->flash('status-created', 'Client Created');
+        session()->flash('status-created', 'Client Created');
 
         $this->close();// ADD THIS TO REFRESH PAGE WITH PHP
 
-        // return $this->redirect('/client', navigate:true);
+        $this->dispatch('browser', 'close-modal');
+
+        return $this->redirect('/client', navigate:true);
+
 
     }
 
@@ -48,6 +54,8 @@ class CreateEditClient extends Component
         $this->formtitle='Edit Client';
         $this->client=clients::findOrFail($id);
         $this->name=$this->client->name;
+        $this->phone=$this->client->phone;
+
     }
 
     public function update(){
@@ -55,13 +63,21 @@ class CreateEditClient extends Component
         $p=clients::findOrFail($this->client->id);
         $p->update($validated);
         $this->dispatch('refresh-clients');
-
-        // session()->flash('status-updated', value: 'Client Updated');
-        session()->flash('status', value: 'Client Updated');
-
-        $this->close();
-        // return $this->redirect('/client', navigate:true);
+        session()->flash('status-updated', value: 'Client Updated');
+        $this->dispatch('browser', 'close-modal');
 
     }
+
+    public function refreshPage()
+    {
+        // Any logic you want to run before refresh (optional)
+
+        // Redirect to the same route to refresh the page
+        return $this->redirect('/client', navigate:true);
+
+    }
+
+
+
 
 }
