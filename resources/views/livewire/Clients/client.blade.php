@@ -1,6 +1,11 @@
+<x-slot name="header">
+    <h2 class="text-xl font-semibold leading-tight text-gray-800">
+        {{ __('Clients') }}
+    </h2>
+</x-slot>
 <div class="py-12">
     <!-- Session Status Alert -->
-     @if (session('status-created'))
+    @if (session('status-created'))
     <div id="alert-1" class="flex items-center p-4 mb-4 text-blue-800 rounded-lg bg-blue-50 dark:bg-gray-800 dark:text-blue-400" role="alert">
         <svg class="flex-shrink-0 w-4 h-4" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
             <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z"/>
@@ -46,7 +51,12 @@
             <livewire:create-edit-client />
         </div>
     </div>
-
+<!-- Search Form -->
+    <div class="relative flex max-w-md mx-auto mb-8">
+        <input wire:modal.live="search" type="search" id="location-search"
+            class="block w-96 pl-4 pr-12 py-2.5 text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500"
+            placeholder="Search Client or Phone N°" required />
+    </div>
     <!-- Client table -->
     <div class="mx-auto max-w-7xl sm:px-6 lg:px-8">
         <div class="overflow-hidden bg-white shadow-sm sm:rounded-lg">
@@ -58,7 +68,6 @@
                                 <th scope="col" class="px-6 py-3">ID</th>
                                 <th scope="col" class="px-6 py-3">Client Name</th>
                                 <th scope="col" class="px-6 py-3">Phone N°</th>
-
                                 <th scope="col" class="px-6 py-3">Action</th>
                             </tr>
                         </thead>
@@ -71,7 +80,14 @@
 
                                 <td wire:ignore class="px-6 py-4">
                                     <!-- Modal toggle -->
-                                    <button data-modal-toggle="modalEl" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">View</button>
+                                    <button
+                                    wire:dispatch="showClient"
+                                    wire:dispatch-data="{ name: '{{ $client->name }}', phone: '{{ $client->phone }}' }"
+                                    data-modal-toggle="modalEl"
+                                    class="font-medium text-blue-600 dark:text-blue-500 hover:underline">
+                                    View
+                                    </button>
+
                                     <livewire:view-client />
                                     <!-- Trigger Edit Modal -->
                                     <button @click="$dispatch('edit-mode', { id: {{ $client->id }} })" data-modal-target="authentication-modal" data-modal-toggle="authentication-modal" class="font-medium text-green-600 dark:text-green-500 hover:underline">Edit</button>
@@ -85,16 +101,57 @@
                             @endforeach
                         </tbody>
                     </table>
+                    <!-- Pagination Links -->
 
+                    <div>
+                        <div  class="flex justify-center">
+
+                            <nav aria-label="Page navigation example">
+
+                                <ul class="inline-flex justify-center p-4 pb-2 -space-x-px">
+
+                                    <button class="flex items-center justify-center h-8 px-3 leading-tight text-gray-500 bg-white border border-gray-300 rounded-l-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">
+                                        <svg class="w-3.5 h-3.5  rtl:rotate-180" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 10">
+                                          <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 5H1m0 0 4 4M1 5l4-4"/>
+                                        </svg>
+                                    </button>
+                                    <li>
+                                        <a href="#" class="flex items-center justify-center h-8 px-3 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">1</a>
+                                    </li>
+                                    <li>
+                                        <a href="#" class="flex items-center justify-center h-8 px-3 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">2</a>
+                                    </li>
+                                    <li>
+                                        <a href="#"  class="flex items-center justify-center h-8 px-3 text-blue-600 border border-gray-300 bg-blue-50 hover:bg-blue-100 hover:text-blue-700 dark:border-gray-700 dark:bg-gray-700 dark:text-white">3</a>
+                                    </li>
+                                    <li>
+                                        <a href="#" class="flex items-center justify-center h-8 px-3 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">4</a>
+                                    </li>
+                                    <li>
+                                        <a href="#" class="flex items-center justify-center h-8 px-3 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">5</a>
+                                    </li>
+                                    <button class="flex items-center justify-center h-8 px-3 leading-tight text-gray-500 bg-white border border-gray-300 rounded-r-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">
+                                        <svg class="w-3.5 h-3.5  rtl:rotate-180" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 10">
+                                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M1 5h12m0 0L9 1m4 4L9 9"/>
+                                      </svg>
+                                    </button>
+                                </ul>
+                            </nav>
+
+                        </div>
+                        <div class="flex justify-center ">
+                            <span class="text-sm text-gray-700 dark:text-gray-400">
+                                Showing <span class="font-semibold text-gray-900 dark:text-white">1</span> to <span class="font-semibold text-gray-900 dark:text-white">10</span> of <span class="font-semibold text-gray-900 dark:text-white">100</span> Entries
+                            </span>
+                        </div>
+                    </div>
                     <!-- If there are no clients -->
-                    @if ($clients->isEmpty())
+                     @if ($clients->isEmpty())
                         <p class="p-4 text-gray-500">No clients available.</p>
                     @endif
                 </div>
             </div>
         </div>
     </div>
-
-
 </div>
 

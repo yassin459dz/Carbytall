@@ -10,12 +10,8 @@ class cars extends Model
         'brand_id' ,
         'model' ,
     ];
-      public function cars() {
-          return $this->hasMany(Cars::class);
-      }
-
-    // public function brand()
-    // {
-    //     return $this->belongsTo(Brand::class);
-    // }
+    public function brand()
+    {
+        return $this->belongsTo(brands::class); // Singular "brand" for the method name
+    }
 }

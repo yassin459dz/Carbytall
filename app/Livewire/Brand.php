@@ -3,13 +3,17 @@
 namespace App\Livewire;
 use App\Models\brands;
 use Livewire\Component;
+use Livewire\Attributes\On;
+use Livewire\WithPagination;
 
 class Brand extends Component
 {
-    public $brand='';//for link with html text input
-    public $allbrands=[];//for link with html table view
+    public $brands;
+    public $brand;
+    public $image;
+    public $search='';
 
-    public $editform=false;
+    use WithPagination;
 
 
     public function render()
@@ -17,37 +21,20 @@ class Brand extends Component
         return view('livewire.brands.brand');
     }
 
+
     public function mount(){
-         $this->allbrands=brands::all();
+
+    $this->brands = brands::all();
     }
-    public function save(){
-        $validated=$this->validate([
-            'brand'=>'required|max:255',
-        ]);
 
-        brands::create($validated);
-        // Flash message
-        session()->flash('message', 'Brand created successfully!');
-          $this->reset();
-        // return redirect()->to('/brand'); // Change this to your actual route
-        return $this->redirect('/brand', );
 
+
+    #[On('refresh-brands')]
+    public function refreshClient(){
+     $this->brands=brands::all();
+    // $this->resetPage();
     }
-     public function clearform()
-     {
-
-         $this->brand = '';
-
-     }
 
 
-    //  #[On('edit-mode')]
-    //  public function edit($id){
-    //      $this->editform=true;
-    //     //  $this->formtitle='Edit Product';
-    //     //  $this->product=Product::findOrFail($id);
-    //     //  $this->title=$this->product->title;
-    //     //  $this->description=$this->product->description;
-    //     //  $this->price=$this->product->price;
-    //  }
+
 }

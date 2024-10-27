@@ -1,29 +1,54 @@
 <?php
 
 namespace App\Livewire;
-
 use Livewire\Component;
 use App\Models\clients;
 use Livewire\Attributes\On;
-
+use Livewire\WithPagination;
 class Client extends Component
 {
 
     public $clients;
+    public $client;
 
-    public function mount(){
+    public $name;
+    public $phone;
 
-        $this->clients = clients::all();
+    public $search='';
 
-    }
+    use WithPagination;
+
     public function render()
     {
-        return view('livewire.clients.client');
+        $this->clients=clients::all();
+
+        return view('livewire.clients.client', [
+            'clients'=> clients::latest()->where('name', 'phone', "%{$this->search}%")
+        ]);
+           if(! $this->search){
+               $this->clients=clients::all();
+           }else{
+               $this->clients=clients::where('name','like','%' .$this->search.'%')->get();
+           }
+        // return view('livewire.clients.client');
     }
+
+    public function search()
+    {
+        return "test";
+    }
+
+    //    public function mount(){
+
+    //    $this->clients = clients::all();
+    //    }
+
 
 
     #[On('refresh-clients')]
     public function refreshClient(){
-        $this->clients=clients::all();
+         $this->clients=clients::all();
+        // $this->resetPage();
     }
+
 }

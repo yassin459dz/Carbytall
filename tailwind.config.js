@@ -14,7 +14,6 @@ export default {
 
     theme: {
         extend: {
-            // darkMode: 'class', // or 'media' for automatic dark mode based on system preferences
 
             fontFamily: {
                 sans: ['Figtree', ...defaultTheme.fontFamily.sans],

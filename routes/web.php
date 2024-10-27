@@ -25,9 +25,9 @@ Route::view('profile', 'profile')
     ->middleware(['auth', 'verified'])
     ->name('brand');
 
-    Route::get('brand/{allbrand}/edit-brand', EditBrand::class)
-    ->middleware(['auth', 'verified'])
-    ->name('edit-brand');
+    // Route::get('brand/{allbrand}/edit-brand', EditBrand::class)
+    // ->middleware(['auth', 'verified'])
+    // ->name('edit-brand');
 
      Route::get('/client', Client::class)
      ->middleware(['auth', 'verified'])

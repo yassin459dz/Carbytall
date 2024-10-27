@@ -12,11 +12,19 @@ class CreateEditClient extends Component
     public $client;
     public $formtitle='Create Client';
     public $editform=false;
-    #[Rule('required')]
-    public $name;
 
     #[Rule('required')]
+    public $name;
+    #[Rule('required')]
     public $phone;
+    #[Rule('nullable')]
+
+    public $phone2;
+    public $address;
+    public $remark;
+    public $sold;
+
+
 
 
 
@@ -29,14 +37,10 @@ class CreateEditClient extends Component
         $validated=$this->validate();
         clients::create($validated);
         $this->dispatch('refresh-clients');
-        session()->flash('status', 'Client Created');
-
-        session()->flash('status-created', 'Client Created');
-
+        // session()->flash('status', 'Client Created');
+        // session()->flash('status-created', 'Client Created');
         $this->close();// ADD THIS TO REFRESH PAGE WITH PHP
-
         $this->dispatch('browser', 'close-modal');
-
         return $this->redirect('/client', navigate:true);
 
 
@@ -55,6 +59,10 @@ class CreateEditClient extends Component
         $this->client=clients::findOrFail($id);
         $this->name=$this->client->name;
         $this->phone=$this->client->phone;
+        $this->phone2=$this->client->phone2;
+        $this->address=$this->client->address;
+        $this->remark=$this->client->remark;
+        $this->sold=$this->client->sold;
 
     }
 
@@ -76,7 +84,6 @@ class CreateEditClient extends Component
         return $this->redirect('/client', navigate:true);
 
     }
-
 
 
 

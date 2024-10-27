@@ -8,69 +8,69 @@ use Livewire\Attributes\Rule;
 
 class CreateEditBrand extends Component
 {
-    public $brand='';
+    public $formtitle='Create Brand';
+    public $editform=false;
+
+    public $brandss;
+
+    #[Rule('required')]
+    public $brand;
+
+    #[Rule('nullable')]
+    public $image;
+
+
 
     public function render()
     {
         return view('livewire.brands.create-edit-brand');
     }
 
-    public function save()
-    {
-        // Validate input
-        $validated = $this->validate([
-            'brand' => 'required|max:255',
-        ]);
+    public function save (){
+        $validated=$this->validate();
+        brands::create($validated);
+        $this->dispatch('refresh-clients');
+        // session()->flash('status', 'Client Created');
+        // session()->flash('status-created', 'Client Created');
+        $this->close();// ADD THIS TO REFRESH PAGE WITH PHP
+        $this->dispatch('browser', 'close-modal');
+        return $this->redirect('/brand', navigate:true);
 
-        // Save the brand
-        Brand::create(['name' => $this->brand]);
 
-        // Flash message for success
-        session()->flash('message', 'Brand created successfully!');
-
-        // Reset the form
-        $this->reset('brand');
     }
-    // public function save(){
-    //     $validated=$this->validate();
-    //     brands::create($validated);
-    //     // $this->dispatch('refresh-brands');
-    //     session()->flash('status','Brand created');
-    //     $this->reset();
-    // }
-    // public function save(){
-    //          $validated=$this->validate([
-    //              'brandtitle'=>'required|max:255',
-    //          ]);
-    //          brands::create($validated);
-    //          // Flash message
-    //          session()->flash('message', 'Brand created successfully!');
-    //            $this->reset();
-    //      }
 
+    #[On('reset-modal')]
+    public function close(){
+        $this->reset();
+    }
 
-    //  public function save(){
-    //      $validated=$this->validate([
-    //          'brand'=>'required|max:255',
-    //      ]);
+    #[On('edit-mode')]
+    public function edit($id){
+        // dd($id);
+        $this->editform=true;
+        $this->formtitle='Edit Client';
+        $this->brandss=brands::findOrFail($id);
+        $this->brand=$this->brandss->brand;
+        $this->image=$this->brandss->image;
 
-    //      brands::create($validated);
-    //      // Flash message
-    //      session()->flash('message', 'Brand created successfully!');
-    //        $this->reset();
-    //     // return redirect()->to('/brand'); // Change this to your actual route
-    //     return $this->redirect('/brand', );
+    }
 
-    // }
+    public function update(){
+        $validated=$this->validate();
+        $p=brands::findOrFail($this->brandss->id);
+        $p->update($validated);
+        $this->dispatch('refresh-brands');
+        session()->flash('status-updated', value: 'Brand Updated');
+        $this->dispatch('browser', 'close-modal');
 
-    // //  public function clearform()
-    // //  {
+    }
 
-    // //      $this->brand = '';
+    public function refreshPage()
+    {
+        // Any logic you want to run before refresh (optional)
 
-    // //  }
-    // #[On('reset-modal')]
-    // public function close(){
-    //     $this->reset();
-    // }
+        // Redirect to the same route to refresh the page
+        return $this->redirect('/brand', navigate:true);
+
+    }
 }
