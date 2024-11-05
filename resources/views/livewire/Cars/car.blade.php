@@ -51,6 +51,8 @@
             <livewire:create-car />
         </div>
     </div>
+    <button "('brand-mode')" class="font-medium text-green-600 dark:text-green-500 hover:underline">Edit</button>
+
 <!-- Search Form -->
     <div class="relative flex max-w-md mx-auto mb-8">
         <input wire:modal.live="search" type="search" id="location-search"
@@ -108,9 +110,9 @@
                 </div>
 
             </div>
-
         </div>
-                                                                    <!-- Pagination Links -->
+        {{$cars->links()}}
+        <!-- Pagination Links -->
 
                                                                     <div>
                                                                         <div  class="flex justify-center">

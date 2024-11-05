@@ -15,6 +15,9 @@ class CreateCar extends Component
     public $allbrands;
     public $formtitle = 'Create Car';
     public $editform = false;
+
+    public $brandform = false;
+
     public $carss;
 
     #[Rule('required')]
@@ -22,6 +25,13 @@ class CreateCar extends Component
 
     #[Rule('required')]
     public $model;
+
+    #[Rule('nullable')]
+    public $brand;  // Added property
+
+    #[Rule('nullable')]
+    public $image;
+
 
     public function mount()
     {
@@ -81,6 +91,25 @@ class CreateCar extends Component
         $this->model = $this->carss->model;
     }
 
+    #[On('brand-mode')]
+    public function addbrand()
+    {
+        $this->brandform = true;
+        $this->formtitle = 'Create Brand';
+
+    }
+
+    public function submit (){
+        $validated=$this->validate();
+        brands::create($validated);
+        // $this->dispatch('refresh-clients');
+        // session()->flash('status', 'Client Created');
+        // session()->flash('status-created', 'Client Created');
+        $this->close();// ADD THIS TO REFRESH PAGE WITH PHP
+        $this->dispatch('browser', 'close-modal');
+        return $this->redirect('/brand', navigate:true);
+    }
+
     public function update()
     {
         $validated = $this->validate();
@@ -89,5 +118,14 @@ class CreateCar extends Component
         $this->dispatch('refresh-cars');
         session()->flash('status-updated', 'Car Updated');
         $this->dispatch('browser', 'close-modal');
+    }
+
+    public function refreshPage()
+    {
+        // Any logic you want to run before refresh (optional)
+
+        // Redirect to the same route to refresh the page
+        return $this->redirect('/car', navigate:true);
+
     }
 }

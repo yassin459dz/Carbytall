@@ -22,14 +22,12 @@ class Client extends Component
     {
         $this->clients=clients::all();
 
-        return view('livewire.clients.client', [
-            'clients'=> clients::latest()->where('name', 'phone', "%{$this->search}%")
-        ]);
-           if(! $this->search){
-               $this->clients=clients::all();
-           }else{
-               $this->clients=clients::where('name','like','%' .$this->search.'%')->get();
-           }
+        return view('livewire.clients.client');
+        //    if(! $this->search){
+        //        $this->clients=clients::all();
+        //    }else{
+        //        $this->clients=clients::where('name','like','%' .$this->search.'%')->get();
+        //    }
         // return view('livewire.clients.client');
     }
 

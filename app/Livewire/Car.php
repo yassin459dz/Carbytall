@@ -9,24 +9,20 @@ use App\Models\cars;
 
 class Car extends Component
 {
-    public $cars;
+    use WithPagination;
 
     public $car;
 
     public function render()
     {
-        return view('livewire.cars.car');
-    }
-
-    public function mount(){
-        $this->cars = cars::all();
-
+        return view('livewire.cars.car', [
+            'cars' => cars::paginate(2)
+        ]);
     }
 
     #[On('refresh-cars')]
-    public function refreshClient(){
-     $this->cars=cars::all();
-    // $this->resetPage();
+    public function refreshCar()
+    {
+        $this->resetPage(); // This ensures pagination starts on the first page when refreshed
     }
-
 }

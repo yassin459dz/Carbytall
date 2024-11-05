@@ -35,8 +35,6 @@ class CreateEditBrand extends Component
         $this->close();// ADD THIS TO REFRESH PAGE WITH PHP
         $this->dispatch('browser', 'close-modal');
         return $this->redirect('/brand', navigate:true);
-
-
     }
 
     #[On('reset-modal')]
@@ -52,7 +50,6 @@ class CreateEditBrand extends Component
         $this->brandss=brands::findOrFail($id);
         $this->brand=$this->brandss->brand;
         $this->image=$this->brandss->image;
-
     }
 
     public function update(){
