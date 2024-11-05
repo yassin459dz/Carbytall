@@ -20,20 +20,19 @@ class CreateCar extends Component
 
     public $carss;
 
-    #[Rule('required')]
-    public $brand_id;  // Added property
+    // #[Rule('required')]
+     public $brand_id;  // Added property
 
-    #[Rule('required')]
-    public $model;
+    // #[Rule('required')]
+     public $model;
 
-    #[Rule('nullable')]
-    public $brand;  // Added property
+    // #[Rule('nullable')]
+     public $brand;  // Added property
 
-    #[Rule('nullable')]
+    // #[Rule('nullable')]
     public $image;
 
-
-    public function mount()
+    public function boot()
     {
         // $this->allbrands = cars::all();
         // $this->allbrands = cars::with('brand')->get(); // Use "brand" instead of "brands"
@@ -48,22 +47,17 @@ class CreateCar extends Component
 
     public function save()
     {
-        $validated = $this->validate();
-        // Cars::create($validated);  // brand_id will now be included in the save
-        // $this->dispatch('refresh-cars');
-        // $this->close();
-        // $this->dispatch('browser', 'close-modal');
-        // return $this->redirect('/car', navigate: true);
+    // Try To Validate With Array
+    $validated = $this->validate(
+        [
+            'brand_id' => 'required|exists:brands,id',
+            'model' => 'required|string|max:255',
+        ]);
+     cars::create([
+         'brand_id' => $this->brand_id,
+         'model' => $this->model,
 
-            // Validate the input data
-    // $validated = $this->validate([
-    //     'brand_id' => 'required|exists:brands,id',
-    //     'model' => 'required|string|max:255',
-    // ]);
-
-    // Create a new car with the validated data
-    $validated = $this->validate();
-    Cars::create($validated);
+    ]);
 
     // Clear form fields and dispatch events
     session()->flash('status-updated', 'Car created successfully!');
@@ -73,6 +67,7 @@ class CreateCar extends Component
     // Redirect or close modal if needed
     $this->dispatch('browser', 'close-modal');
     return $this->redirect('/car', navigate: true);
+
     }
 
     #[On('reset-modal')]
@@ -97,19 +92,38 @@ class CreateCar extends Component
         $this->brandform = true;
         $this->formtitle = 'Create Brand';
 
+
     }
+
 
     public function submit (){
-        $validated=$this->validate();
-        brands::create($validated);
-        // $this->dispatch('refresh-clients');
+        $validated = $this->validate(
+            [
+                'brand' => 'required|string|max:255',
+                'image' => 'required|string|max:255',
+            ]);
+            brands::create([
+             'brand' => $this->brand,
+             'image' => $this->image,
+
+        ]);
+        $this->brandform = false;
+        $this->fetchBrands(); // Call a method to refresh brands
+
+        //$this->reset();
+
+         //$this->dispatch('refresh-cars');
         // session()->flash('status', 'Client Created');
         // session()->flash('status-created', 'Client Created');
-        $this->close();// ADD THIS TO REFRESH PAGE WITH PHP
-        $this->dispatch('browser', 'close-modal');
-        return $this->redirect('/brand', navigate:true);
+        // $this->close();// ADD THIS TO REFRESH PAGE WITH PHP
+        //$this->dispatch('browser', 'close-modal');
     }
 
+    // Method to fetch all brands
+    public function fetchBrands()
+    {
+        $this->allbrands = brands::all(); // Assuming you're storing brands in this property
+    }
     public function update()
     {
         $validated = $this->validate();

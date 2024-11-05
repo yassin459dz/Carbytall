@@ -16,7 +16,7 @@ class Car extends Component
     public function render()
     {
         return view('livewire.cars.car', [
-            'cars' => cars::paginate(2)
+            'cars' => cars::paginate(100)
         ]);
     }
 

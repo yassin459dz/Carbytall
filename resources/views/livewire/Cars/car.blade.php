@@ -95,7 +95,7 @@
                                     <button data-modal-target="popup-modal-{{ $car->id }}" data-modal-toggle="popup-modal-{{ $car->id }}" class="font-medium text-red-600 dark:text-red-500 hover:underline">
                                     Delete
                                     </button>
-                                    <livewire:deletecar :carId="$car->id" />
+                                    {{-- <livewire:deletecar :carId="$car->id" /> --}}
                                 </td>
                             </tr>
                             @endforeach
