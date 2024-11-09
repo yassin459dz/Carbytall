@@ -80,12 +80,8 @@
 
                                 <td wire:ignore class="px-6 py-4">
                                     <!-- Modal toggle -->
-                                    <button
-                                    data-modal-toggle="modalEl"
-                                    class="font-medium text-blue-600 dark:text-blue-500 hover:underline">
-                                    View
-                                    </button>
-
+                                    <button @click="$dispatch ('view-mode', { id: {{ $brand->id }} })" data-modal-target="authentication-modalview" data-modal-toggle="authentication-modalview" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">View</button>
+                                    <livewire:viewbrand />
                                     {{-- <livewire:view-brand /> --}}
                                     <!-- Trigger Edit Modal -->
                                     <button @click="$dispatch('edit-mode', { id: {{ $brand->id }} })" data-modal-target="authentication-modal" data-modal-toggle="authentication-modal" class="font-medium text-green-600 dark:text-green-500 hover:underline">Edit</button>

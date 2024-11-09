@@ -35,11 +35,12 @@ class Client extends Component
     {
         return "test";
     }
+    // this for send data to edit page
 
-    //    public function mount(){
+        public function mount(){
 
-    //    $this->clients = clients::all();
-    //    }
+        $this->clients = clients::all();
+        }
 
 
 

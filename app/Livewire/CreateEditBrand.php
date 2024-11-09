@@ -46,7 +46,7 @@ class CreateEditBrand extends Component
     public function edit($id){
         // dd($id);
         $this->editform=true;
-        $this->formtitle='Edit Client';
+        $this->formtitle='Edit Brand';
         $this->brandss=brands::findOrFail($id);
         $this->brand=$this->brandss->brand;
         $this->image=$this->brandss->image;

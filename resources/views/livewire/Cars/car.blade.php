@@ -51,7 +51,6 @@
             <livewire:create-car />
         </div>
     </div>
-    <button "('brand-mode')" class="font-medium text-green-600 dark:text-green-500 hover:underline">Edit</button>
 
 <!-- Search Form -->
     <div class="relative flex max-w-md mx-auto mb-8">
@@ -68,7 +67,7 @@
                         <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                             <tr>
                                 <th scope="col" class="px-6 py-3">ID</th>
-                                <th scope="col" class="px-6 py-3">Car</th>
+                                <th scope="col" class="px-6 py-3">Brand</th>
                                 <th scope="col" class="px-6 py-3">Model</th>
                                 <th scope="col" class="px-6 py-3">Action</th>
                             </tr>
@@ -90,12 +89,12 @@
 
                                     {{-- <livewire:view-brand /> --}}
                                     <!-- Trigger Edit Modal -->
-                                    {{-- <button @click="$dispatch('edit-mode', { id: {{ $brand->id }} })" data-modal-target="authentication-modal" data-modal-toggle="authentication-modal" class="font-medium text-green-600 dark:text-green-500 hover:underline">Edit</button> --}}
+                                     <button @click="$dispatch('edit-mode', { id: {{ $car->id }} })" data-modal-target="authentication-modal" data-modal-toggle="authentication-modal" class="font-medium text-green-600 dark:text-green-500 hover:underline">Edit</button>
                                     <!-- Delete Button in Parent Blade File -->
                                     <button data-modal-target="popup-modal-{{ $car->id }}" data-modal-toggle="popup-modal-{{ $car->id }}" class="font-medium text-red-600 dark:text-red-500 hover:underline">
                                     Delete
                                     </button>
-                                    {{-- <livewire:deletecar :carId="$car->id" /> --}}
+                                     <livewire:deletecar :carId="$car->id" />
                                 </td>
                             </tr>
                             @endforeach

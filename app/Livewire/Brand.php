@@ -21,6 +21,7 @@ class Brand extends Component
         return view('livewire.brands.brand');
     }
 
+    // this for send data to edit page
 
     public function mount(){
 

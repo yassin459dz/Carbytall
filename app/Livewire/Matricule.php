@@ -5,29 +5,26 @@ namespace App\Livewire;
 use Livewire\Component;
 use Livewire\Attributes\On;
 use Livewire\WithPagination;
-use App\Models\cars;
+use App\Models\matricules;
 
-class Car extends Component
+class Matricule extends Component
 {
-    use WithPagination;
-
-    public $car;
+    public $matricules;
 
     public function render()
     {
-        return view('livewire.cars.car', [
-            'cars' => cars::paginate(100)
-        ]);
+        return view('livewire.matricule.matricule');
     }
-    // this for send data to edit page
+
     public function mount(){
 
-        $this->car = cars::all();
+        $this->matricules = matricules::all();
     }
 
-    #[On('refresh-cars')]
+    #[On('refresh-matricules')]
     public function refreshCar()
     {
         $this->resetPage(); // This ensures pagination starts on the first page when refreshed
     }
+
 }

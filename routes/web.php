@@ -6,6 +6,9 @@ use App\livewire\Car;
 use App\livewire\Brand;
 use App\livewire\EditBrand;
 use App\livewire\Client;
+use App\livewire\Matricule;
+use App\livewire\Facture;
+
 
 Route::view('/', 'welcome');
 
@@ -33,5 +36,12 @@ Route::view('profile', 'profile')
      ->middleware(['auth', 'verified'])
      ->name('client');
 
+     Route::get('/matricule', Matricule::class)
+     ->middleware(['auth', 'verified'])
+     ->name('matricule');
+
+     Route::get('/facture', facture::class)
+     ->middleware(['auth', 'verified'])
+     ->name('facture');
 
 require __DIR__.'/auth.php';

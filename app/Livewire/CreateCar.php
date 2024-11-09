@@ -26,6 +26,9 @@ class CreateCar extends Component
     // #[Rule('required')]
      public $model;
 
+     public $car_id;
+
+
     // #[Rule('nullable')]
      public $brand;  // Added property
 
@@ -81,9 +84,37 @@ class CreateCar extends Component
     {
         $this->editform = true;
         $this->formtitle = 'Edit Client';
-        $this->carss = Cars::findOrFail($id);
+        $this->carss = Cars::findOrFail($id); // Fetch the car data by ID
         $this->brand_id = $this->carss->brand_id;  // Set brand_id for edit
         $this->model = $this->carss->model;
+        $this->car_id = $id;  // Store the ID for use in the update
+
+    }
+
+    public function update()
+    {
+    // Validate the incoming request data
+        // Validate the incoming request data
+        $validatedData = $this->validate([
+            'brand_id' => 'required|exists:brands,id',
+            'model' => 'required|string|max:255',
+        ]);
+        // Validate input data (you can add more validation rules as needed)
+        $this->validate([
+            'brand_id' => 'required|integer',
+            'model' => 'required|string|max:255',
+        ]);
+        // Find the car entry by ID and update it with the new data
+        $car = Cars::findOrFail($this->car_id);
+        $car->brand_id = $this->brand_id;
+        $car->model = $this->model;
+        // Save the changes to the database
+        $car->save();
+        //  reset the form  after updating
+        $this->dispatch('refresh-cars');
+        //success message or perform other actions
+        session()->flash('status-updated', 'Car Updated');
+        $this->dispatch('browser', 'close-modal');
     }
 
     #[On('brand-mode')]
@@ -94,7 +125,13 @@ class CreateCar extends Component
 
 
     }
+    #[On('brand-mode')]
+    public function closebrand()
+    {
+        $this->brandform = false;
+        $this->formtitle = 'Create Car';
 
+    }
 
     public function submit (){
         $validated = $this->validate(
@@ -110,13 +147,6 @@ class CreateCar extends Component
         $this->brandform = false;
         $this->fetchBrands(); // Call a method to refresh brands
 
-        //$this->reset();
-
-         //$this->dispatch('refresh-cars');
-        // session()->flash('status', 'Client Created');
-        // session()->flash('status-created', 'Client Created');
-        // $this->close();// ADD THIS TO REFRESH PAGE WITH PHP
-        //$this->dispatch('browser', 'close-modal');
     }
 
     // Method to fetch all brands
@@ -124,15 +154,7 @@ class CreateCar extends Component
     {
         $this->allbrands = brands::all(); // Assuming you're storing brands in this property
     }
-    public function update()
-    {
-        $validated = $this->validate();
-        $p = Cars::findOrFail($this->carss->id);
-        $p->update($validated);
-        $this->dispatch('refresh-cars');
-        session()->flash('status-updated', 'Car Updated');
-        $this->dispatch('browser', 'close-modal');
-    }
+
 
     public function refreshPage()
     {
