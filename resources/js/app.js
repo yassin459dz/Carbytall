@@ -1,5 +1,6 @@
 import { initFlowbite } from "flowbite";
 import "./bootstrap";
+import 'preline'
 
 
 // import Alpine from "alpinejs";

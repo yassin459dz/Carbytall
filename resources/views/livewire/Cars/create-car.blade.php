@@ -63,14 +63,39 @@
                     class="text-white bg-blue-700 hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 font-medium rounded-full text-sm px-5 py-2.5 text-center me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
                        +
                    </button>
-                    <select id="allbrands"
-                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                    wire:model="brand_id">
-                   <option value="" selected>Choose a Brand</option>
-                   @foreach ($allbrands as $brand)
-                   <option value="{{ $brand->id }}">{{ $brand->brand }}</option>
-                   @endforeach
-                   </select>
+                    <div class="max-w-sm">
+                        <div class="relative max-w-sm">
+                            <!-- Brand Dropdown -->
+                            <div class="relative" x-data="{ open: false, search: '' }" @click.away="open = false">
+                                <!-- Input field to filter brands -->
+                                <div >
+                                    <input
+                                        type="text"
+                                        class="block w-full p-2 text-sm border-gray-200 rounded-lg focus:border-blue-500 focus:ring-blue-500 dark:bg-neutral-900 dark:border-neutral-700 dark:text-neutral-400 dark:placeholder-neutral-500 dark:focus:ring-neutral-600"
+                                        x-model="search"
+                                        @focus="open = true"
+                                        @input="open = true"
+                                    />
+                                </div>
+
+                                <!-- Filtered Brand Options Dropdown -->
+                                <div class="absolute z-50 w-full mt-2 bg-white border border-gray-200 rounded-lg dark:bg-neutral-800 dark:border-neutral-700"
+                                     x-show="open && search.length > 0"
+                                     @click.away="open = false">
+                                    <div class="max-h-72 rounded-b-lg overflow-hidden overflow-y-auto [&::-webkit-scrollbar]:w-2 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-track]:bg-gray-100 [&::-webkit-scrollbar-thumb]:bg-gray-300 dark:[&::-webkit-scrollbar-track]:bg-neutral-700 dark:[&::-webkit-scrollbar-thumb]:bg-neutral-500">
+                                        <template x-for="brand in {{ json_encode($allbrands) }}" :key="brand.id">
+                                            <div
+                                                class="flex items-center w-full px-4 py-2 text-sm text-gray-800 cursor-pointer hover:bg-gray-100 dark:hover:bg-neutral-700 dark:text-neutral-200"
+                                                @click="$wire.set('brand_id', brand.id); open = false; search = brand.brand"
+                                                x-show="brand.brand.toLowerCase().includes(search.toLowerCase())">
+                                                <span x-text="brand.brand"></span>
+                                            </div>
+                                        </template>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- End Brand Dropdown -->
+                        </div>
                    <label for="model" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Car Model</label>
                    <input wire:model="model" type="text" name="model"  class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white" required />
                    @error('model')
