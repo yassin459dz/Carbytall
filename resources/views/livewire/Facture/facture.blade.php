@@ -66,26 +66,70 @@
                         <div class="px-4 py-5 bg-white sm:p-6">
                             @if($currentstep===1)
                             <div class="flex flex-col">
-                                <select id="allclients"
-                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                                wire:model="client_id">
-                                <option value="Client" selected>Client</option>
-                                @foreach ($allclients as $client)
-                                <option value="{{ $client->id }}">{{ $client->name }}</option>
-                                @endforeach
-                                </select>
 
-                                 {{-- <select id="allbrands"
-                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                                wire:model="brand_id">
-                                <option value="" selected>Choose a Brand</option>
-                                @foreach ($allbrands as $brand)
-                                <option value="{{ $brand->id }}">{{ $brand->brand }}</option>
-                                @endforeach
-                                </select> --}}
+                                {{-- THE FACTURE N° --}}
+                                <div class="w-full py-2">
+                                    <label for="facture" class="block text-sm font-medium text-gray-700">Facture N°</label>
+                                    <!-- Display facture number as an h3 tag -->
+                                    <h3 class="text-lg font-medium leading-6 text-gray-900">
+                                        {{ str_pad($facture_number, 8, '0', STR_PAD_LEFT) }}
+                                    </h3>
+                                </div>
+
+                                {{-- THE FACTURE N° --}}
+
+                                {{-- THE SERCHABLE DROPDOWN --}}
+                                <div class="relative max-w-sm">
+                                    <div x-data="{
+                                            open: false,
+                                            search: @js($search), // Initialize Alpine with Livewire's current search value
+                                            setClientName() {
+                                                this.search = @this.allclients.find(c => c.id === @this.client_id)?.name || '';
+                                            }
+                                        }"
+                                        x-init="setClientName()" {{-- Initialize search value when component loads --}}
+                                        @click.away="open = false"
+                                        class="relative">
+
+                                        <label for="client" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Client Name</label>
+
+                                        <!-- Input Field -->
+                                        <input
+                                            type="text"
+                                            class="block w-full p-2 text-sm border-gray-200 rounded-lg focus:border-blue-500 focus:ring-blue-500 dark:bg-neutral-900 dark:border-neutral-700 dark:text-neutral-400 dark:placeholder-neutral-500 dark:focus:ring-neutral-600"
+                                            x-model="search"
+                                            @input.debounce.100ms="open = true; $wire.set('search', search)" {{-- Sync with Livewire on input --}}
+                                            {{-- @focus="open = true" --}}
+                                        />
+
+                                        <!-- Dropdown List -->
+                                        <div class="absolute z-50 w-full mt-2 bg-white border border-gray-200 rounded-lg dark:bg-neutral-800 dark:border-neutral-700"
+                                             x-show="open && search.length > 0">
+                                            <div class="overflow-hidden overflow-y-auto max-h-72">
+                                                <template x-for="client in {{ json_encode($allclients) }}" :key="client.id">
+                                                    <div class="flex items-center w-full px-4 py-2 text-sm text-gray-800 cursor-pointer hover:bg-gray-100 dark:hover:bg-neutral-700 dark:text-neutral-200"
+                                                         @click="
+                                                            $wire.set('client_id', client.id); // Update Livewire client_id
+                                                            search = client.name; // Update Alpine search
+                                                            open = false;
+                                                         "
+                                                         x-show="client.name.toLowerCase().includes(search.toLowerCase())">
+                                                        <span x-text="client.name"></span>
+                                                    </div>
+                                                </template>
+                                            </div>
+                                        </div>
+
+                                        @error('client_id')
+                                            <span class="mt-1 text-xs text-red-500">{{ $message }}</span>
+                                        @enderror
+                                    </div>
+                                </div>
+
+
 
                                 <select id="allcars"
-                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                                class="bg-gray-50 border mt-4 border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                                 wire:model="car_id">
                                 <option value="" selected>Choose a Car</option>
                                 @foreach ($allcars as $car)
@@ -93,16 +137,7 @@
                                 @endforeach
                                 </select>
                                 @error('car_id') <span class="mt-1 text-xs text-red-500">{{ $message }}</span> @enderror
-                                    {{-- <div class="w-full py-2">
-                                        <label for="first_name" class="block text-sm font-medium text-gray-700">First name</label>
-                                        <input wire:model.lazy="first_name" type="text" type="text" name="first_name" id="first_name" autocomplete="given-name" class="block w-full mt-1 border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
-                                        @error('first_name') <span class="mt-1 text-xs text-red-500">{{ $message }}</span> @enderror
-                                    </div>
-                                    <div class="w-full py-2">
-                                        <label for="last_name" class="block text-sm font-medium text-gray-700">Last name</label>
-                                        <input wire:model.lazy="last_name" type="text" name="last_name" id="last_name" autocomplete="family-name" class="block w-full mt-1 border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
-                                        @error('last_name') <span class="mt-1 text-xs text-red-500">{{ $message }}</span> @enderror
-                                    </div> --}}
+
 
                                 </div>
                                 @endif
@@ -116,7 +151,7 @@
                                     </div>
                                     <div class="w-full py-2">
                                         <label for="phone" class="block text-sm font-medium text-gray-700">Phone N°</label>
-                                        <input wire:model.lazy="phone" type="text" name="password_confirmation" id="password_confirmation" class="block w-full mt-1 border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                                        <input wire:model.lazy="phone" type="text" name="phone" id="password_confirmation" class="block w-full mt-1 border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
                                         @error('phone') <span class="mt-1 text-xs text-red-500">{{ $message }}</span> @enderror
                                     </div>
                                 </div>
@@ -144,57 +179,5 @@
             </div>
         </div>
 
-<!-- Search Input for Dropdown -->
-<div class="relative w-60">
-    <input type="text" id="dropdownSearchInput" placeholder="Search..." class="block w-full px-4 py-2 text-gray-900 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500" onkeyup="filterDropdown()" onclick="showDropdown()">
-
-    <!-- Dropdown Menu (Initially Hidden) -->
-    <div id="dropdownSearch" class="absolute z-10 hidden w-full mt-1 bg-white rounded-lg shadow">
-      <ul id="dropdownList" class="py-2 text-gray-700">
-        <!-- Dropdown Items -->
-        <li><a href="#" class="block px-4 py-2 hover:bg-gray-100">Option 1</a></li>
-        <li><a href="#" class="block px-4 py-2 hover:bg-gray-100">Option 2</a></li>
-        <li><a href="#" class="block px-4 py-2 hover:bg-gray-100">Option 3</a></li>
-        <li><a href="#" class="block px-4 py-2 hover:bg-gray-100">Option 4</a></li>
-        <li><a href="#" class="block px-4 py-2 hover:bg-gray-100">Option 5</a></li>
-      </ul>
-    </div>
-  </div>
-
-</div>
 
 
-<!-- JavaScript for Filtering -->
-<script>
-    function showDropdown() {
-      // Show dropdown when input is clicked
-      document.getElementById("dropdownSearch").classList.remove("hidden");
-    }
-
-    function filterDropdown() {
-      const input = document.getElementById("dropdownSearchInput");
-      const filter = input.value.toLowerCase();
-      const dropdownList = document.getElementById("dropdownList");
-      const dropdownItems = dropdownList.querySelectorAll("li");
-
-      if (filter) {
-        // Show the dropdown list when there is input
-        dropdownItems.forEach(item => {
-          const text = item.textContent || item.innerText;
-          item.style.display = text.toLowerCase().includes(filter) ? "" : "none";
-        });
-      } else {
-        // Hide the dropdown list when input is empty
-        document.getElementById("dropdownSearch").classList.add("hidden");
-      }
-    }
-
-    // Close the dropdown when clicking outside
-    document.addEventListener("click", function(event) {
-      const dropdown = document.getElementById("dropdownSearch");
-      const input = document.getElementById("dropdownSearchInput");
-      if (!dropdown.contains(event.target) && event.target !== input) {
-        dropdown.classList.add("hidden");
-      }
-    });
-  </script>

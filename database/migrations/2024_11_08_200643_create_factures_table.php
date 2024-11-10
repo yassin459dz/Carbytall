@@ -13,10 +13,10 @@ return new class extends Migration
     {
         Schema::create('factures', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('client_id')->constrained('clients')->cascadeOnDelete();
-            $table->foreignId('car_id')->constrained('cars')->cascadeOnDelete();
+            $table->foreignId('client_id')->constrained('clients')->cascadeOnDelete();//
+            $table->foreignId('car_id')->constrained('cars')->cascadeOnDelete();//
             $table->foreignId('matricule_id')->constrained('matricules')->cascadeOnDelete();
-            $table->unsignedInteger('facture_number')->unique();
+            $table->unsignedInteger('facture_number')->unique();//
             $table->string('product');
             $table->unsignedInteger('km');
             $table->decimal('price', 10, 2);
