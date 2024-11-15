@@ -68,14 +68,18 @@
                             <div class="flex flex-col">
 
                                 {{-- THE FACTURE N° --}}
-                                <div class="w-full py-2">
+                                {{-- <div class="w-full py-2">
                                     <label for="facture" class="block text-sm font-medium text-gray-700">Facture N°</label>
                                     <!-- Display facture number as an h3 tag -->
                                     <h3 class="text-lg font-medium leading-6 text-gray-900">
                                         {{ str_pad($facture_number, 8, '0', STR_PAD_LEFT) }}
                                     </h3>
-                                </div>
-
+                                </div> --}}
+                                {{-- <div class="w-full py-2">
+                                    <label for="facture_number" class="block text-sm font-medium text-gray-700">Fac</label>
+                                    <input wire:model.lazy="facture_number" type="number" name="facture_number" id="facture_number" class="block w-full mt-1 border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                                    @error('fac') <span class="mt-1 text-xs text-red-500">{{ $message }}</span> @enderror
+                                </div> --}}
                                 {{-- THE FACTURE N° --}}
 
                                 {{-- THE SERCHABLE DROPDOWN --}}
@@ -90,17 +94,32 @@
                                         x-init="setClientName()" {{-- Initialize search value when component loads --}}
                                         @click.away="open = false"
                                         class="relative">
+                                        <div>
+                                            <div>
+                                                <button @click="$dispatch('lite-mode', search)" data-modal-target="authentication-modal" data-modal-toggle="authentication-modal" class="block text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" type="button">
+                                                    Create Client
+                                                    {{-- <button @click="$dispatch('open-modal', search)" --}}
+
+                                                </button>
+                                            </div>
+                                            <div wire:ignore>
+                                                <livewire:create-edit-client />
+                                            </div>
+                                        </div>
 
                                         <label for="client" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Client Name</label>
 
                                         <!-- Input Field -->
                                         <input
-                                            type="text"
-                                            class="block w-full p-2 text-sm border-gray-200 rounded-lg focus:border-blue-500 focus:ring-blue-500 dark:bg-neutral-900 dark:border-neutral-700 dark:text-neutral-400 dark:placeholder-neutral-500 dark:focus:ring-neutral-600"
-                                            x-model="search"
-                                            @input.debounce.100ms="open = true; $wire.set('search', search)" {{-- Sync with Livewire on input --}}
-                                            {{-- @focus="open = true" --}}
-                                        />
+                                        type="text"
+                                        class="block w-full p-2 text-sm placeholder-black border-gray-200 rounded-lg focus:border-blue-500 focus:ring-blue-500 dark:bg-neutral-900 dark:border-neutral-700 dark:text-neutral-400 dark:placeholder-black dark:focus:ring-neutral-600"
+                                        x-model="search"
+                                        :placeholder="search.length === 0 && !open ? 'Client' : ''"  {{-- Show placeholder if input is empty and not focused --}}
+                                        @focus="open = true"  {{-- Set open to true when focused --}}
+                                        @input.debounce.100ms="open = true; $wire.set('search', search)" {{-- Sync with Livewire on input --}}
+                                    />
+
+
 
                                         <!-- Dropdown List -->
                                         <div class="absolute z-50 w-full mt-2 bg-white border border-gray-200 rounded-lg dark:bg-neutral-800 dark:border-neutral-700"
@@ -145,17 +164,42 @@
 
                                 <div class="flex flex-col">
                                     <div class="w-full py-2">
-                                        <label for="email" class="block text-sm font-medium text-gray-700">Email</label>
-                                        <input wire:model.lazy="email" type="email" name="email" id="email" class="block w-full mt-1 border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
-                                        @error('email') <span class="mt-1 text-xs text-red-500">{{ $message }}</span> @enderror
+                                        <label for="mat" class="block text-sm font-medium text-gray-700">Matricule</label>
+                                        <input wire:model.lazy="mat" type="text" name="mat" id="mat" class="block w-full mt-1 border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                                        @error('mat') <span class="mt-1 text-xs text-red-500">{{ $message }}</span> @enderror
                                     </div>
                                     <div class="w-full py-2">
-                                        <label for="phone" class="block text-sm font-medium text-gray-700">Phone N°</label>
-                                        <input wire:model.lazy="phone" type="text" name="phone" id="password_confirmation" class="block w-full mt-1 border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
-                                        @error('phone') <span class="mt-1 text-xs text-red-500">{{ $message }}</span> @enderror
+                                        <label for="km" class="block text-sm font-medium text-gray-700">km</label>
+                                        <input wire:model.lazy="km" type="number" name="km" id="km" class="block w-full mt-1 border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                                        @error('km') <span class="mt-1 text-xs text-red-500">{{ $message }}</span> @enderror
                                     </div>
                                 </div>
                             @endif
+                            @if($currentstep===3)
+
+                            <div class="flex flex-col">
+                                <div class="w-full py-2">
+                                    <label for="product" class="block text-sm font-medium text-gray-700">product</label>
+                                    <input wire:model.lazy="product" type="text" name="product" id="product" class="block w-full mt-1 border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                                    @error('product') <span class="mt-1 text-xs text-red-500">{{ $message }}</span> @enderror
+                                </div>
+                                <div class="w-full py-2">
+                                    <label for="qte" class="block text-sm font-medium text-gray-700">qte</label>
+                                    <input wire:model.lazy="qte" type="number" name="qte" id="qte" class="block w-full mt-1 border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                                    @error('qte') <span class="mt-1 text-xs text-red-500">{{ $message }}</span> @enderror
+                                </div>
+                                <div class="w-full py-2">
+                                    <label for="price" class="block text-sm font-medium text-gray-700">price</label>
+                                    <input wire:model.lazy="price" type="number" name="price" id="price" class="block w-full mt-1 border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                                    @error('price') <span class="mt-1 text-xs text-red-500">{{ $message }}</span> @enderror
+                                </div>
+                                <div class="w-full py-2">
+                                    <label for="total" class="block text-sm font-medium text-gray-700">total</label>
+                                    <input wire:model.lazy="total" type="number" name="total" id="total" class="block w-full mt-1 border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                                    @error('total') <span class="mt-1 text-xs text-red-500">{{ $message }}</span> @enderror
+                                </div>
+                            </div>
+                        @endif
                         </div>
                         <div class="flex items-center justify-between px-4 py-3 text-right bg-gray-50 sm:px-6">
                             @if($currentstep>1)

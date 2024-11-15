@@ -13,6 +13,9 @@ class CreateEditClient extends Component
     public $formtitle='Create Client';
     public $editform=false;
 
+    public $liteform=false;
+
+
     #[Rule('required')]
     public $name;
     #[Rule('required')]
@@ -41,8 +44,8 @@ class CreateEditClient extends Component
         // session()->flash('status-created', 'Client Created');
         $this->close();// ADD THIS TO REFRESH PAGE WITH PHP
         $this->dispatch('browser', 'close-modal');
-        return $this->redirect('/client', navigate:true);
-
+        // Call the refreshPage function to handle the page refresh/redirect
+        return $this->refreshPage();
 
     }
 
@@ -81,10 +84,28 @@ class CreateEditClient extends Component
         // Any logic you want to run before refresh (optional)
 
         // Redirect to the same route to refresh the page
-        return $this->redirect('/client', navigate:true);
+        //return $this->redirect('/client', navigate:true);
+        // Check if the current page is 'car' before refreshing
+        // if (request()->is('client')) {
+            // Perform the refresh if we're on the 'car' page
 
+
+            //return $this->redirect('/client', navigate: true);
+        // }else
+        // {
+        //     return $this->redirect('/facture', navigate: true);
+        // }
+            // Redirect to the same route to refresh the page
+            // return $this->redirect('/car', navigate:true);
     }
 
+    #[On('lite-mode')]
+    public function lite(){
+        // dd($id);
+        $this->liteform=true;
+        // $this->formtitle='lite mode';
 
+
+    }
 
 }
