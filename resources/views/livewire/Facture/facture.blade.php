@@ -84,8 +84,18 @@
 
                                 {{-- THE SERCHABLE DROPDOWN --}}
 
-                                <div class="relative max-w-sm">
 
+                                    {{----------------------- THIS IF YOU WANT TO CLOSE DROPDOWN WITHOUTH BUTTON ----------------}}
+                                    {{-- checkIfMatches() {
+                                        // Check if any client matches the search term
+                                        const hasMatch = this.allClients.some(client =>
+                                            client.name.toLowerCase().includes(this.search.toLowerCase())
+                                        );
+                                        if (!hasMatch) {
+                                            this.open = false; // Close the dropdown if no matches
+                                        }
+                                    } --}}
+                                <div class="relative max-w-sm">
                                     <div
                                     x-data="{
                                         open: false,
@@ -94,15 +104,7 @@
                                         setClientName() {
                                             this.search = @this.allclients.find(c => c.id === @this.client_id)?.name || '';
                                         },
-                                        checkIfMatches() {
-                                            // Check if any client matches the search term
-                                            const hasMatch = this.allClients.some(client =>
-                                                client.name.toLowerCase().includes(this.search.toLowerCase())
-                                            );
-                                            if (!hasMatch) {
-                                                this.open = false; // Close the dropdown if no matches
-                                            }
-                                        }
+
                                     }"
                                     x-init="setClientName()" {{-- Initialize search value when component loads --}}
                                     @click.away="open = false"
@@ -111,7 +113,10 @@
                                     <div>
                                         <div>
                                             <button
-                                            @click="$dispatch('lite-mode')"
+                                            {{-- @click="$dispatch('lite-mode')" --}}
+                                            @click="open = false;
+                                            $dispatch('lite-mode')"
+
                                             data-modal-target="authentication-modal" data-modal-toggle="authentication-modal" class="block text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" type="button">
                                                 Create Client
                                                 {{-- <button @click="$dispatch('open-modal', search)" --}}
@@ -123,11 +128,14 @@
                                         </div>
                                     </div>
                                     <!-- Input Field -->
+                                    <label for="Client" class="block text-sm font-medium text-gray-700">Client Name</label>
+
                                     <input
+                                        id="NewClient"
                                         type="text"
-                                        class="block w-full p-2 text-sm placeholder-black border-gray-200 rounded-lg focus:border-blue-500 focus:ring-blue-500 dark:bg-neutral-900 dark:border-neutral-700 dark:text-neutral-400 dark:placeholder-black dark:focus:ring-neutral-600"
+                                        class="block w-full p-2 text-sm placeholder-gray-500 border-gray-200 rounded-lg focus:border-blue-500 focus:ring-blue-500 dark:bg-neutral-900 dark:border-neutral-700 dark:text-neutral-400 dark:placeholder-black dark:focus:ring-neutral-600"
                                         x-model="search"
-                                        :placeholder="search.length === 0 && !open ? 'Client' : ''"  {{-- Show placeholder if input is empty and not focused --}}
+                                        placeholder="Client"
                                         @focus="open = true"  {{-- Set open to true when focused --}}
                                         @input.debounce.100ms="open = true; $wire.set('search', search); checkIfMatches()" {{-- Sync with Livewire and check for matches --}}
                                     />
