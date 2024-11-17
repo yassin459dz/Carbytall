@@ -83,67 +83,79 @@
                                 {{-- THE FACTURE N° --}}
 
                                 {{-- THE SERCHABLE DROPDOWN --}}
+
                                 <div class="relative max-w-sm">
-                                    <div x-data="{
-                                            open: false,
-                                            search: @js($search), // Initialize Alpine with Livewire's current search value
-                                            setClientName() {
-                                                this.search = @this.allclients.find(c => c.id === @this.client_id)?.name || '';
+
+                                    <div
+                                    x-data="{
+                                        open: false,
+                                        search: @js($search), // Initialize Alpine with Livewire's current search value
+                                        allClients: @js($allclients), // Pass all clients from Livewire
+                                        setClientName() {
+                                            this.search = @this.allclients.find(c => c.id === @this.client_id)?.name || '';
+                                        },
+                                        checkIfMatches() {
+                                            // Check if any client matches the search term
+                                            const hasMatch = this.allClients.some(client =>
+                                                client.name.toLowerCase().includes(this.search.toLowerCase())
+                                            );
+                                            if (!hasMatch) {
+                                                this.open = false; // Close the dropdown if no matches
                                             }
-                                        }"
-                                        x-init="setClientName()" {{-- Initialize search value when component loads --}}
-                                        @click.away="open = false"
-                                        class="relative">
+                                        }
+                                    }"
+                                    x-init="setClientName()" {{-- Initialize search value when component loads --}}
+                                    @click.away="open = false"
+
+                                    class="relative">
+                                    <div>
                                         <div>
-                                            <div>
-                                                <button @click="$dispatch('lite-mode', search)" data-modal-target="authentication-modal" data-modal-toggle="authentication-modal" class="block text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" type="button">
-                                                    Create Client
-                                                    {{-- <button @click="$dispatch('open-modal', search)" --}}
+                                            <button
+                                            @click="$dispatch('lite-mode')"
+                                            data-modal-target="authentication-modal" data-modal-toggle="authentication-modal" class="block text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" type="button">
+                                                Create Client
+                                                {{-- <button @click="$dispatch('open-modal', search)" --}}
 
-                                                </button>
-                                            </div>
-                                            <div wire:ignore>
-                                                <livewire:create-edit-client />
-                                            </div>
+                                            </button>
                                         </div>
-
-                                        <label for="client" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Client Name</label>
-
-                                        <!-- Input Field -->
-                                        <input
+                                        <div wire:ignore>
+                                            <livewire:create-edit-client />
+                                        </div>
+                                    </div>
+                                    <!-- Input Field -->
+                                    <input
                                         type="text"
                                         class="block w-full p-2 text-sm placeholder-black border-gray-200 rounded-lg focus:border-blue-500 focus:ring-blue-500 dark:bg-neutral-900 dark:border-neutral-700 dark:text-neutral-400 dark:placeholder-black dark:focus:ring-neutral-600"
                                         x-model="search"
                                         :placeholder="search.length === 0 && !open ? 'Client' : ''"  {{-- Show placeholder if input is empty and not focused --}}
                                         @focus="open = true"  {{-- Set open to true when focused --}}
-                                        @input.debounce.100ms="open = true; $wire.set('search', search)" {{-- Sync with Livewire on input --}}
+                                        @input.debounce.100ms="open = true; $wire.set('search', search); checkIfMatches()" {{-- Sync with Livewire and check for matches --}}
                                     />
 
-
-
-                                        <!-- Dropdown List -->
-                                        <div class="absolute z-50 w-full mt-2 bg-white border border-gray-200 rounded-lg dark:bg-neutral-800 dark:border-neutral-700"
-                                             x-show="open && search.length > 0">
-                                            <div class="overflow-hidden overflow-y-auto max-h-72">
-                                                <template x-for="client in {{ json_encode($allclients) }}" :key="client.id">
-                                                    <div class="flex items-center w-full px-4 py-2 text-sm text-gray-800 cursor-pointer hover:bg-gray-100 dark:hover:bg-neutral-700 dark:text-neutral-200"
-                                                         @click="
-                                                            $wire.set('client_id', client.id); // Update Livewire client_id
-                                                            search = client.name; // Update Alpine search
-                                                            open = false;
-                                                         "
-                                                         x-show="client.name.toLowerCase().includes(search.toLowerCase())">
-                                                        <span x-text="client.name"></span>
-                                                    </div>
-                                                </template>
-                                            </div>
+                                    <!-- Dropdown List -->
+                                    <div class="absolute z-50 w-full mt-2 bg-white border border-gray-200 rounded-lg dark:bg-neutral-800 dark:border-neutral-700"
+                                         x-show="open && search.length > 0">
+                                        <div class="overflow-hidden overflow-y-auto max-h-72">
+                                            <template x-for="client in allClients" :key="client.id">
+                                                <div
+                                                    class="flex items-center w-full px-4 py-2 text-sm text-gray-800 cursor-pointer hover:bg-gray-100 dark:hover:bg-neutral-700 dark:text-neutral-200"
+                                                    @click="
+                                                        $wire.set('client_id', client.id);
+                                                        search = client.name;
+                                                        open = false;
+                                                    "
+                                                    x-show="client.name.toLowerCase().includes(search.toLowerCase())">
+                                                    <span x-text="client.name"></span>
+                                                </div>
+                                            </template>
                                         </div>
-
-                                        @error('client_id')
-                                            <span class="mt-1 text-xs text-red-500">{{ $message }}</span>
-                                        @enderror
                                     </div>
+
+                                    @error('client_id')
+                                        <span class="mt-1 text-xs text-red-500">{{ $message }}</span>
+                                    @enderror
                                 </div>
+
 
 
 
