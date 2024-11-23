@@ -32,6 +32,8 @@ class Facture extends Component
 
     public $car;
 
+
+
     public function render()
     {
         return view('livewire.facture.facture');

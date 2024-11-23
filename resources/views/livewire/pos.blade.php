@@ -1,0 +1,134 @@
+<div class="py-12" x-data="orderApp({{ $product->toJson() }})">
+    <body class="flex items-center justify-center h-screen overflow-hidden" style="background: #edf2f7;">
+        <div class="container mx-auto bg-white">
+            <div class="flex flex-col-reverse shadow-lg lg:flex-row">
+                <!-- Left Section -->
+                <div class="w-full min-h-screen shadow-lg lg:w-3/5">
+                    <h1>Product</h1>
+
+                    <div class="grid grid-cols-3 gap-3 px-5 mt-5 overflow-y-auto h-3/4">
+                        <!-- Products List -->
+
+                        <template x-for="product in products" :key="product.id">
+                            <button
+                                class="flex flex-col items-center justify-center h-32 px-3 py-3 text-center transition-shadow border border-gray-200 rounded-md hover:shadow-lg"
+                                @click="addToOrder(product)">
+                                <div class="mb-2">
+                                    <span class="block font-bold text-gray-800" x-text="product.name"></span>
+                                    <span class="block font-medium text-blue-500" x-text="product.description"></span>
+                                </div>
+                                <div>
+                                    <span class="text-lg font-bold text-red-500" x-text="`${product.price} DA`"></span>
+                                </div>
+                            </button>
+                        </template>
+                    </div>
+                </div>
+
+                <!-- Right Section -->
+                <div class="w-full lg:w-2/5">
+                    <div class="flex flex-row items-center justify-between px-5 mt-5">
+                        <div class="text-xl font-bold">Current Order</div>
+                        <div class="font-semibold">
+                            <button
+                                class="px-4 py-2 text-red-500 bg-red-100 rounded-md"
+                                @click="clearOrder">
+                                Clear All
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="h-64 px-5 py-4 mt-5 overflow-y-auto">
+                        <!-- Order Items List -->
+                        <template x-for="(item, index) in orderItems" :key="item.id">
+                            <div class="flex flex-row items-center justify-between mb-4">
+                                <div class="flex flex-row items-center w-2/5">
+                                    <span class="ml-4 text-sm font-semibold" x-text="item.name"></span>
+                                </div>
+                                <div class="flex justify-between w-32">
+                                    <button
+                                        class="px-3 py-1 bg-gray-300 rounded-md"
+                                        @click="updateQuantity(index, -1)"
+                                        >
+                                        -
+                                    </button>
+                                    <span class="mx-4 font-semibold" x-text="item.quantity"></span>
+                                    <button
+                                        class="px-3 py-1 bg-gray-300 rounded-md"
+                                        @click="updateQuantity(index, 1)">
+                                        +
+                                    </button>
+                                </div>
+                                <div class="w-16 text-lg font-semibold text-center">
+                                    <span x-text="`${(item.price * item.quantity).toFixed(2)} DA`"></span>
+                                </div>
+                            </div>
+                        </template>
+                    </div>
+
+                    <div class="px-4 mt-5">
+                        <div class="rounded-md shadow-lg">
+                            <div class="flex items-center justify-between px-4 py-2">
+                                <span class="text-xl font-semibold">Total:</span>
+                                <span class="text-xl font-bold" x-text="totalPrice().toFixed(2) + ' DA'"></span>
+                                <button
+                                    class="px-8 py-4 font-semibold text-center text-white bg-blue-600 rounded-md shadow-lg"
+                                    @click="validateOrder">
+                                    Validate
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </body>
+</div>
+
+<script>
+    function orderApp(products) {
+        return {
+            products: products,  // This is the dynamic data passed from Laravel
+            orderItems: [],
+
+            // Add product to order
+            addToOrder(product) {
+                const existingItem = this.orderItems.find(item => item.id === product.id);
+                if (existingItem) {
+                    existingItem.quantity++;
+                } else {
+                    this.orderItems.push({
+                        ...product,
+                        quantity: 1
+                    });
+                }
+            },
+
+            // Update quantity of an item in the order
+            updateQuantity(index, change) {
+            if (this.orderItems[index].quantity + change <= 0) {
+            // Remove the item if the quantity becomes 0
+            this.orderItems.splice(index, 1);
+                } else {
+                    this.orderItems[index].quantity += change;
+                }
+            },
+
+
+            // Clear the order
+            clearOrder() {
+                this.orderItems = [];
+            },
+
+            // Calculate the total price
+            totalPrice() {
+                return this.orderItems.reduce((total, item) => total + item.price * item.quantity, 0);
+            },
+
+            // Handle order validation
+            validateOrder() {
+                alert('Order validated! Total: ' + this.totalPrice().toFixed(2) + ' DA');
+            }
+        }
+    }
+</script>

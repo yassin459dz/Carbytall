@@ -131,14 +131,23 @@
                                     <label for="Client" class="block text-sm font-medium text-gray-700">Client Name</label>
 
                                     <input
-                                        id="NewClient"
-                                        type="text"
-                                        class="block w-full p-2 text-sm placeholder-gray-500 border-gray-200 rounded-lg focus:border-blue-500 focus:ring-blue-500 dark:bg-neutral-900 dark:border-neutral-700 dark:text-neutral-400 dark:placeholder-black dark:focus:ring-neutral-600"
-                                        x-model="search"
-                                        placeholder="Client"
-                                        @focus="open = true"  {{-- Set open to true when focused --}}
-                                        @input.debounce.100ms="open = true; $wire.set('search', search); checkIfMatches()" {{-- Sync with Livewire and check for matches --}}
-                                    />
+                                    id="NewClient"
+                                    type="text"
+                                    class="block w-full p-2 text-sm placeholder-gray-500 border-gray-200 rounded-lg focus:border-blue-500 focus:ring-blue-500 dark:bg-neutral-900 dark:border-neutral-700 dark:text-neutral-400 dark:placeholder-black dark:focus:ring-neutral-600"
+                                    x-model="search"
+                                    placeholder="Client"
+                                    @focus="open = true"  {{-- Set open to true when focused --}}
+                                    @input.debounce.100ms="
+                                        open = true;
+                                        $wire.set('search', search);
+                                        checkIfMatches();
+                                        // Check if the search term doesn't match any client, then update the modal's name field
+                                        if (!allClients.some(client => client.name.toLowerCase().includes(search.toLowerCase()))) {
+                                            $wire.set('name', search);
+                                        }
+                                    " {{-- Sync with Livewire and check for matches --}}
+                                />
+
 
                                     <!-- Dropdown List -->
                                     <div class="absolute z-50 w-full mt-2 bg-white border border-gray-200 rounded-lg dark:bg-neutral-800 dark:border-neutral-700"

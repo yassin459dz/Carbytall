@@ -1,13 +1,16 @@
 <?php
 
-use Illuminate\Support\Facades\Route;
-use App\livewire\Dashboardlive;
 use App\livewire\Car;
+use App\livewire\pos;
 use App\livewire\Brand;
-use App\livewire\EditBrand;
 use App\livewire\Client;
-use App\livewire\Matricule;
 use App\livewire\Facture;
+use App\livewire\EditBrand;
+use App\livewire\Matricule;
+use App\livewire\Dashboardlive;
+use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\TestingController;
+
 
 
 Route::view('/', 'welcome');
@@ -44,4 +47,12 @@ Route::view('profile', 'profile')
      ->middleware(['auth', 'verified'])
      ->name('facture');
 
+     Route::get('/pos', pos::class)
+     ->middleware(['auth', 'verified'])
+     ->name('pos');
+
 require __DIR__.'/auth.php';
+
+Route::get('/testing-pos',[TestingController::class, 'testingPos']);
+
+
