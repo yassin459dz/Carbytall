@@ -40,7 +40,7 @@
                         </div>
                     </div>
 
-                    <div class="h-64 pt-4 overflow-y-scroll ">
+                    <div class="h-64 pt-4 overflow-y-scroll no-scrollbar">
                         <!-- Order Items List -->
                         <template x-for="(item, index) in orderItems" :key="item.id">
                             <div class="flex items-center justify-between mb-4">
