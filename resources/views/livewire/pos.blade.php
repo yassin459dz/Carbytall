@@ -1,9 +1,11 @@
 <div class="py-12" x-data="orderApp({{ $product->toJson() }})">
     <body class="flex items-center justify-center h-screen overflow-hidden" style="background: #edf2f7;">
-        <div class="container mx-auto bg-white">
+        <div class="container px-0 mx-auto bg-white">
             <div class="flex flex-col-reverse shadow-lg lg:flex-row">
                 <!-- Left Section -->
-                <div class="w-full min-h-screen shadow-lg lg:w-3/5">
+                <div class="w-full min-h-screen shadow-lg lg:w-[57%]">
+                {{-- <div class="w-full min-h-screen shadow-lg lg:w-[57%]"> --}}
+
                     <h1>Product</h1>
 
                     <div class="grid grid-cols-3 gap-3 px-5 mt-5 overflow-y-auto h-3/4">
@@ -38,36 +40,45 @@
                         </div>
                     </div>
 
-                    <div class="h-64 px-5 py-4 mt-5 overflow-y-auto">
+                    <div class="h-64 pt-4 overflow-y-scroll ">
                         <!-- Order Items List -->
                         <template x-for="(item, index) in orderItems" :key="item.id">
-                            <div class="flex flex-row items-center justify-between mb-4">
-                                <div class="flex flex-row items-center w-2/5">
-                                    <span class="ml-4 text-sm font-semibold" x-text="item.name"></span>
+                            <div class="flex items-center justify-between mb-4">
+                                <!-- Item Name and Description -->
+                                <div class="flex flex-col items-start w-1/2">
+                                    <span class="text-sm font-semibold" x-text="item.name"></span>
+                                    <span class="text-sm font-semibold text-blue-500" x-text="item.description"></span>
                                 </div>
-                                <div class="flex justify-between w-32">
+
+                                <!-- Quantity Controls -->
+                                <div class="flex items-center justify-between w-32">
                                     <button
                                         class="px-3 py-1 bg-gray-300 rounded-md"
-                                        @click="updateQuantity(index, -1)"
-                                        >
+                                        @click="updateQuantity(index, -1)">
                                         -
                                     </button>
-                                    <span class="mx-4 font-semibold" x-text="item.quantity"></span>
+                                    <span class="px-2 text-sm font-semibold" x-text="item.quantity"></span>
                                     <button
                                         class="px-3 py-1 bg-gray-300 rounded-md"
                                         @click="updateQuantity(index, 1)">
                                         +
                                     </button>
                                 </div>
-                                <div class="w-16 text-lg font-semibold text-center">
+
+                                <!-- Price -->
+                                <div class="w-20 text-sm font-semibold text-right">
                                     <span x-text="`${(item.price * item.quantity).toFixed(2)} DA`"></span>
                                 </div>
                             </div>
                         </template>
                     </div>
 
+
+
                     <div class="px-4 mt-5">
+
                         <div class="rounded-md shadow-lg">
+
                             <div class="flex items-center justify-between px-4 py-2">
                                 <span class="text-xl font-semibold">Total:</span>
                                 <span class="text-xl font-bold" x-text="totalPrice().toFixed(2) + ' DA'"></span>

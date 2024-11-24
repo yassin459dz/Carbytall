@@ -5,11 +5,12 @@ use App\Models\Factures;
 use App\Models\brands;
 use App\Models\cars;
 use App\Models\clients;
+use App\Models\Product;
 use Livewire\Component;
 
 class Facture extends Component
 {
-    public $currentstep = 1;
+    public $currentstep = 3;
     public $totalstep = 3;
 
     public $client_id;
@@ -42,6 +43,8 @@ class Facture extends Component
     public function mount()
     {
         $this->initializeFactureNumber();
+        $this->product = Product::all();
+
     }
 
     public function incrementstep()
