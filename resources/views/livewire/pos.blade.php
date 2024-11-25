@@ -77,12 +77,49 @@
 
 
                     <div class="relative px-4 py-8">
+                        <!-- Buttons for adding fixed amounts -->
+                        <div class="flex justify-center mb-4 space-x-4">
+                            <button
+                                class="px-4 py-2 font-semibold text-white bg-green-500 rounded-md hover:bg-green-600"
+                                @click="addExtraCharge(2000)">
+                                +2000 DA
+                            </button>
+                            <button
+                                class="px-4 py-2 font-semibold text-white bg-green-500 rounded-md hover:bg-green-600"
+                                @click="addExtraCharge(1000)">
+                                +1000 DA
+                            </button>
+                            <button
+                                class="px-4 py-2 font-semibold text-white bg-green-500 rounded-md hover:bg-green-600"
+                                @click="addExtraCharge(500)">
+                                +500 DA
+                            </button>
+                        </div>
 
+                        <!-- Buttons for subtracting fixed amounts -->
+                        <div class="flex justify-center mb-4 space-x-4">
+                            <button
+                                class="px-4 py-2 font-semibold text-white bg-red-500 rounded-md hover:bg-red-600"
+                                @click="subtractExtraCharge(2000)">
+                                -2000 DA
+                            </button>
+                            <button
+                                class="px-4 py-2 font-semibold text-white bg-red-500 rounded-md hover:bg-red-600"
+                                @click="subtractExtraCharge(1000)">
+                                -1000 DA
+                            </button>
+                            <button
+                                class="px-4 py-2 font-semibold text-white bg-red-500 rounded-md hover:bg-red-600"
+                                @click="subtractExtraCharge(500)">
+                                -500 DA
+                            </button>
+                        </div>
+
+                        <!-- Total Price and Validation Button -->
                         <div class="mt-5 rounded-md shadow-lg">
-
-                            <div class="flex items-center justify-between px-4 py-2 ">
+                            <div class="flex items-center justify-between px-4 py-2">
                                 <span class="text-xl font-semibold">Total:</span>
-                                <span class="text-xl font-bold" x-text="totalPrice().toFixed(2) + ' DA'"></span>
+                                <span class="text-xl font-bold" x-text="(totalPrice() + extraCharge).toFixed(2) + ' DA'"></span>
                                 <button
                                     class="px-8 py-4 font-semibold text-center text-white bg-blue-600 rounded-md shadow-lg"
                                     @click="validateOrder">
@@ -91,6 +128,9 @@
                             </div>
                         </div>
                     </div>
+
+
+
                 </div>
             </div>
         </div>
@@ -98,49 +138,70 @@
 </div>
 
 <script>
-    function orderApp(products) {
-        return {
-            products: products,  // This is the dynamic data passed from Laravel
-            orderItems: [],
+function orderApp(products) {
+    return {
+        products: products, // Dynamic data passed from Laravel
+        orderItems: [],
+        extraCharge: 0, // Additional amount to add/subtract from the total price
 
-            // Add product to order
-            addToOrder(product) {
-                const existingItem = this.orderItems.find(item => item.id === product.id);
-                if (existingItem) {
-                    existingItem.quantity++;
-                } else {
-                    this.orderItems.push({
-                        ...product,
-                        quantity: 1
-                    });
-                }
-            },
-
-            // Update quantity of an item in the order
-            updateQuantity(index, change) {
-            if (this.orderItems[index].quantity + change <= 0) {
-            // Remove the item if the quantity becomes 0
-            this.orderItems.splice(index, 1);
-                } else {
-                    this.orderItems[index].quantity += change;
-                }
-            },
-
-
-            // Clear the order
-            clearOrder() {
-                this.orderItems = [];
-            },
-
-            // Calculate the total price
-            totalPrice() {
-                return this.orderItems.reduce((total, item) => total + item.price * item.quantity, 0);
-            },
-
-            // Handle order validation
-            validateOrder() {
-                alert('Order validated! Total: ' + this.totalPrice().toFixed(2) + ' DA');
+        // Add product to order
+        addToOrder(product) {
+            const existingItem = this.orderItems.find(item => item.id === product.id);
+            if (existingItem) {
+                existingItem.quantity++;
+            } else {
+                this.orderItems.push({
+                    ...product,
+                    quantity: 1
+                });
             }
+        },
+
+        // Update quantity of an item in the order
+        updateQuantity(index, change) {
+            if (this.orderItems[index].quantity + change <= 0) {
+                // Remove the item if the quantity becomes 0
+                this.orderItems.splice(index, 1);
+            } else {
+                this.orderItems[index].quantity += change;
+            }
+        },
+
+        // Clear the order
+        clearOrder() {
+            this.orderItems = [];
+            this.extraCharge = 0; // Reset extra charge when clearing the order
+        },
+
+        // Add extra charge
+        addExtraCharge(amount) {
+            this.extraCharge += amount;
+        },
+
+        // Subtract extra charge
+        subtractExtraCharge(amount) {
+            this.extraCharge -= amount;
+        },
+
+        // Calculate the total price (ensure it doesn't drop below 0)
+        displayedTotal() {
+            return Math.max(0, this.totalPrice() + this.extraCharge);
+        },
+
+        // Calculate the base total price
+        totalPrice() {
+            return this.orderItems.reduce((total, item) => total + item.price * item.quantity, 0);
+        },
+
+        // Handle order validation
+        validateOrder() {
+            alert('Order validated! Total: ' + this.displayedTotal().toFixed(2) + ' DA');
         }
     }
+}
+
+
+
+
+
 </script>
