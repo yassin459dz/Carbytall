@@ -13,7 +13,7 @@
 
                         <template x-for="product in products" :key="product.id">
                             <button
-                                class="flex flex-col items-center justify-center h-32 px-3 py-3 text-center transition-shadow border border-gray-200 rounded-md hover:shadow-lg"
+                                class="flex flex-col items-center justify-center h-32 px-3 py-3 text-center transition-shadow border border-gray-200 rounded-md hover:shadow-lg "
                                 @click="addToOrder(product)">
                                 <div class="mb-2">
                                     <span class="block font-bold text-gray-800" x-text="product.name"></span>
@@ -33,21 +33,22 @@
                         <div class="text-xl font-bold">Current Order</div>
                         <div class="font-semibold">
                             <button
-                                class="px-4 py-2 text-red-500 bg-red-100 rounded-md"
-                                @click="clearOrder">
-                                Clear All
-                            </button>
+                            class="px-4 py-2 text-red-500 bg-red-200 rounded-md hover:bg-red-600 hover:text-white focus:ring-4 focus:outline-none focus:ring-red-300"
+                            @click="clearOrder; $event.target.blur()">
+                            Clear All
+                        </button>
+
                         </div>
                     </div>
 
                     <div class="h-64 pt-4 overflow-y-scroll no-scrollbar">
                         <!-- Order Items List -->
                         <template x-for="(item, index) in orderItems" :key="item.id">
-                            <div class="flex items-center justify-between mb-4">
+                            <div class="flex items-center justify-between ">
                                 <!-- Item Name and Description -->
-                                <div class="flex flex-col items-start w-1/2">
-                                    <span class="text-sm font-semibold" x-text="item.name"></span>
-                                    <span class="text-sm font-semibold text-blue-500" x-text="item.description"></span>
+                                <div class="flex flex-col items-center w-1/2">
+                                    <span class="ml-2 font-semibold " x-text="item.name"></span>
+                                    <span class="ml-2 font-semibold text-blue-500 " x-text="item.description"></span>
                                 </div>
 
                                 <!-- Quantity Controls -->
@@ -66,8 +67,8 @@
                                 </div>
 
                                 <!-- Price -->
-                                <div class="w-20 text-sm font-semibold text-right">
-                                    <span x-text="`${(item.price * item.quantity).toFixed(2)} DA`"></span>
+                                <div class="w-20 font-semibold text-right">
+                                    <span x-text="`${(item.price * item.quantity).toFixed(2)}`"></span>
                                 </div>
                             </div>
                         </template>
@@ -75,11 +76,11 @@
 
 
 
-                    <div class="px-4 mt-5">
+                    <div class="relative px-4 py-8">
 
-                        <div class="rounded-md shadow-lg">
+                        <div class="mt-5 rounded-md shadow-lg">
 
-                            <div class="flex items-center justify-between px-4 py-2">
+                            <div class="flex items-center justify-between px-4 py-2 ">
                                 <span class="text-xl font-semibold">Total:</span>
                                 <span class="text-xl font-bold" x-text="totalPrice().toFixed(2) + ' DA'"></span>
                                 <button
