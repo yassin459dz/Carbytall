@@ -180,8 +180,12 @@ function orderApp(products) {
 
         // Subtract extra charge
         subtractExtraCharge(amount) {
-            this.extraCharge -= amount;
+        // Ensure the total does not drop below 0
+        if (this.displayedTotal() - amount >= 0) {
+        this.extraCharge -= amount;
+        }
         },
+
 
         // Calculate the total price (ensure it doesn't drop below 0)
         displayedTotal() {
