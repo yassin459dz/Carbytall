@@ -92,17 +92,17 @@
                         <div class="flex justify-center space-x-3">
                             <button
                             class="px-4 py-2 font-semibold text-white bg-red-500 rounded-md hover:bg-red-600"
-                            @click="subtractExtraCharge(2000)">
+                            @click="discount(2000)">
                             -2000 DA
                             </button>
                             <button
                             class="px-4 py-2 font-semibold text-white bg-red-500 rounded-md hover:bg-red-600"
-                            @click="subtractExtraCharge(1000)">
+                            @click="discount(1000)">
                             -1000 DA
                             </button>
                             <button
                             class="px-4 py-2 font-semibold text-white bg-red-500 rounded-md hover:bg-red-600"
-                            @click="subtractExtraCharge(500)">
+                            @click="discount(500)">
                             -500 DA
                             </button>
                         </div>
@@ -124,14 +124,17 @@
                             <span class="text-lg font-semibold text-red-600">Discounts:</span>
                             <span
                                 class="text-xl font-bold text-red-700"
-                                x-text="discount > 0 ? '-' + discount.toFixed(2) + ' DA' : '0.00 DA'">
+                                {{-- x-text="discount > 0 ? '-' + discount.toFixed(2) + ' DA' : '0.00 DA'"> --}}
+                                x-text="discountAmount > 0 ? '-' + discountAmount.toFixed(2) + ' DA' : '0.00 DA'">
+
                             </span>
                         </div>
                         <div class="flex items-center justify-between">
                             <span class="text-xl font-bold text-gray-800">Total:</span>
                             <span
                                 class="text-2xl font-bold text-blue-600"
-                                x-text="(totalPrice() + extraCharge).toFixed(2) + ' DA'">
+                                {{-- x-text="(totalPrice() + extraCharge).toFixed(2) + ' DA'"> --}}
+                                x-text="(totalPrice() + extraCharge - discountAmount).toFixed(2) + ' DA'">
 
                             </span>
                         </div>
@@ -159,7 +162,7 @@
         extraCharge: 0,
 
         // Discount applied to the order
-        discount: 0,
+        discountAmount: 0,
 
         addToOrder(product) {
             // Check if the product is already in the order
@@ -185,7 +188,7 @@
                 // Reset extra charge and discount if the order is empty
                 if (this.orderItems.length === 0) {
                     this.extraCharge = 0;
-                    this.discount = 0;
+                    this.discountAmount = 0;
                 }
             } else {
                 // Update the product's quantity
@@ -199,7 +202,7 @@
 
             // Reset extra charge and discount
             this.extraCharge = 0;
-            this.discount = 0;
+            this.discountAmount = 0;
         },
 
         addExtraCharge(amount) {
@@ -207,20 +210,16 @@
             this.extraCharge += amount;
         },
 
-        subtractExtraCharge(amount) {
-            // Ensure the total amount after subtraction is not negative
-            if (this.calculateTotal() - amount >= 0) {
-                this.extraCharge -= amount;
-            }
-            // Add the subtracted amount as a discount
-            this.discount += amount;
+        discount(amount) {
+            // Add the specified amount to the discount
+            this.discountAmount += amount;
         },
 
 
         calculateTotal() {
-            // Calculate subtotal and apply extra charge and discount
+            // Calculate subtotal, apply extra charge, and subtract discount
             const subtotal = this.totalPrice();
-            return Math.max(0, subtotal + this.extraCharge - this.discount);
+            return Math.max(0, subtotal + this.extraCharge - this.discountAmount);
         },
 
         totalPrice() {
