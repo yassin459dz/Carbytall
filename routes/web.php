@@ -4,6 +4,7 @@ use App\livewire\Car;
 use App\livewire\pos;
 use App\livewire\Brand;
 use App\livewire\Client;
+use App\Livewire\Front;
 use App\livewire\Facture;
 use App\livewire\EditBrand;
 use App\livewire\Matricule;
@@ -50,6 +51,12 @@ Route::view('profile', 'profile')
      Route::get('/pos', pos::class)
      ->middleware(['auth', 'verified'])
      ->name('pos');
+
+     Route::get('/front', Front::class)
+     ->middleware(['auth', 'verified'])
+     ->name('front');
+
+
 
 require __DIR__.'/auth.php';
 
