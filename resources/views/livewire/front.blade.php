@@ -92,19 +92,25 @@
                         <div class="flex justify-center space-x-3">
                             <button
                             class="px-4 py-2 font-semibold text-white bg-red-500 rounded-md hover:bg-red-600"
-                            @click="discount(2000)">
+                            @click="discount(2000)"
+                            :disabled="!canApplyDiscount(2000)"
+                            :class="{'opacity-50 cursor-not-allowed': !canApplyDiscount(2000)}">
                             -2000 DA
-                            </button>
-                            <button
+                        </button>
+                        <button
                             class="px-4 py-2 font-semibold text-white bg-red-500 rounded-md hover:bg-red-600"
-                            @click="discount(1000)">
+                            @click="discount(1000)"
+                            :disabled="!canApplyDiscount(1000)"
+                            :class="{'opacity-50 cursor-not-allowed': !canApplyDiscount(1000)}">
                             -1000 DA
-                            </button>
-                            <button
+                        </button>
+                        <button
                             class="px-4 py-2 font-semibold text-white bg-red-500 rounded-md hover:bg-red-600"
-                            @click="discount(500)">
+                            @click="discount(500)"
+                            :disabled="!canApplyDiscount(500)"
+                            :class="{'opacity-50 cursor-not-allowed': !canApplyDiscount(500)}">
                             -500 DA
-                            </button>
+                        </button>
                         </div>
                     </div>
 
@@ -150,28 +156,18 @@
     </div>
 
     <script>
-        function orderApp(products) {
+function orderApp(products) {
     return {
-        // Array of available products
         products: products,
-
-        // List of items added to the order
         orderItems: [],
-
-        // Additional charges added to the order
         extraCharge: 0,
-
-        // Discount applied to the order
         discountAmount: 0,
 
         addToOrder(product) {
-            // Check if the product is already in the order
             const existingItem = this.orderItems.find(item => item.id === product.id);
             if (existingItem) {
-                // If the product exists, increase its quantity
                 existingItem.quantity++;
             } else {
-                // If not, add the product to the order with a quantity of 1
                 this.orderItems.push({
                     ...product,
                     quantity: 1
@@ -180,55 +176,67 @@
         },
 
         updateQuantity(index, change) {
-            // Check if quantity becomes zero or less after change
             if (this.orderItems[index].quantity + change <= 0) {
-                // Remove the product from the order
                 this.orderItems.splice(index, 1);
 
-                // Reset extra charge and discount if the order is empty
                 if (this.orderItems.length === 0) {
                     this.extraCharge = 0;
                     this.discountAmount = 0;
                 }
             } else {
-                // Update the product's quantity
                 this.orderItems[index].quantity += change;
             }
         },
 
         clearOrder() {
-            // Reset the order items array
             this.orderItems = [];
-
-            // Reset extra charge and discount
             this.extraCharge = 0;
             this.discountAmount = 0;
         },
 
         addExtraCharge(amount) {
-            // Add the specified amount to the extra charge
             this.extraCharge += amount;
         },
 
         discount(amount) {
-            // Add the specified amount to the discount
-            this.discountAmount += amount;
+            // Get the current total (products + extra charges)
+            const currentTotal = this.totalPrice() + this.extraCharge;
+
+            // Only apply discount if it doesn't make total negative
+            if (currentTotal >= amount) {
+                this.discountAmount += amount;
+            } else {
+                alert('Discount amount exceeds current total.');
+            }
         },
 
+        // Comprehensive method to check if a specific discount can be applied
+        canApplyDiscount(amount) {
+            // No items in the order
+            if (this.orderItems.length === 0) {
+                return false;
+            }
+
+            // Calculate current total (products + extra charges)
+            const currentTotal = this.totalPrice() + this.extraCharge;
+
+            // Check multiple conditions:
+            // 1. Total must be greater than or equal to discount amount
+            // 2. Applying discount won't make total negative
+            return currentTotal >= amount &&
+                   (currentTotal - this.discountAmount - amount) >= 0;
+        },
 
         calculateTotal() {
-            // Calculate subtotal, apply extra charge, and subtract discount
             const subtotal = this.totalPrice();
             return Math.max(0, subtotal + this.extraCharge - this.discountAmount);
         },
 
         totalPrice() {
-            // Calculate the sum of all product prices in the order
             return this.orderItems.reduce((total, item) => total + item.price * item.quantity, 0);
         },
 
         validateOrder() {
-            // Show an alert with the total amount of the order
             alert('Order validated! Total: ' + this.calculateTotal().toFixed(2) + ' DA');
         }
     }
