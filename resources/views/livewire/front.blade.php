@@ -6,12 +6,23 @@
             <div class="flex flex-col md:flex-row">
                 <!-- Left Section: Product List -->
                 <div class="w-full p-6 md:w-3/5 bg-gray-50">
-                    <h2 class="pb-3 mb-6 text-2xl font-bold text-gray-800 border-b">
-                        Available Products
-                    </h2>
+                    <div class="flex items-center justify-between mb-6">
+                        <h2 class="text-2xl font-bold text-gray-800">
+                            Available Products
+                        </h2>
+                        <div class="flex items-center space-x-2">
+                            <input
+                                type="text"
+                                placeholder="Search products..."
+                                class="px-4 py-2 transition duration-300 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                                x-model="searchTerm"
+                            >
+                            <!-- Optionally, you could add a filter icon or additional search functionality -->
+                        </div>
+                    </div>
 
                     <div class="grid grid-cols-2 lg:grid-cols-3 gap-4 overflow-y-scroll no-scrollbar max-h-[100vh]">
-                        <template x-for="product in products" :key="product.id">
+                        <template x-for="product in filteredProducts" :key="product.id">
                             <div
                                 class="p-4 text-center transition duration-300 transform bg-white border border-gray-200 rounded-lg cursor-pointer hover:scale-105 hover:shadow-lg"
                                 @click="addToOrder(product)">
@@ -155,14 +166,24 @@
         </div>
     </div>
 
-    <script>
+<script>
 function orderApp(products) {
     return {
         products: products,
         orderItems: [],
         extraCharge: 0,
         discountAmount: 0,
+        searchTerm: '', // Add this line
 
+        // Add this computed property
+        get filteredProducts() {
+            if (!this.searchTerm) return this.products;
+
+            return this.products.filter(product =>
+                product.name.toLowerCase().includes(this.searchTerm.toLowerCase()) ||
+                product.description.toLowerCase().includes(this.searchTerm.toLowerCase())
+            );
+        },
         addToOrder(product) {
             const existingItem = this.orderItems.find(item => item.id === product.id);
             if (existingItem) {
