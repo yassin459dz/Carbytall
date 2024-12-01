@@ -213,6 +213,7 @@ function orderApp(products) {
             this.orderItems = [];
             this.extraCharge = 0;
             this.discountAmount = 0;
+            this.searchTerm ="";
         },
 
         addExtraCharge(amount) {
