@@ -133,7 +133,7 @@
                                     <input
                                     id="NewClient"
                                     type="text"
-                                    class="block w-full p-2 text-sm placeholder-gray-500 border-gray-200 rounded-lg focus:border-blue-500 focus:ring-blue-500 dark:bg-neutral-900 dark:border-neutral-700 dark:text-neutral-400 dark:placeholder-black dark:focus:ring-neutral-600"
+                                    class="block w-full p-2 text-sm text-gray-800 placeholder-gray-400 placeholder-gray-500 bg-white border-gray-200 rounded-lg focus:border-blue-500 focus:ring-blue-500"
                                     x-model="search"
                                     placeholder="Client"
                                     @focus="open = true"  {{-- Set open to true when focused --}}
@@ -147,16 +147,14 @@
                                         }
                                     " {{-- Sync with Livewire and check for matches --}}
                                 />
-
-
                                     <!-- Dropdown List -->
                                     <div class="absolute z-50 w-full mt-2 bg-white border border-gray-200 rounded-lg dark:bg-neutral-800 dark:border-neutral-700"
                                          x-show="open && search.length > 0">
                                         <div class="overflow-hidden overflow-y-auto max-h-72">
                                             <template x-for="client in allClients" :key="client.id">
                                                 <div
-                                                    class="flex items-center w-full px-4 py-2 text-sm text-gray-800 cursor-pointer hover:bg-gray-100 dark:hover:bg-neutral-700 dark:text-neutral-200"
-                                                    @click="
+                                                class="flex items-center w-full px-4 py-2 text-sm text-gray-800 cursor-pointer hover:bg-blue-600 hover:text-white"
+                                                @click="
                                                         $wire.set('client_id', client.id);
                                                         search = client.name;
                                                         open = false;
@@ -173,34 +171,176 @@
                                     @enderror
                                 </div>
 
+                                {{--
+                                --}}
+                                <div class="relative max-w-sm">
+                                    <div
+                                        x-data="{
+                                            open: false,
+                                            search: @entangle('search').defer, // Bind search to Livewire
+                                            allMat: @js($allmat), // All cars passed from Livewire
+                                            filteredMat() {
+                                                return this.allMat.filter(matt =>
+                                                    matt.mat.toLowerCase().includes(this.search.toLowerCase())
+                                                );
+                                            },
+                                        }"
+                                        @click.away="open = false"
+                                        class="relative"
+                                    >
+                                        <!-- Create Car Button -->
+                                        <div class="mb-2">
+                                            <button
+                                                @click="$dispatch('lite-mode')"
+                                                class="block text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+                                                type="button"
+                                            >
+                                                Add Matricule
+                                            </button>
+                                            <div wire:ignore>
+                                                <livewire:create-edit-client />
+                                            </div>
+                                        </div>
+
+                                        <!-- Input Field -->
+                                        <label for="NewMat" class="block text-sm font-medium text-gray-700">Matricule</label>
+                                        <input
+                                            id="NewMat"
+                                            type="text"
+                                            class="block w-full p-2 text-sm text-gray-800 placeholder-gray-400 placeholder-gray-500 bg-white border-gray-200 rounded-lg focus:border-blue-500 focus:ring-blue-500"
+                                            x-model="search"
+                                            @focus="open = true"
+                                            @input.debounce.300ms="$wire.set('search', search)"
+                                        />
+
+                                        <!-- Dropdown List -->
+                                        <div
+                                            class="absolute z-50 w-full mt-2 bg-white border border-gray-200 rounded-lg shadow dark:bg-neutral-800 dark:border-neutral-700"
+                                            x-show="open && search.length > 0"
+                                            x-transition
+                                        >
+                                            <div class="overflow-hidden overflow-y-auto max-h-72">
+                                                <template x-for="car in filteredMat()" :key="car.id">
+                                                    <div
+                                                    class="flex items-center w-full px-4 py-2 text-sm text-gray-800 cursor-pointer hover:bg-blue-600 hover:text-white"
+                                                    @click="
+                                                            $wire.set('mat_id', car.id);
+                                                            search = car.mat;
+                                                            open = false;
+                                                        "
+                                                    >
+                                                        <span x-text="car.mat"></span>
+                                                    </div>
+                                                </template>
+                                            </div>
+                                        </div>
+
+                                        <!-- Error Message -->
+                                        @error('mat_id')
+                                        <span class="mt-1 text-xs text-red-500">{{ $message }}</span>
+                                        @enderror
+                                    </div>
+                                </div>
+
+                                {{--
+                                --}}
 
 
+                                <div class="relative max-w-sm">
+                                    <div
+                                        x-data="{
+                                            open: false,
+                                            search: @js($search), // Initialize search value
+                                            allCars: @js($allcars), // All cars passed from Livewire
+                                            setCarName() {
+                                                this.search = this.allCars.find(car => car.id === @js($car_id))?.model || '';
+                                            },
+                                        }"
+                                        x-init="setCarName()" {{-- Initialize search value on load --}}
+                                        @click.away="open = false"
+                                        class="relative"
+                                    >
+                                        <!-- Create Car Button -->
+                                        <div class="mb-2">
+                                            <button
+                                                @click="open = false; $dispatch('lite-mode')"
+                                                data-modal-target="authentication-modal"
+                                                data-modal-toggle="authentication-modal"
+                                                class="block text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+                                                type="button"
+                                            >
+                                                Create Car
+                                            </button>
+                                            <div wire:ignore>
+                                                <livewire:create-edit-client />
+                                            </div>
+                                        </div>
 
-                                <select id="allcars"
-                                class="bg-gray-50 border mt-4 border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                                wire:model="car_id">
-                                <option value="" selected>Choose a Car</option>
-                                @foreach ($allcars as $car)
-                                <option value="{{ $car->id }}">{{ $car->model }}</option>
-                                @endforeach
-                                </select>
-                                @error('car_id') <span class="mt-1 text-xs text-red-500">{{ $message }}</span> @enderror
+                                        <!-- Input Field -->
+                                        <label for="NewCar" class="block text-sm font-medium text-gray-700">Car Model</label>
+                                        <input
+                                            id="NewCar"
+                                            type="text"
+                                            class="block w-full p-2 text-sm text-gray-800 placeholder-gray-400 placeholder-gray-500 bg-white border-gray-200 rounded-lg focus:border-blue-500 focus:ring-blue-500"
+                                            x-model="search"
+                                            @focus="open = true" {{-- Show dropdown on focus --}}
+                                            @input.debounce.100ms="
+                                                open = true;
+                                                $wire.set('search', search);
+                                                // Check if the input matches any car, else update the modal's name field
+                                                if (!allCars.some(car => car.model.toLowerCase().includes(search.toLowerCase()))) {
+                                                    $wire.set('model', search);
+                                                }
+                                            "
+                                        />
+
+                                        <!-- Dropdown List -->
+                                        <div
+                                            class="absolute z-50 w-full mt-2 bg-white border border-gray-200 rounded-lg dark:bg-neutral-800 dark:border-neutral-700"
+                                            x-show="open && search.length > 0"
+                                            x-transition
+                                        >
+                                            <div class="overflow-hidden overflow-y-auto max-h-72">
+                                                <template x-for="car in allCars" :key="car.id">
+                                                    <div
+                                                    class="flex items-center w-full px-4 py-2 text-sm text-gray-800 cursor-pointer hover:bg-blue-600 hover:text-white"
+                                                    @click="
+                                                            $wire.set('car_id', car.id);
+                                                            search = car.model;
+                                                            open = false;
+                                                        "
+                                                        x-show="car.model.toLowerCase().includes(search.toLowerCase())"
+                                                    >
+                                                        <span x-text="car.model"></span>
+                                                    </div>
+                                                </template>
+                                            </div>
+                                        </div>
+
+                                        <!-- Error Message -->
+                                        @error('car_id')
+                                        <span class="mt-1 text-xs text-red-500">{{ $message }}</span>
+                                        @enderror
+                                    </div>
+                                </div>
 
 
+                                {{--  --}}
                                 </div>
                                 @endif
                                 @if($currentstep===2)
 
                                 <div class="flex flex-col">
-                                    <div class="w-full py-2">
-                                        <label for="mat" class="block text-sm font-medium text-gray-700">Matricule</label>
-                                        <input wire:model.lazy="mat" type="text" name="mat" id="mat" class="block w-full mt-1 border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
-                                        @error('mat') <span class="mt-1 text-xs text-red-500">{{ $message }}</span> @enderror
-                                    </div>
+
                                     <div class="w-full py-2">
                                         <label for="km" class="block text-sm font-medium text-gray-700">km</label>
                                         <input wire:model.lazy="km" type="number" name="km" id="km" class="block w-full mt-1 border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
                                         @error('km') <span class="mt-1 text-xs text-red-500">{{ $message }}</span> @enderror
+                                    </div>
+                                    <div class="w-full py-2">
+                                        <label for="remark" class="block text-sm font-medium text-gray-700">Remark</label>
+                                        <input wire:model.lazy="remark" type="text" name="remark" id="remark" class="block w-full mt-1 border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                                        @error('remark') <span class="mt-1 text-xs text-red-500">{{ $message }}</span> @enderror
                                     </div>
                                 </div>
                             @endif

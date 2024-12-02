@@ -5,6 +5,7 @@ use App\Models\Factures;
 use App\Models\brands;
 use App\Models\cars;
 use App\Models\clients;
+use App\Models\matricules;
 use App\Models\Product;
 use Livewire\Component;
 
@@ -21,17 +22,21 @@ class Facture extends Component
     public $gender;
     public $allbrands;
     public $allclients;
+    public $car;
     public $allcars;
     public $car_id;
     public $search = '';
-    public $mat;
+    public $allmat;
+    public $matt;
+    public $mat_id;
     public $km;
     public $product;
     public $qte;
     public $price;
     public $total;
+    public $mat;
 
-    public $car;
+
 
 
 
@@ -68,10 +73,14 @@ class Facture extends Component
             $validated = $this->validate([
                 // 'client_id' => 'required',
                 'car_id' => 'required',
+                'mat_id' => 'required',
+                'client_id' => 'required',
                  //'fac' => 'required',
             ], [
                 'car_id.required' => 'Please select a Car Model',
                 'client_id.required' => 'Please select a Client',
+                'mat_id.required' => 'Please select a Matricule',
+
             ]);
         }
         elseif ($this->currentstep === 2) {
@@ -112,6 +121,8 @@ class Facture extends Component
         $this->allclients = clients::all();
         $this->allbrands = brands::all();
         $this->allcars = cars::all();
+        $this->allmat = matricules::all();
+
 
         if ($this->client_id) {
             $selectedClient = $this->allclients->where('id', $this->client_id)->first();
