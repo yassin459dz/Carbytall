@@ -48,37 +48,62 @@
                     </div>
 
                     <!-- Order Items -->
-                    <div class="space-y-4 max-h-[40vh] overflow-y-scroll no-scrollbar ">
-                        <template x-for="(item, index) in orderItems" :key="item.id">
-                            <div class="flex items-center justify-between p-3 rounded-lg bg-blue-50">
-                                <div class="flex-grow ">
-                                    <div class="font-semibold text-gray-800" x-text="item.name"></div>
-                                    <div class="text-sm font-bold text-blue-600" x-text="item.description"></div>
-                                </div>
-
-                                <div class="flex items-center space-x-2">
-                                    <button
-                                        class="flex items-center justify-center w-8 h-8 bg-gray-200 rounded-full "
-                                        @click="updateQuantity(index, -1)">
-                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="black" class="size-4">
-                                            <path stroke-linecap="round" stroke-linejoin="round" d="M5 12h14" />
-                                        </svg>
-                                    </button>
-                                    <span class="px-2 font-semibold" x-text="item.quantity"></span>
-                                    <button
-                                        class="flex items-center justify-center w-8 h-8 bg-gray-200 rounded-full"
-                                        @click="updateQuantity(index, 1)">
-                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="black" class="size-4">
-                                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
-                                          </svg>
-
-                                    </button>
-                                </div>
-
-                                <div class="ml-4 font-bold text-blue-600" x-text="`${(item.price * item.quantity).toFixed(2)}`"></div>
-                            </div>
-                        </template>
-                    </div>
+<!-- Order Items -->
+<div
+  class="space-y-4 max-h-[40vh] overflow-y-scroll no-scrollbar"
+>
+  <template x-for="(item, index) in orderItems" :key="item.id">
+    <div
+      x-data="{ isDragging: false }"
+      @mousedown.prevent="
+        initDrag(index, $event);
+        isDragging = true;
+      "
+      @mousemove.prevent="
+        handleDragMove($event);
+        if (isDragging) $event.preventDefault();
+      "
+      @mouseup.prevent="
+        handleDragEnd($event);
+        isDragging = false;
+      "
+      @mouseleave.prevent="
+        handleDragEnd($event);
+        isDragging = false;
+      "
+      class="flex items-center justify-between p-3 transition-transform duration-100 ease-in-out rounded-lg bg-blue-50"
+      :class="{
+        'translate-x-1': dragState.direction === 'right' && dragState.draggedIndex === index,
+        '-translate-x-1': dragState.direction === 'left' && dragState.draggedIndex === index
+      }"
+    >
+      <div class="flex-grow">
+        <div class="font-semibold text-gray-800" x-text="item.name"></div>
+        <div class="text-sm font-bold text-blue-600" x-text="item.description"></div>
+      </div>
+      <div class="flex items-center space-x-2">
+        <button
+          class="flex items-center justify-center w-8 h-8 bg-gray-200 rounded-full"
+          @click="updateQuantity(index, -1)"
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="black" class="size-4">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M5 12h14" />
+          </svg>
+        </button>
+        <span class="px-2 font-semibold" x-text="item.quantity"></span>
+        <button
+          class="flex items-center justify-center w-8 h-8 bg-gray-200 rounded-full"
+          @click="updateQuantity(index, 1)"
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="black" class="size-4">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+          </svg>
+        </button>
+      </div>
+      <div class="ml-4 font-bold text-blue-600" x-text="`${(item.price * item.quantity).toFixed(2)}`"></div>
+    </div>
+  </template>
+</div>
 
                     <!-- Extra Charge Buttons -->
                     <div class="mt-8 space-y-4">
@@ -173,9 +198,15 @@ function orderApp(products) {
         orderItems: [],
         extraCharge: 0,
         discountAmount: 0,
-        searchTerm: '', // Add this line
+        searchTerm: '',
+        dragState: {
+            direction: null,
+            startX: 00,
+            isDragging: false,
+            draggedIndex: null
+        },
 
-        // Add this computed property
+        // Existing methods...
         get filteredProducts() {
             if (!this.searchTerm) return this.products;
 
@@ -184,6 +215,7 @@ function orderApp(products) {
                 product.description.toLowerCase().includes(this.searchTerm.toLowerCase())
             );
         },
+
         addToOrder(product) {
             const existingItem = this.orderItems.find(item => item.id === product.id);
             if (existingItem) {
@@ -209,11 +241,64 @@ function orderApp(products) {
             }
         },
 
+        // Drag-related methods
+        initDrag(index, event) {
+            this.dragState.startX = event.clientX;
+            this.dragState.isDragging = true;
+            this.dragState.draggedIndex = index;
+        },
+
+        handleDragMove(event) {
+    if (!this.dragState.isDragging) return;
+
+    const dragDistance = event.clientX - this.dragState.startX;
+
+    // Update drag direction
+    this.dragState.direction = dragDistance > 0 ? 'right' : 'left';
+
+    // Apply movement effect (for visual feedback)
+    const draggedElement = document.querySelector(`[data-drag-index="${this.dragState.draggedIndex}"]`);
+    if (draggedElement) {
+        draggedElement.style.transform = `translateX(${dragDistance}px)`;
+    }
+},
+
+handleDragEnd(event) {
+    if (!this.dragState.isDragging) return;
+
+    const dragDistance = event.clientX - this.dragState.startX;
+
+    // Perform actions based on drag distance
+    if (Math.abs(dragDistance) > 50) { // Example threshold for deletion
+        if (this.dragState.direction === 'right') {
+            // Dragged right - trigger specific action (e.g., mark as favorite)
+            console.log('Dragged right: Trigger action');
+        } else if (this.dragState.direction === 'left') {
+            // Dragged left - remove item
+            this.orderItems.splice(this.dragState.draggedIndex, 1);
+        }
+    }
+
+    // Reset styles and drag state
+    const draggedElement = document.querySelector(`[data-drag-index="${this.dragState.draggedIndex}"]`);
+    if (draggedElement) {
+        draggedElement.style.transform = '';
+    }
+
+    this.dragState = {
+        direction: null,
+        startX: 0,
+        isDragging: false,
+        draggedIndex: null
+    };
+},
+
+        // Existing methods continue...
         clearOrder() {
             this.orderItems = [];
             this.extraCharge = 0;
             this.discountAmount = 0;
-            this.searchTerm ="";
+            this.searchTerm = "";
         },
 
         addExtraCharge(amount) {
@@ -221,10 +306,8 @@ function orderApp(products) {
         },
 
         discount(amount) {
-            // Get the current total (products + extra charges)
             const currentTotal = this.totalPrice() + this.extraCharge;
 
-            // Only apply discount if it doesn't make total negative
             if (currentTotal >= amount) {
                 this.discountAmount += amount;
             } else {
@@ -232,19 +315,13 @@ function orderApp(products) {
             }
         },
 
-        // Comprehensive method to check if a specific discount can be applied
         canApplyDiscount(amount) {
-            // No items in the order
             if (this.orderItems.length === 0) {
                 return false;
             }
 
-            // Calculate current total (products + extra charges)
             const currentTotal = this.totalPrice() + this.extraCharge;
 
-            // Check multiple conditions:
-            // 1. Total must be greater than or equal to discount amount
-            // 2. Applying discount won't make total negative
             return currentTotal >= amount &&
                    (currentTotal - this.discountAmount - amount) >= 0;
         },

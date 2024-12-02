@@ -10,7 +10,7 @@ use Livewire\Component;
 
 class Facture extends Component
 {
-    public $currentstep = 3;
+    public $currentstep = 1;
     public $totalstep = 3;
 
     public $client_id;
