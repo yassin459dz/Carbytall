@@ -13,11 +13,15 @@ class Factures extends Model
         'km',
         'mat',
         'bl_number',
-        'product',
         'price',
         'qte',
         'total',
         'remark',
+        'total_amount',
+        'extra_charge',
+        'discount_amount',
+        'order_items',
+
     ];
 
     public function client()

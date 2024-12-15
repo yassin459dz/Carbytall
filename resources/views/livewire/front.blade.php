@@ -2,7 +2,9 @@
     <div
         x-data="orderApp({{ $product->toJson() }})"
         x-init="initializeState()"
-        class="container max-w-6xl px-4 py-8 mx-auto">
+        class="mx-auto max-w-7xl">
+        {{-- class="container mx-auto max-w-7xl"> --}}
+
         <div class="bg-white shadow-2xl rounded-xl">
             <div class="flex flex-col md:flex-row">
                 <!-- Left Section: Product List -->
@@ -37,12 +39,12 @@
                     </div>
                 </div>
 
-                <!-- Right Section: Order Summary -->
+<!-- Right Section: Order Summary -->
                 <div class="w-full p-6 bg-white md:w-2/5">
                     <div class="flex items-center justify-between mb-6">
                         <h2 class="text-2xl font-bold text-gray-800">Current Order</h2>
                         <button
-                        class="px-4 py-2 font-semibold text-red-500 bg-red-200 rounded-md hover:bg-red-600 hover:text-white focus:ring-4 focus:outline-none focus:ring-red-300"
+                        class="px-4 py-2 text-red-500 bg-red-200 rounded-md hover:bg-red-600 hover:text-white focus:ring-4 focus:outline-none focus:ring-red-300"
                         @click="clearOrder">
                             Clear All
                         </button>
@@ -105,7 +107,6 @@
     </template>
 </div>
 
-                    <!-- Modal Overlay -->
 <!-- Modal Overlay -->
 <div
 
@@ -150,6 +151,9 @@
                 x-model="editedItem.name"
                 class="w-full px-3 py-2 leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline"
                 type="text"
+                wire:model.lazy="product"
+                @input="$wire.set('product', editedItem.name)"
+
             >
         </div>
 
@@ -315,6 +319,7 @@
             </div>
         </div>
     </div>
+<!-- Order Items -->
 
 <script>
 function orderApp(products) {

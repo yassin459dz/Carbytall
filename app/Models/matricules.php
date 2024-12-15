@@ -47,4 +47,9 @@ class matricules extends Model
          return $this->belongsTo(cars::class);
      }
 
+     public function facture()
+     {
+         return $this->belongsTo(Factures::class);
+     }
+
 }

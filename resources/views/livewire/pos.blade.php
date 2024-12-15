@@ -1,4 +1,4 @@
-<div class="py-12" x-data="orderApp({{ $product->toJson() }})">
+<div class="py-12 " x-data="orderApp({{ $product->toJson() }})">
     <body class="flex items-center justify-center h-screen overflow-hidden" style="background: #edf2f7;">
         <div class="container px-0 mx-auto bg-white">
             <div class="flex flex-col-reverse shadow-lg lg:flex-row">
