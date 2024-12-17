@@ -586,10 +586,13 @@
 
                                     </span>
                                 </div>
-                                <button
+                                {{-- <button
                                     class="w-full py-3 mt-4 font-semibold text-white transition bg-blue-600 rounded-lg hover:bg-blue-700"
                                     @click="validateOrder">
                                     Validate Order
+                                </button> --}}
+                                <button @click="prepareSubmission" class="w-full py-3 mt-4 font-semibold text-white transition bg-blue-600 rounded-lg hover:bg-blue-700">
+                                    <span x-text="isSubmitted ? 'Reset' : 'Validate Order'"></span>
                                 </button>
                             </div>
                         </div>
@@ -622,13 +625,12 @@
                         @if($currentstep === $totalstep)
                         <div>
 
-                            <button
-                            type="submit"
-                            @click.prevent="prepareSubmission()"
-                            class="px-4 py-2 text-white bg-green-600 rounded-md hover:bg-green-700"
-                        >
-                            Submit Order
-                        </button>
+
+    <!-- Single Button to Submit and Auto-Reset -->
+    <button @click="prepareSubmission" class="px-4 py-2 text-white bg-green-600 rounded-md hover:bg-green-700">
+        <span x-text="isSubmitted ? 'Reset' : 'Submit Order'"></span>
+    </button>
+
                         </div>
                         @endif
                     </div>
@@ -656,17 +658,18 @@ function orderApp(products) {
         editModalOpen: false,
         editingItem: null,
         editedItem: null,
+        isSubmitted: false,  // This flag ensures submission only once
 
-        initializeState() {
-            // Ensure everything is reset on page load
-            this.editModalOpen = false;
-            this.editedItem = {
-                name: '',
-                description: '',
-                quantity: 1,
-                price: 0
-            };
-        },
+        // initializeState() {
+        //     // Ensure everything is reset on page load
+        //     this.editModalOpen = false;
+        //     this.editedItem = {
+        //         name: '',
+        //         description: '',
+        //         quantity: 1,
+        //         price: 0
+        //     };
+        // },
         // Existing methods...
         get filteredProducts() {
             if (!this.searchTerm) return this.products;
@@ -735,18 +738,25 @@ function orderApp(products) {
             }
         },
         prepareSubmission() {
-    // Ensure orderItems is not empty and has valid data
-    if (this.orderItems.length === 0) {
-        alert('Please add items to the order');
-        return;
-    }
+            if (this.orderItems.length === 0) {
+                alert('Please add items to the order');
+                return;
+            }
 
-    // Prepare data for Livewire submission
-    @this.set('orderItems', JSON.stringify(this.orderItems));
-    @this.set('total_amount', this.calculateTotal());
-    @this.set('extraCharge', this.extraCharge);
-    @this.set('discountAmount', this.discountAmount);
-},
+            // Prepare and submit
+            @this.set('orderItems', JSON.stringify(this.orderItems));
+            @this.set('total_amount', this.calculateTotal());
+            @this.set('extraCharge', this.extraCharge);
+            @this.set('discountAmount', this.discountAmount);
+
+            // Automatically reset after a short delay
+            setTimeout(() => {
+                @this.set('orderItems', null);
+                @this.set('total_amount', 0);
+                @this.set('extraCharge', 0);
+                @this.set('discountAmount', 0);
+            }, 100);
+        },
   // Drag methods remain the same as previous implementation...
   handleDragEnd(event) {
             if (!this.dragState.isDragging) return;

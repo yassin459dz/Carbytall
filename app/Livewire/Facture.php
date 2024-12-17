@@ -50,21 +50,21 @@ public $extraCharge = 0;
 public $discountAmount = 0;
 
     // Method to add order item dynamically
-    public function addOrderItem($productId, $quantity, $price)
-    {
-        $product = Product::find($productId);
+    // public function addOrderItem($productId, $quantity, $price)
+    // {
+    //     $product = Product::find($productId);
 
-        if ($product) {
-            $this->orderItems[] = [
-                'product_id' => $product->id,
-                'name' => $product->name,
-                'description' => $product->description,
-                'quantity' => $quantity,
-                'price' => $price,
-                'total' => $quantity * $price
-            ];
-        }
-    }
+    //     if ($product) {
+    //         $this->orderItems[] = [
+    //             'product_id' => $product->id,
+    //             'name' => $product->name,
+    //             'description' => $product->description,
+    //             'quantity' => $quantity,
+    //             'price' => $price,
+    //             'total' => $quantity * $price
+    //         ];
+    //     }
+    // }
 
     // Method to remove order item
     // public function removeOrderItem($index)
@@ -220,23 +220,6 @@ public $discountAmount = 0;
     // Calculate total amount
     $totalAmount = collect($processedOrderItems)->sum('total') + $this->extraCharge - $this->discountAmount;
 
-        // dd($this->all());
-// Validate input data
-
-     // Debug the created facture
-    //  dd([
-    //     'client_id' => $this->client_id,
-    //     'car_id' => $this->car_id, // nullable
-    //     'matricule_id' => $this->mat_id, // assuming you want to store this
-    //     'km' => $this->km,
-    //     'remark' => $this->remark,
-    //     'order_items' => json_encode($processedOrderItems),
-    //     'total_amount' => $totalAmount,
-    //     'extra_charge' => $this->extraCharge,
-    //     'discount_amount' => $this->discountAmount,
-    // ]);
-     // Create facture items
-
             Factures::create([
 
                 'client_id' => $this->client_id,
@@ -253,7 +236,7 @@ public $discountAmount = 0;
                 //'facture_number' => $this->fac,
                 'created_at' => now(),
                 'updated_at' => now(),
-                ]);
-
+                ]
+            );
     }
 }
