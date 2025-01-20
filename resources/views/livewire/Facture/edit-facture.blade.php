@@ -1,9 +1,19 @@
 <div
-    x-data="orderApp({{ $product->toJson() }})"
-    x-init="initializeState()"
-    class="mx-auto max-w-7xl"
+x-data="orderApp(@js($product))"
+x-init="() => {
+    console.log('Initializing Alpine.js...');
+
+    if (@js($orderItems)) {
+                console.log('Order Items:', @js($orderItems));
+
+        orderItems = JSON.parse(@js($orderItems));
+        extraCharge = @js($extraCharge);
+        discountAmount = @js($discountAmount);
+    }
+}"
+class="mx-auto max-w-7xl"
 >
-    <form wire:submit.prevent="submit">
+    <form wire:submit.prevent="update">
         <div class="bg-white shadow-2xl rounded-xl">
             <div class="flex flex-col md:flex-row">
                 <!-- Left Section: Product List (mostly unchanged) -->
@@ -285,8 +295,16 @@
                         </div>
                         <div>
                             <!-- Order Items -->
+                            {{-- <template x-for="(item, index) in orderItems" :key="index">
+                                <div>
+                                    <span x-text="item.name"></span>
+                                    <span x-text="item.description"></span>
+                                    <span x-text="item.quantity"></span>
+                                    <span x-text="item.price"></span>
+                                </div>
+                            </template> --}}
                             <div class="space-y-4 max-h-[40vh] overflow-y-scroll no-scrollbar">
-                                <template x-for="(item, index) in orderItems" :key="item.id">
+                                <template x-for="(item, index) in orderItems" :key="index">
                                     <div
                                         x-data="{ isDragging: false }"
                                         :data-drag-index="index"
@@ -515,13 +533,23 @@
                             </div>
 
                             <!-- Total and Validate -->
+                            {{-- <template x-for="(item, index) in orderItems" :key="index">
+                                <div>
+                                    <span x-text="extraCharge"></span>
+                                    <span x-text="discountAmount"></span>
+                                    <span x-text="totalPrice"></span>
+                                </div>
+                            </template> --}}
                             <div class="p-4 mt-6 rounded-lg bg-blue-50">
                                 <!-- Extra Charges -->
                                 <div class="flex items-center justify-between mb-2">
                                     <span class="text-lg font-semibold text-green-600">Extra Charges:</span>
                                     <span
                                         class="text-xl font-bold text-green-700"
-                                        x-text="extraCharge > 0 ? '+' + extraCharge.toFixed(2) + ' DA' : '0.00 DA'">
+                                        {{-- x-text="extraCharge > 0 ? '+' + extraCharge.toFixed(2) + ' DA' : '0.00 DA'" --}}
+                                        {{-- x-text="Number(extraCharge) > 0 ? '+' + Number(extraCharge).toFixed(2) + ' DA' : '0.00 DA'" --}}
+                                        x-text="Number(extraCharge ?? 0) > 0 ? '+' + Number(extraCharge ?? 0).toFixed(2) + ' DA' : '0.00 DA'"
+                                        >
                                     </span>
                                 </div>
 
@@ -530,8 +558,7 @@
                                     <span class="text-lg font-semibold text-red-600">Discounts:</span>
                                     <span
                                         class="text-xl font-bold text-red-700"
-                                        {{-- x-text="discount > 0 ? '-' + discount.toFixed(2) + ' DA' : '0.00 DA'"> --}}
-                                        x-text="discountAmount > 0 ? '-' + discountAmount.toFixed(2) + ' DA' : '0.00 DA'">
+                                        x-text="Number(discountAmount) > 0 ? '-' + Number(discountAmount).toFixed(2) + ' DA' : '0.00 DA'">
 
                                     </span>
                                 </div>
@@ -540,7 +567,8 @@
                                     <span
                                         class="text-2xl font-bold text-blue-600"
                                         {{-- x-text="(totalPrice() + extraCharge).toFixed(2) + ' DA'"> --}}
-                                        x-text="(totalPrice() + extraCharge - discountAmount).toFixed(2) + ' DA'">
+                                        {{-- x-text="(totalPrice() + extraCharge - discountAmount).toFixed(2) + ' DA'"> --}}
+                                        x-text="(totalPrice() + Number(extraCharge) - Number(discountAmount)).toFixed(2) + ' DA'">
 
                                     </span>
                                 </div>
@@ -602,9 +630,9 @@
 function orderApp(products) {
     return {
         products: products,
-        orderItems: [],
-        extraCharge: 0,
-        discountAmount: 0,
+        orderItems: @json(is_array($orderItems) ? $orderItems : json_decode($orderItems ?? '[]')),
+        extraCharge: @json($extraCharge ?? 0),
+        discountAmount: @json($discountAmount ?? 0),
         searchTerm: '',
         dragState: {
             direction: null,
@@ -618,17 +646,6 @@ function orderApp(products) {
         editedItem: null,
         isSubmitted: false,  // This flag ensures submission only once
 
-        // initializeState() {
-        //     // Ensure everything is reset on page load
-        //     this.editModalOpen = false;
-        //     this.editedItem = {
-        //         name: '',
-        //         description: '',
-        //         quantity: 1,
-        //         price: 0
-        //     };
-        // },
-        // Existing methods...
         get filteredProducts() {
             if (!this.searchTerm) return this.products;
 
@@ -701,19 +718,19 @@ function orderApp(products) {
                 return;
             }
 
-            // Prepare and submit
+            // Only send all the data to Livewire when actually submitting
             @this.set('orderItems', JSON.stringify(this.orderItems));
             @this.set('total_amount', this.calculateTotal());
-            @this.set('extraCharge', this.extraCharge);
-            @this.set('discountAmount', this.discountAmount);
+            @this.set('extraCharge', Number(this.extraCharge));
+            @this.set('discountAmount', Number(this.discountAmount));
 
-            // Automatically reset after a short delay
-            setTimeout(() => {
-                @this.set('orderItems', null);
-                @this.set('total_amount', 0);
-                @this.set('extraCharge', 0);
-                @this.set('discountAmount', 0);
-            }, 100);
+            // Call the update method
+            @this.update();
+        },
+
+        calculateTotal() {
+            const itemsTotal = this.totalPrice();
+            return itemsTotal + Number(this.extraCharge) - Number(this.discountAmount);
         },
   // Drag methods remain the same as previous implementation...
   handleDragEnd(event) {
@@ -788,39 +805,39 @@ function orderApp(products) {
             this.searchTerm = "";
         },
 
+        // Add these updated methods to your orderApp function
+
         addExtraCharge(amount) {
-            this.extraCharge += amount;
+            // Only update the local Alpine.js state
+            this.extraCharge = (Number(this.extraCharge) || 0) + Number(amount);
         },
 
         discount(amount) {
-            const currentTotal = this.totalPrice() + this.extraCharge;
+            const currentTotal = this.totalPrice() + (Number(this.extraCharge) || 0);
+            const currentDiscount = Number(this.discountAmount) || 0;
 
-            if (currentTotal >= amount) {
-                this.discountAmount += amount;
+            if (currentTotal >= (currentDiscount + amount)) {
+                // Only update the local Alpine.js state
+                this.discountAmount = currentDiscount + Number(amount);
             } else {
-                alert('Discount amount exceeds current total.');
+                alert('Discount cannot exceed total amount');
             }
         },
 
-        canApplyDiscount(amount) {
-            if (this.orderItems.length === 0) {
-                return false;
-            }
+canApplyDiscount(amount) {
+    if (this.orderItems.length === 0) return false;
 
-            const currentTotal = this.totalPrice() + this.extraCharge;
+    const currentTotal = this.totalPrice() + (Number(this.extraCharge) || 0);
+    const currentDiscount = Number(this.discountAmount) || 0;
 
-            return currentTotal >= amount &&
-                   (currentTotal - this.discountAmount - amount) >= 0;
-        },
+    return currentTotal >= (currentDiscount + amount);
+},
 
-        calculateTotal() {
-            const subtotal = this.totalPrice();
-            return Math.max(0, subtotal + this.extraCharge - this.discountAmount);
-        },
-
-        totalPrice() {
-            return this.orderItems.reduce((total, item) => total + item.price * item.quantity, 0);
-        },
+totalPrice() {
+    return this.orderItems.reduce((total, item) => {
+        return total + (Number(item.price) * Number(item.quantity));
+    }, 0);
+},
 
         validateOrder() {
             alert('Order validated! Total: ' + this.calculateTotal().toFixed(2) + ' DA');

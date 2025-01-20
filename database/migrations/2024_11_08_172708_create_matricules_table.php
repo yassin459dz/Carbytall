@@ -16,11 +16,11 @@ return new class extends Migration
             $table->foreignId('client_id')->constrained('clients')->cascadeOnDelete();
             $table->foreignId('car_id')->constrained('cars')->cascadeOnDelete();
             $table->string('mat');
-            $table->unsignedInteger('km')->default(0);
-            $table->string('color')->nullable();
             $table->integer('anne')->nullable();
             $table->string('remark')->nullable();
             $table->timestamps();
+            // Add unique constraint for the combination
+            $table->unique(['client_id', 'car_id', 'mat']);
         });
     }
 

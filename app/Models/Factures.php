@@ -11,7 +11,6 @@ class Factures extends Model
         'car_id',
         'matricule_id',
         'km',
-        'bl_number',
         'remark',
         'total_amount',
         'extra_charge',
@@ -19,19 +18,24 @@ class Factures extends Model
         'order_items',
 
     ];
-
+    protected $casts = [
+        'order_items' => 'json',
+        'total_amount' => 'decimal:2',
+        // 'extra_charge' => 'decimal:2',
+        // 'discount_amount' => 'decimal:2',
+    ];
     public function client()
     {
-        return $this->hasMany(clients::class);
+        return $this->belongsTo(clients::class);
     }
 
     public function car()
     {
-        return $this->hasMany(cars::class);
+        return $this->belongsTo(cars::class);
     }
 
     public function matricule()
     {
-        return $this->hasMany(matricules::class); // Changed from hasMany to belongsTo
+        return $this->belongsTo(matricules::class); // Changed from hasMany to belongsTo
     }
 }

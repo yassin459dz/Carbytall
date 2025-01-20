@@ -1,6 +1,7 @@
 <?php
 
 use App\livewire\Car;
+use App\Livewire\EditFacture;
 use App\livewire\pos;
 use App\livewire\Brand;
 use App\livewire\Client;
@@ -11,8 +12,7 @@ use App\livewire\Matricule;
 use App\livewire\Dashboardlive;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\TestingController;
-
-
+use App\Livewire\ListFacture;
 
 Route::view('/', 'welcome');
 
@@ -56,6 +56,13 @@ Route::view('profile', 'profile')
      ->middleware(['auth', 'verified'])
      ->name('front');
 
+     Route::get('/allfacture', ListFacture::class)
+     ->middleware(['auth', 'verified'])
+     ->name('ListFacture');
+
+    Route::get('/editfacture/{edit}', EditFacture::class)
+    ->middleware(['auth', 'verified'])
+    ->name('editfacture');
 
 
 require __DIR__.'/auth.php';

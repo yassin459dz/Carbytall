@@ -28,6 +28,6 @@ export default {
         require('preline/plugin'),
 
     ],
-    // darkMode: 'class' // Just add this line at the bottom.
+
 
 };

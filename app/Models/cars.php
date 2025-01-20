@@ -1,9 +1,12 @@
 <?php
 
 namespace App\Models;
+use App\Models\clients;
+use App\Models\Factures;
+
 
 use Illuminate\Database\Eloquent\Model;
-
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 class cars extends Model
 {
     protected $fillable = [
@@ -14,4 +17,9 @@ class cars extends Model
     {
         return $this->belongsTo(brands::class); // Singular "brand" for the method name
     }
+
+    public function factures()
+{
+    return $this->hasMany(Factures::class);
+}
 }

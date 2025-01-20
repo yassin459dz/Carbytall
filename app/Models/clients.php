@@ -2,9 +2,9 @@
 
 namespace App\Models;
 
-use App\Livewire\Car;
+use App\Models\cars;
 use Illuminate\Database\Eloquent\Model;
-
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 class clients extends Model
 {
     protected $fillable = [
@@ -15,4 +15,7 @@ class clients extends Model
         'remark',
         'sold',
     ];
+
+
+
 }
