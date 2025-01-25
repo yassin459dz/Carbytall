@@ -16,6 +16,8 @@ class Factures extends Model
         'extra_charge',
         'discount_amount',
         'order_items',
+        'status',
+
 
     ];
     protected $casts = [

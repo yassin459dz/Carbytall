@@ -23,6 +23,7 @@ return new class extends Migration
             $table->decimal('extra_charge', 10, 2)->default(0);
             $table->decimal('discount_amount', 10, 2)->default(0);
             $table->json('order_items')->nullable(); // Store order items
+            $table->enum('status', ['PAID', 'NOT PAID'])->default('PAID');
             $table->timestamps();
         });
     }

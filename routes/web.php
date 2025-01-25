@@ -13,6 +13,7 @@ use App\livewire\Dashboardlive;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\TestingController;
 use App\Livewire\ListFacture;
+use App\Livewire\ViewFacture;
 
 Route::view('/', 'welcome');
 
@@ -63,6 +64,10 @@ Route::view('profile', 'profile')
     Route::get('/editfacture/{edit}', EditFacture::class)
     ->middleware(['auth', 'verified'])
     ->name('editfacture');
+
+    Route::get('/facture/view/{id}', ViewFacture::class)
+    ->middleware(['auth', 'verified'])
+    ->name('viewfacture');
 
 
 require __DIR__.'/auth.php';

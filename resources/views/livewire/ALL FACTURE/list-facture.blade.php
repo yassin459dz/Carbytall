@@ -94,6 +94,10 @@
                                 <td class="px-6 py-4">{{ $facture->created_at }}</td>
                                     <td>
                                         <a wire:navigate href="{{ route('editfacture', ['edit' => $facture->id]) }}" class="font-medium text-green-600 dark:text-green-500 hover:underline">Edit</a>
+                                        <a wire:navigate href="{{ route('viewfacture', ['id' => $facture->id]) }}"
+                                            class="font-medium text-blue-600 dark:text-blue-500 hover:underline">
+                                             View
+                                         </a>
                                     </td>
                             </tr>
                             @endforeach
