@@ -62,47 +62,72 @@
         <div class="overflow-hidden bg-white shadow-sm sm:rounded-lg">
             <div class="p-6 text-gray-900">
                 <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
-                    <table class="w-full text-sm text-left text-gray-500 rtl:text-right dark:text-gray-400">
-                        <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+                    <table class="w-full text-sm text-left text-gray-700 dark:text-gray-400">
+                        <thead class="text-xs font-semibold text-gray-900 uppercase bg-gray-100 dark:bg-gray-800 dark:text-gray-300">
                             <tr>
-                                <th scope="col" class="px-6 py-3">ID</th>
-                                <th scope="col" class="px-6 py-3">Client</th>
-                                <th scope="col" class="px-6 py-3">Car Model</th>
-                                <th scope="col" class="px-6 py-3">Matricule</th>
-                                <th scope="col" class="px-6 py-3">KM</th>
-                                <th scope="col" class="px-6 py-3">Remark</th>
-
-                                <th scope="col" class="px-6 py-3">Total</th>
-                                <th scope="col" class="px-6 py-3">Time</th>
-                                <th scope="col" class="px-6 py-3">Action</th>
+                                <th scope="col" class="px-3 py-4 text-center">ID</th>
+                                <th scope="col" class="px-6 py-4 text-center">Client</th>
+                                <th scope="col" class="px-6 py-4 text-center">Car Model</th>
+                                <th scope="col" class="px-6 py-4 text-center">Matricule</th>
+                                <th scope="col" class="px-6 py-4 text-center">KM</th>
+                                <th scope="col" class="px-6 py-4 text-center">Remark</th>
+                                <th scope="col" class="px-6 py-4 text-center">Status</th>
+                                <th scope="col" class="px-6 py-4 text-center">Total</th>
+                                <th scope="col" class="px-6 py-4 text-center">Time</th>
+                                <th scope="col" class="px-6 py-4 text-center">Action</th>
                             </tr>
                         </thead>
-                        <tbody>
-                             @foreach ($factures as $facture)
-                            <tr class="border-b odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800 dark:border-gray-700">
-                                <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">{{ $loop->index + 1 }}</th>
-                                {{-- <td class="px-6 py-4">{{ $facture->id }}</td> --}}
-                                <td class="px-6 py-4 font-medium ">{{ $facture->client->name}}</td>
-                                <td class="px-6 py-4">{{ $facture->car->model  }}</td>
-                                <td class="px-6 py-4">{{ $facture->matricule->mat }}</td>
-                                <td class="px-6 py-4">{{ $facture->km }}</td>
-                                <td class="px-6 py-4">{{ $facture->remark }}</td>
-                                <td class="px-6 py-4">
-                                    <span class="inline-flex items-center px-2 py-1 text-sm font-medium rounded-full bg-emerald-100 text-emerald-700">{{ $facture->total_amount }} DA</span>
-                                </td>
+                        <tbody class="divide-y divide-gray-200 dark:divide-gray-700">
+                            @foreach ($factures as $facture)
+                            <tr class="odd:bg-white even:bg-gray-50 dark:odd:bg-gray-900 dark:even:bg-gray-800">
+                                <td class="px-3 py-4 font-medium text-center text-gray-900 dark:text-white">{{ $loop->index + 1 }}</td>
+                                <td class="px-6 py-4 text-center">{{ $facture->client->name }}</td>
+                                <td class="px-6 py-4 text-center">{{ $facture->car->model }}</td>
+                                <td class="px-6 py-4 text-center">{{ $facture->matricule->mat }}</td>
+                                <td class="px-6 py-4 text-center">{{ $facture->km }}</td>
+                                <td class="px-6 py-4 text-center">{{ $facture->remark }}</td>
+                                <td class="px-2 py-4 text-center">
+                                    <span class="inline-flex items-center justify-center gap-1 px-2 py-2 text-xs font-medium rounded-full whitespace-nowrap
+                                    {{ $facture->status === 'PAID' ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700' }}">
+                                    @if ($facture->status === 'PAID')
+                                        <svg class="w-4 h-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                        </svg>
+                                    @else
+                                        <svg class="w-4 h-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 9.75l4.5 4.5M14.25 9.75l-4.5 4.5M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                        </svg>
+                                    @endif
+                                    <span>{{ $facture->status }}</span>
+                                </span>
 
-                                <td class="px-6 py-4">{{ $facture->created_at }}</td>
-                                    <td>
-                                        <a wire:navigate href="{{ route('editfacture', ['edit' => $facture->id]) }}" class="font-medium text-green-600 dark:text-green-500 hover:underline">Edit</a>
-                                        <a wire:navigate href="{{ route('viewfacture', ['id' => $facture->id]) }}"
-                                            class="font-medium text-blue-600 dark:text-blue-500 hover:underline">
-                                             View
-                                         </a>
-                                    </td>
+                                </td>
+                                <td class="px-6 py-4 text-center">
+                                    <span class="inline-flex items-center px-3 py-1 text-sm font-semibold text-center rounded-full bg-emerald-100 text-emerald-700 whitespace-nowrap">
+                                        {{ $facture->total_amount }} DA
+                                    </span>
+                                </td>
+                                <td class="px-6 py-4" text-center>{{ $facture->created_at }}</td>
+                                <td class="py-4 space-x-2">
+                                    <a wire:navigate href="{{ route('viewfacture', ['id' => $facture->id]) }}"
+                                       class="font-medium text-blue-600 dark:text-blue-500 hover:underline">
+                                       View
+                                    </a>
+                                    <a wire:navigate href="{{ route('editfacture', ['edit' => $facture->id]) }}"
+                                       class="font-medium text-green-600 dark:text-green-500 hover:underline">
+                                       Edit
+                                    </a>
+
+                                     <button data-modal-target="popup-modal-{{ $facture->id }}" data-modal-toggle="popup-modal-{{ $facture->id }}" class="font-medium text-red-600 dark:text-red-500 hover:underline">
+                                        Delete
+                                        </button>
+                                        <livewire:deletefacture :factureId="$facture->id" />
+                                </td>
                             </tr>
                             @endforeach
                         </tbody>
                     </table>
+
                     <!-- Pagination Links -->
 
                     <div>

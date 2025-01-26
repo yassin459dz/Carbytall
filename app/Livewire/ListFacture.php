@@ -10,7 +10,7 @@ use Livewire\Component;
 class ListFacture extends Component
 {
     public $factures;
-
+    public $status;
 
     public function render()
     {

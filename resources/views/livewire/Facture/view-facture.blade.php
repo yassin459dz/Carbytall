@@ -15,8 +15,8 @@
                     </div>
                     <div class="flex items-center space-x-4">
                         <div class="inline-flex items-center px-2 py-1 text-green-100 rounded-full
-                        {{ $status === 'paid' ? 'bg-green-500/20' : 'bg-red-500/20' }}">
-                        @if ($status === 'paid')
+                        {{ $status === 'PAID' ? 'bg-green-500/20' : 'bg-red-500/20' }}">
+                        @if ($status === 'PAID')
                             <svg class="w-4 h-4 mr-1" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
                             </svg>
@@ -146,7 +146,7 @@
             Livewire.on('show-thermal-invoice-preview', (event) => {
                 const printData = event[0] || event;
 
-        const printWindow = window.open('', 'Invoice Print', 'width=1200,height=1200');
+        const printWindow = window.open();
 
         if (!printWindow) {
             alert('Please allow pop-ups for this site to print invoices');
@@ -154,12 +154,7 @@
         }
 
                 printWindow.document.write(`
-<!DOCTYPE html>
-    <html lang="en">
-    <head>
-      <meta charset="UTF-8">
-      <meta name="viewport" content="width=device-width, initial-scale=1.0">
-      <title>Invoice Print</title>
+
       <style>
         @media print {
           @page {
@@ -199,7 +194,7 @@
           width: 80mm;
           margin: auto;
           background: #fff;
-          padding: 12px;
+          padding: 8px;
           box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
         }
         .header, .footer {
@@ -234,8 +229,6 @@
           margin-bottom: 16px;
         }
       </style>
-    </head>
-    <body>
 
       <div class="invoice-container" id="invoice">
         <div class="header">
@@ -292,11 +285,9 @@
           <p>Thank you for your business!</p>
         </div>
       </div>
-    </body>
-    </html>
     `);
 
-        printWindow.document.close();
+       printWindow.document.close();
 
         // Call the print method to directly show the print dialog
         printWindow.print();

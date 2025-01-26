@@ -23,6 +23,7 @@ class ViewFacture extends Component
     public $financial;
     public $remark;
 
+
     public function mount($id)
     {
         $this->factureId = $id;
