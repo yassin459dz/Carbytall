@@ -12,11 +12,12 @@ class ListFacture extends Component
     public $factures;
     public $status;
 
+
     public function render()
     {
         $this->factures=Factures::all();
 
-        return view('livewire.ALL FACTURE.list-facture');
+        return view('livewire.FACTURE.list-facture');
     }
 
 }

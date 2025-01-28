@@ -80,8 +80,8 @@
                         <tbody class="divide-y divide-gray-200 dark:divide-gray-700">
                             @foreach ($factures as $facture)
                             <tr class="odd:bg-white even:bg-gray-50 dark:odd:bg-gray-900 dark:even:bg-gray-800">
-                                <td class="px-3 py-4 font-medium text-center text-gray-900 dark:text-white">{{ $loop->index + 1 }}</td>
-                                <td class="px-6 py-4 text-center">{{ $facture->client->name }}</td>
+                                <td class="px-3 py-4 font-medium text-center text-gray-900 dark:text-white">#{{ $facture->id }}</td>
+                                <td class="px-6 py-4 font-medium text-center text-gray-900 dark:text-white">{{ $facture->client->name }}</td>
                                 <td class="px-6 py-4 text-center">{{ $facture->car->model }}</td>
                                 <td class="px-6 py-4 text-center">{{ $facture->matricule->mat }}</td>
                                 <td class="px-6 py-4 text-center">{{ $facture->km }}</td>
@@ -107,8 +107,8 @@
                                         {{ $facture->total_amount }} DA
                                     </span>
                                 </td>
-                                <td class="px-6 py-4" text-center>{{ $facture->created_at }}</td>
-                                <td class="py-4 space-x-2">
+                                <td class="px-4 py-4" text-center>{{ $facture->created_at }}</td>
+                                <td class="py-4 ">
                                     <a wire:navigate href="{{ route('viewfacture', ['id' => $facture->id]) }}"
                                        class="font-medium text-blue-600 dark:text-blue-500 hover:underline">
                                        View

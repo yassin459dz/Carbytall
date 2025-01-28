@@ -12,6 +12,7 @@ use App\livewire\Matricule;
 use App\livewire\Dashboardlive;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\TestingController;
+use App\Livewire\Bl;
 use App\Livewire\ListFacture;
 use App\Livewire\ViewFacture;
 
@@ -68,6 +69,10 @@ Route::view('profile', 'profile')
     Route::get('/facture/view/{id}', ViewFacture::class)
     ->middleware(['auth', 'verified'])
     ->name('viewfacture');
+
+    Route::get('/Bl', Bl::class)
+    ->middleware(['auth', 'verified'])
+    ->name('Bl');
 
 
 require __DIR__.'/auth.php';

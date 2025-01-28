@@ -40,8 +40,8 @@ class ViewFacture extends Component
 
         // Set invoice details
         $this->invoiceNumber = str_pad($this->facture->id, 6, '0', STR_PAD_LEFT);
-        $this->date = $this->facture->created_at->format('Y-m-d');
-        $this->time = $this->facture->created_at->format('H:i');
+        $this->date = $this->facture->created_at->format('d-M-Y');
+        $this->time = $this->facture->created_at->format('g:i A');
 
         // Set client info
         $this->client = [

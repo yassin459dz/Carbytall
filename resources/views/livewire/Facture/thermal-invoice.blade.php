@@ -38,7 +38,7 @@
         </div>
     </div>
 
-    <table class="items-table">
+0    <table class="items-table">
         <thead>
             <tr>
                 <th>Item</th>
