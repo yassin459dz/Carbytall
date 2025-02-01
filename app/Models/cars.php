@@ -3,6 +3,8 @@
 namespace App\Models;
 use App\Models\clients;
 use App\Models\Factures;
+use App\Models\matricules;
+
 
 
 use Illuminate\Database\Eloquent\Model;
@@ -21,5 +23,10 @@ class cars extends Model
     public function factures()
 {
     return $this->hasMany(Factures::class);
+}
+
+public function matricules()
+{
+    return $this->hasMany(matricules::class);
 }
 }

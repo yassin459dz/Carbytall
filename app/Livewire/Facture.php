@@ -43,9 +43,16 @@ class Facture extends Component
     public $extraCharge = 0;
     public $discountAmount = 0;
 
+    public $selectedClient = null;
+    public $selectedMat = null;
+    public $selectedCar = null;
+
+
+
 
     public function render()
     {
+
         return view('livewire.facture.facture');
     }
 
@@ -57,7 +64,45 @@ class Facture extends Component
         $this->fetchClients();
     }
 
+    // public function updatedselectedClient($client)
+    // {
+    //     // Retrieve car IDs associated with the selected client via matricules
+    //     $carIds = matricules::where('client_id', $client)->pluck('car_id');
+    //     $matIds = matricules::where('client_id', $client)->pluck('id');
 
+    //     // Fetch the cars that match those IDs
+    //     $this->allcars = cars::whereIn('id', $carIds)->get();
+    //     $this->allmat = matricules::where('id', $matIds)->get();
+
+    // }
+
+
+    // public function updatedselectedCar($car)
+    // {
+    //     // Get the matricules linked to the selected car
+    //     $this->allmat = matricules::where('car_id', $car)->get();
+    // }
+
+    public function updated($property, $value)
+    {
+        if ($property === 'selectedClient') {
+            // Retrieve car IDs associated with the selected client via matricules
+            $carIds = matricules::where('client_id', $value)->pluck('car_id');
+
+            // Fetch the cars that match those IDs
+            $this->allcars = cars::whereIn('id', $carIds)->get();
+
+            // Reset the selected car and matricules
+            $this->selectedCar = null;
+            $this->selectedMat = null;
+            $this->allmat = collect(); // Empty until a car is selected
+        }
+
+        if ($property === 'selectedCar') {
+            // Get the matricules linked to the selected car
+            $this->allmat = matricules::where('car_id', $value)->get();
+        }
+    }
 
 
 
@@ -178,6 +223,11 @@ class Facture extends Component
     {
         // Initialize facture number logic
     }
+
+
+
+
+
 
     public function submit()
     {

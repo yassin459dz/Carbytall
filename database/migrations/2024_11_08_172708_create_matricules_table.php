@@ -19,8 +19,6 @@ return new class extends Migration
             $table->integer('anne')->nullable();
             $table->string('remark')->nullable();
             $table->timestamps();
-            // Add unique constraint for the combination
-            $table->unique(['client_id', 'car_id', 'mat']);
         });
     }
 

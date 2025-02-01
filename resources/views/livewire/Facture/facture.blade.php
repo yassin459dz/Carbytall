@@ -110,10 +110,7 @@
         @enderror
     </div>
 </div>
-                    {{-------------------------------Client END----------------------------}}
-
-
-
+{{-------------------------------Client END----------------------------}}
 {{-------------------------------CAR START----------------------------}}
 <div class="relative max-w-sm">
     <div
@@ -188,9 +185,8 @@
         @enderror
     </div>
 </div>
-
 {{-------------------------------CAR END----------------------------}}
-{{-------------------------------Matriquelle Start----------------------------}}
+{{-------------------------------Matriquelle START----------------------------}}
 <div class="relative max-w-sm">
     <div
         x-data="{
@@ -200,8 +196,23 @@
             setMatName() {
                 this.search = this.allMat.find(m => m.id === @js($mat_id))?.mat || '';
             },
+            hasExactMatch() {
+                return this.allMat.some(m => m.mat.toLowerCase() === this.search.toLowerCase());
+            },
+            hasPartialMatches() {
+                return this.allMat.some(m => m.mat.toLowerCase().includes(this.search.toLowerCase()));
+            },
+            addNewMatricule(newMat) {
+                this.allMat = [...this.allMat, newMat];
+                this.search = newMat.mat;
+                $wire.set('mat_id', newMat.id);
+                this.open = false;
+            }
         }"
-        x-init="setMatName()"
+        x-init="setMatName();
+                $wire.on('matriculeCreated', (newMat) => {
+                    addNewMatricule(newMat);
+                });"
         @click.away="open = false"
         class="relative"
     >
@@ -215,10 +226,22 @@
             @input.debounce.100ms="
                 open = true;
                 $wire.set('mat', search);
+                if (!hasPartialMatches()) {
+                    $wire.set('mat', search);
+                }
+            "
+            @keydown.enter.prevent="
+                if (!hasExactMatch()) {
+                    $wire.createMatricule();
+                }
             "
         />
-        <div class="absolute z-50 w-full mt-2 bg-white border border-gray-200 rounded-lg dark:bg-neutral-800 dark:border-neutral-700"
-             x-show="open && search.length > 0">
+
+        <div
+            class="absolute z-50 w-full mt-2 bg-white border border-gray-200 rounded-lg dark:bg-neutral-800 dark:border-neutral-700"
+            x-show="open && search.length > 0"
+            x-transition
+        >
             <div class="overflow-hidden overflow-y-auto max-h-72">
                 <template x-for="matricule in allMat" :key="matricule.id">
                     <div
@@ -228,23 +251,58 @@
                             search = matricule.mat;
                             open = false;
                         "
-                        x-show="matricule.mat.toLowerCase().includes(search.toLowerCase())">
+                        x-show="matricule.mat.toLowerCase().includes(search.toLowerCase())"
+                    >
                         <span x-text="matricule.mat"></span>
                     </div>
                 </template>
+
+                <div
+                x-show="!allMat.some(m => m.mat.toLowerCase() === search.toLowerCase()) && search.length > 0"
+                class="px-4 py-2 text-sm text-blue-600 cursor-pointer hover:bg-blue-50"
+                @click="
+                    $wire.createMatricule();
+                    open = false; // Close the dropdown
+                    search = ''; // Clear the search input (optional)
+                "
+            >
+                Create A New Matricule
+            </div>
             </div>
         </div>
+
+        @error('mat')
+            <span class="mt-1 text-xs text-red-500">{{ $message }}</span>
+        @enderror
         @error('mat_id')
             <span class="mt-1 text-xs text-red-500">{{ $message }}</span>
         @enderror
     </div>
 </div>
-
 {{-------------------------------Matriquelle END----------------------------}}
+<select wire:model.live="selectedClient">
+    <option value="">Select Client</option>
+    @foreach ($allclients as $client)
+        <option value="{{ $client->id }}">{{ $client->name }}</option>
+    @endforeach
+</select>
+
+<select wire:model.live="selectedCar">
+    <option value="">Select Car</option>
+    @foreach ($allcars as $car)
+        <option value="{{ $car->id }}">{{ $car->model }}</option>
+    @endforeach
+</select>
+
+<select wire:model.live="selectedMat">
+    <option value="">Select Mat</option>
+    @foreach ($allmat as $mat)
+        <option value="{{ $mat->id }}">{{ $mat->mat }}</option>
+    @endforeach
+</select>
+
+
                     @endif
-
-
-
 
                     <!-- Vehicle Details (Livewire Step 2) -->
                     @if($currentstep === 2)

@@ -23,8 +23,6 @@ class Factures extends Model
     protected $casts = [
         'order_items' => 'json',
         'total_amount' => 'decimal:2',
-        // 'extra_charge' => 'decimal:2',
-        // 'discount_amount' => 'decimal:2',
     ];
     public function client()
     {
@@ -36,8 +34,8 @@ class Factures extends Model
         return $this->belongsTo(cars::class);
     }
 
-    public function matricule()
+    public function facture()
     {
-        return $this->belongsTo(matricules::class); // Changed from hasMany to belongsTo
+        return $this->belongsTo(Factures::class);
     }
 }
