@@ -34,8 +34,8 @@ class Factures extends Model
         return $this->belongsTo(cars::class);
     }
 
-    public function facture()
+    public function matricule()
     {
-        return $this->belongsTo(Factures::class);
+        return $this->belongsTo(matricules::class); // Changed from hasMany to belongsTo
     }
 }
