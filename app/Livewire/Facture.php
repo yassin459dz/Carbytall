@@ -9,6 +9,8 @@ use App\Models\matricules;
 use App\Models\Product;
 use Livewire\Component;
 use Illuminate\Support\Facades\Log;
+use Livewire\Attributes\Computed;
+
 
 class Facture extends Component
 {
@@ -42,13 +44,23 @@ class Facture extends Component
     public $total_amount = 0;
     public $extraCharge = 0;
     public $discountAmount = 0;
-
     public $selectedClient = null;
     public $selectedMat = null;
     public $selectedCar = null;
+    public $previousCarSelection = null;
 
+    // public $ClientID;
+    // public $MatId;
+    // public $CarID;
 
-
+    // #[Computed()]
+    // public function Client(){
+    //     return clients::all();
+    // }
+    // #[Computed()]
+    // public function Mat(){
+    //     return matricules::where('client_id', $this->ClientID)->get();
+    // }
 
     public function render()
     {
@@ -62,6 +74,8 @@ class Facture extends Component
         $this->initializeFactureNumber();
         $this->product = Product::all();
         $this->fetchClients();
+        $this->allcars = collect();
+        $this->allmat = collect();
     }
 
     // public function updatedselectedClient($client)
@@ -72,16 +86,15 @@ class Facture extends Component
 
     //     // Fetch the cars that match those IDs
     //     $this->allcars = cars::whereIn('id', $carIds)->get();
-    //     $this->allmat = matricules::where('id', $matIds)->get();
-
+    //     $this->allmat = matricules::whereIn('id', $matIds)->get(); // FIXED: Use whereIn
     // }
-
 
     // public function updatedselectedCar($car)
     // {
     //     // Get the matricules linked to the selected car
     //     $this->allmat = matricules::where('car_id', $car)->get();
     // }
+
 
     public function updated($property, $value)
     {
@@ -103,6 +116,12 @@ class Facture extends Component
             $this->allmat = matricules::where('car_id', $value)->get();
         }
     }
+
+     public function updateMatricules()
+{
+    $this->allmat = matricules::where('car_id', $this->selectedCar)->get();
+}
+
 
 
 
@@ -179,10 +198,10 @@ class Facture extends Component
         $this->allclients = clients::all();
     }
 
-    public function fetchCars()
-    {
-        $this->allcars = cars::all();
-    }
+    // public function fetchCars()
+    // {
+    //     $this->allcars = cars::all();
+    // }
 
     public function fetchProduct()
     {
@@ -193,7 +212,7 @@ class Facture extends Component
     {
         $this->allclients = clients::all();
         $this->allbrands = brands::all();
-        $this->allcars = cars::all();
+        // $this->allcars = cars::all();
         $this->allmat = matricules::all();
         $this->product = Product::all();
 
@@ -204,12 +223,12 @@ class Facture extends Component
             }
         }
 
-        if ($this->car_id) {
-            $selectedCar = $this->allcars->where('id', $this->car_id)->first();
-            if ($selectedCar) {
-                $this->search = $selectedCar->Model;
-            }
-        }
+        // if ($this->car_id) {
+        //     $selectedCar = $this->allcars->where('id', $this->car_id)->first();
+        //     if ($selectedCar) {
+        //         $this->search = $selectedCar->Model;
+        //     }
+        // }
 
         if ($this->mat_id) {
             $selectedMatricule = $this->allmat->where('id', $this->mat_id)->first();
