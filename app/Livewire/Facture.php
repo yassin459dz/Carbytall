@@ -99,28 +99,31 @@ class Facture extends Component
     public function updated($property, $value)
     {
         if ($property === 'selectedClient') {
-            // Retrieve car IDs associated with the selected client via matricules
-            $carIds = matricules::where('client_id', $value)->pluck('car_id');
+            // Get cars that belong to this client through matricules table
+            $carIds = matricules::where('client_id', $value)
+                ->pluck('car_id');
 
-            // Fetch the cars that match those IDs
+            // Fetch cars that match those IDs
             $this->allcars = cars::whereIn('id', $carIds)->get();
 
-            // Reset the selected car and matricules
+            // Reset selections
             $this->selectedCar = null;
             $this->selectedMat = null;
-            $this->allmat = collect(); // Empty until a car is selected
+            $this->allmat = collect();
         }
 
         if ($property === 'selectedCar') {
-            // Get the matricules linked to the selected car
-            $this->allmat = matricules::where('car_id', $value)->get();
+            // Get matricules that are linked to both the selected client AND car
+            $this->allmat = matricules::where('car_id', $value)
+                ->where('client_id', $this->selectedClient)  // Add this line to filter by client
+                ->get();
         }
     }
 
-     public function updateMatricules()
-{
-    $this->allmat = matricules::where('car_id', $this->selectedCar)->get();
-}
+//      public function updateMatricules()
+// {
+//     $this->allmat = matricules::where('car_id', $this->selectedCar)->get();
+// }
 
 
 
