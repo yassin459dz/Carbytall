@@ -44,72 +44,55 @@
                     <div class="mb-6">
 {{-------------------------------Client START----------------------------}}
 <div class="relative max-w-sm">
-    <div
-        x-data="{
-            open: false,
-            search: @js($search),
-            allClients: @js($allclients),
-            setClientName() {
-                this.search = @this.allclients.find(c => c.id === @this.client_id)?.name || '';
-            },
-        }"
-        x-init="setClientName()"
-        @click.away="open = false"
-        class="relative"
-    >
-    <div>
-        <div>
-            <button
-            {{-- @click="$dispatch('lite-mode')" --}}
-            @click="open = false;
-            $dispatch('lite-mode')"
 
-            data-modal-target="authentication-modal" data-modal-toggle="authentication-modal" class="block text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" type="button">
-                Create Client
-                {{-- <button @click="$dispatch('open-modal', search)" --}}
+    <button
+    class="mt-2 block w-full text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center">
+    Create Client
+    </button>
 
-            </button>
-        </div>
-        <div wire:ignore>
-            <livewire:create-edit-client />
-        </div>
-    </div>
-    <!-- Input Field -->
-        <label for="Client" class="block text-sm font-medium text-gray-700">Client Name</label>
+    <label for="client" class="block text-sm font-medium text-gray-700">Client Name</label>
+    <div x-data="{ search: '', open: false }" class="relative">
+        <!-- Searchable Input -->
         <input
-            id="NewClient"
             type="text"
-            class="block w-full p-2 text-sm text-gray-800 placeholder-gray-400 placeholder-gray-500 bg-white border-gray-200 rounded-lg focus:border-blue-500 focus:ring-blue-500"
             x-model="search"
-            placeholder="Client"
             @focus="open = true"
-            @input.debounce.100ms="
-                open = true;
-                $wire.set('search', search);
-            "
+            @input="open = true"
+            class="block w-full p-2 text-sm text-gray-800 placeholder-gray-400 bg-white border border-gray-200 rounded-lg focus:border-blue-500 focus:ring-blue-500"
+            placeholder="Search Client..."
         />
-        <div class="absolute z-50 w-full mt-2 bg-white border border-gray-200 rounded-lg dark:bg-neutral-800 dark:border-neutral-700"
+
+        <!-- Dropdown -->
+        <div class="absolute z-50 w-full mt-2 bg-white border border-gray-200 rounded-lg shadow-lg"
              x-show="open && search.length > 0">
             <div class="overflow-hidden overflow-y-auto max-h-72">
-                <template x-for="client in allClients" :key="client.id">
+                <template x-for="client in [...document.querySelectorAll('#clientSelect option')].filter(c => c.innerText.toLowerCase().includes(search.toLowerCase()))">
                     <div
                         class="flex items-center w-full px-4 py-2 text-sm text-gray-800 cursor-pointer hover:bg-blue-600 hover:text-white"
                         @click="
-                            $wire.set('client_id', client.id);
-                            search = client.name;
+                            search = client.innerText;
+                            document.querySelector('#clientSelect').value = client.value;
                             open = false;
-                        "
-                        x-show="client.name.toLowerCase().includes(search.toLowerCase())">
-                        <span x-text="client.name"></span>
+                        ">
+                        <span x-text="client.innerText"></span>
                     </div>
                 </template>
             </div>
         </div>
-        @error('client_id')
-            <span class="mt-1 text-xs text-red-500">{{ $message }}</span>
-        @enderror
+
+        <!-- Select Dropdown (Hidden) -->
+        <select id="clientSelect" wire:model.lazy="selectedClient" class="hidden">
+            <option value="">Select Client</option>
+            @foreach ($allclients as $client)
+                <option value="{{ $client->id }}">{{ $client->name }}</option>
+            @endforeach
+        </select>
     </div>
+
+    <!-- Create Client Button -->
+
 </div>
+
 {{-------------------------------Client END----------------------------}}
 {{-------------------------------CAR START----------------------------}}
 <div class="relative max-w-sm">
@@ -299,27 +282,75 @@
     @enderror
 </div>
 <div>
-<select wire:model.lazy="selectedClient">
-        <option value="">Select Client</option>
-        @foreach ($allclients as $client)
-            <option value="{{ $client->id }}">{{ $client->name }}</option>
-        @endforeach
-    </select>
+    <div class="relative max-w-sm">
+        <label for="client" class="block text-sm font-medium text-gray-700">Client Name</label>
 
-    <select wire:model.lazy="selectedCar">
-        <option value="">Select Car</option>
-        @foreach ($allcars as $car)
-            <option value="{{ $car->id }}">{{ $car->model }}</option>
-        @endforeach
-    </select>
+        <div x-data="{ search: '', open: false }" class="relative">
+            <!-- Searchable Input -->
+            <input
+                type="text"
+                x-model="search"
+                @focus="open = true"
+                @input="open = true"
+                class="block w-full p-2 text-sm text-gray-800 placeholder-gray-400 bg-white border border-gray-200 rounded-lg focus:border-blue-500 focus:ring-blue-500"
+                placeholder="Search Client..."
+            />
 
+            <!-- Dropdown -->
+            <div class="absolute z-50 w-full mt-2 bg-white border border-gray-200 rounded-lg shadow-lg"
+                 x-show="open && search.length > 0">
+                <div class="overflow-hidden overflow-y-auto max-h-72">
+                    <template x-for="client in [...document.querySelectorAll('#clientSelect option')].filter(c => c.innerText.toLowerCase().includes(search.toLowerCase()))">
+                        <div
+                            class="flex items-center w-full px-4 py-2 text-sm text-gray-800 cursor-pointer hover:bg-blue-600 hover:text-white"
+                            @click="
+                                search = client.innerText;
+                                document.querySelector('#clientSelect').value = client.value;
+                                open = false;
+                                $wire.set('selectedClient', client.value).then(() => {
+                                    $wire.refreshDependentDropdowns();
+                                });
+                            ">
+                            <span x-text="client.innerText"></span>
+                        </div>
+                    </template>
+                </div>
+            </div>
 
-    <select wire:model="selectedMat">
-        <option value="">Select Mat</option>
-        @foreach ($allmat as $mat)
-            <option value="{{ $mat->id }}">{{ $mat->mat }}</option>
-        @endforeach
-    </select>
+            <!-- Select Dropdown (Hidden) -->
+            <select id="clientSelect" wire:model.lazy="selectedClient" class="hidden">
+                <option value="">Select Client</option>
+                @foreach ($allclients as $client)
+                    <option value="{{ $client->id }}">{{ $client->name }}</option>
+                @endforeach
+            </select>
+        </div>
+
+        <!-- Car Dropdown (Dependent on Client) -->
+        <label for="car" class="block mt-4 text-sm font-medium text-gray-700">Car</label>
+        <select id="carSelect" wire:model.lazy="selectedCar" class="block w-full p-2 border-gray-200 rounded-lg">
+            <option value="">Select Car</option>
+            @foreach ($allcars as $car)
+                <option value="{{ $car->id }}">{{ $car->model }}</option>
+            @endforeach
+        </select>
+
+        <!-- Mat Dropdown (Dependent on Car) -->
+        <label for="mat" class="block mt-4 text-sm font-medium text-gray-700">Mat</label>
+        <select id="matSelect" wire:model.lazy="selectedMat" class="block w-full p-2 border-gray-200 rounded-lg">
+            <option value="">Select Mat</option>
+            @foreach ($allmat as $mat)
+                <option value="{{ $mat->id }}">{{ $mat->mat }}</option>
+            @endforeach
+        </select>
+
+        <!-- Create Client Button -->
+        <button
+            class="mt-2 block w-full text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center">
+            Create Client
+        </button>
+    </div>
+
 </div>
 
 

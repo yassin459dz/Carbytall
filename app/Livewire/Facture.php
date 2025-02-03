@@ -107,6 +107,8 @@ class Facture extends Component
         }
     }
 
+    
+
     // public function updatedSelectedMat($value)
     // {
     // $matRecord = matricules::find($value);
