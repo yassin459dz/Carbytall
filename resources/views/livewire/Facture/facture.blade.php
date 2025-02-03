@@ -281,7 +281,25 @@
 </div>
 {{-------------------------------Matriquelle END----------------------------}}
 <div>
-    <select wire:model.lazy="selectedClient">
+    <label for="client" class="block text-sm font-medium text-gray-700">
+        Client Name
+    </label>
+    <select
+        id="client"
+        wire:model.lazy="selectedClient"
+        class="block w-full p-2 text-sm text-gray-800 bg-white border border-gray-200 rounded-lg focus:border-blue-500 focus:ring-blue-500"
+    >
+        <option value="">Select Client</option>
+        @foreach ($allclients as $client)
+            <option value="{{ $client->id }}">{{ $client->name }}</option>
+        @endforeach
+    </select>
+    @error('client_id')
+        <span class="mt-1 text-xs text-red-500">{{ $message }}</span>
+    @enderror
+</div>
+<div>
+<select wire:model.lazy="selectedClient">
         <option value="">Select Client</option>
         @foreach ($allclients as $client)
             <option value="{{ $client->id }}">{{ $client->name }}</option>
@@ -297,6 +315,7 @@
 
 
     <select wire:model="selectedMat">
+        <option value="">Select Mat</option>
         @foreach ($allmat as $mat)
             <option value="{{ $mat->id }}">{{ $mat->mat }}</option>
         @endforeach
@@ -305,23 +324,6 @@
 
 
 
-{{-- <select wire:model.live="ClientID" >
-    <option value="">Select Client</option>
-    @foreach ($this->allclients as $client)
-    <option value="{{ $client->id }}">{{ $client->name }}</option>
-    @endforeach
-</select>
-
-<select >
-    <option value="">Select Car</option>
-</select>
-
-<select wire:model.live="MatID" >
-    <option value="">Select Client</option>
-    @foreach ($this->allmat as $mat)
-    <option value="{{ $mat->id}}">{{ $mat->mat }}</option>
-    @endforeach
-</select> --}}
 
 
 

@@ -47,20 +47,6 @@ class Facture extends Component
     public $selectedClient = null;
     public $selectedMat = null;
     public $selectedCar = null;
-    public $previousCarSelection = null;
-
-    // public $ClientID;
-    // public $MatId;
-    // public $CarID;
-
-    // #[Computed()]
-    // public function Client(){
-    //     return clients::all();
-    // }
-    // #[Computed()]
-    // public function Mat(){
-    //     return matricules::where('client_id', $this->ClientID)->get();
-    // }
 
     public function render()
     {
@@ -73,58 +59,64 @@ class Facture extends Component
 
         $this->initializeFactureNumber();
         $this->product = Product::all();
+         $this->allmat = matricules::all();
+
         $this->fetchClients();
         $this->allcars = collect();
-        $this->allmat = collect();
+        // $this->allmat = collect();
     }
-
-    // public function updatedselectedClient($client)
-    // {
-    //     // Retrieve car IDs associated with the selected client via matricules
-    //     $carIds = matricules::where('client_id', $client)->pluck('car_id');
-    //     $matIds = matricules::where('client_id', $client)->pluck('id');
-
-    //     // Fetch the cars that match those IDs
-    //     $this->allcars = cars::whereIn('id', $carIds)->get();
-    //     $this->allmat = matricules::whereIn('id', $matIds)->get(); // FIXED: Use whereIn
-    // }
-
-    // public function updatedselectedCar($car)
-    // {
-    //     // Get the matricules linked to the selected car
-    //     $this->allmat = matricules::where('car_id', $car)->get();
-    // }
 
 
     public function updated($property, $value)
     {
+        // When a license plate is selected, update client and car accordingly.
+        if ($property === 'selectedMat') {
+            $matRecord = matricules::find($value);
+            if ($matRecord) {
+                // Update the selected client and car based on the chosen mat record.
+                $this->selectedClient = $matRecord->client_id;
+                $this->selectedCar = $matRecord->car_id;
+
+                // Optionally, you might want to update the cars list.
+                // For example, if you want to display only the car that belongs to the mat:
+                $this->allcars = cars::where('id', $matRecord->car_id)->get();
+
+                // You could also reinitialize the client list if needed,
+                // but often you have a complete list of clients available.
+            }
+        }
+
+        // (Optional) If the user changes the client manually, update available cars.
         if ($property === 'selectedClient') {
-            // Get cars that belong to this client through matricules table
+            // Get cars linked to the selected client (using the matricules table as a pivot).
             $carIds = matricules::where('client_id', $value)
                 ->pluck('car_id');
-
-            // Fetch cars that match those IDs
             $this->allcars = cars::whereIn('id', $carIds)->get();
 
-            // Reset selections
+            // Reset the car and mat selections.
             $this->selectedCar = null;
             $this->selectedMat = null;
             $this->allmat = collect();
         }
 
+        // (Optional) If the user changes the car manually, update available matricules.
         if ($property === 'selectedCar') {
-            // Get matricules that are linked to both the selected client AND car
             $this->allmat = matricules::where('car_id', $value)
-                ->where('client_id', $this->selectedClient)  // Add this line to filter by client
+                ->where('client_id', $this->selectedClient) // filter by selected client
                 ->get();
         }
     }
 
-//      public function updateMatricules()
-// {
-//     $this->allmat = matricules::where('car_id', $this->selectedCar)->get();
-// }
-
+    // public function updatedSelectedMat($value)
+    // {
+    // $matRecord = matricules::find($value);
+    // if ($matRecord)
+    //     {
+    //     $this->selectedClient = $matRecord->client_id;
+    //     $this->selectedCar = $matRecord->car_id;
+    //     $this->allcars = cars::where('id', $matRecord->car_id)->get();
+    //     }
+    // }
 
 
 
@@ -216,7 +208,7 @@ class Facture extends Component
         $this->allclients = clients::all();
         $this->allbrands = brands::all();
         // $this->allcars = cars::all();
-        $this->allmat = matricules::all();
+        // $this->allmat = matricules::all();
         $this->product = Product::all();
 
         if ($this->client_id) {
