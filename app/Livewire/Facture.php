@@ -91,6 +91,7 @@ class Facture extends Component
             // Get cars linked to the selected client (using the matricules table as a pivot).
             $carIds = matricules::where('client_id', $value)
                 ->pluck('car_id');
+
             $this->allcars = cars::whereIn('id', $carIds)->get();
 
             // Reset the car and mat selections.
@@ -107,7 +108,7 @@ class Facture extends Component
         }
     }
 
-    
+
 
     // public function updatedSelectedMat($value)
     // {
