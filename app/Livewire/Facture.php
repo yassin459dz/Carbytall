@@ -48,11 +48,13 @@ class Facture extends Component
     public $selectedMat = null;
     public $selectedCar = null;
 
+
+
     public function render()
     {
 
-        return view('livewire.facture.facture');
-    }
+        $groupedCars = $this->getGroupedCarsProperty();
+        return view('livewire.Facture.facture', compact('groupedCars'));    }
 
     public function mount()
     {
@@ -64,41 +66,54 @@ class Facture extends Component
         $this->fetchClients();
         $this->allcars = collect();
         // $this->allmat = collect();
+        $this->allcars = cars::all();
     }
 
+    public function getGroupedCarsProperty(): array
+    {
+        // Get IDs of cars associated with the selected client, if any.
+        $ownedCarIds = $this->selectedClient
+            ? matricules::where('client_id', $this->selectedClient)
+                ->pluck('car_id')
+                ->toArray()
+            : [];
+
+        // Filter the complete list into two groups.
+        $ownedCars = $this->allcars->filter(function ($car) use ($ownedCarIds) {
+            return in_array($car->id, $ownedCarIds);
+        });
+
+        $nonOwnedCars = $this->allcars->filter(function ($car) use ($ownedCarIds) {
+            return !in_array($car->id, $ownedCarIds);
+        });
+
+        return [
+            'Owned Car'     => $ownedCars,
+            'Non Owned Car' => $nonOwnedCars,
+        ];
+    }
 
     public function updated($property, $value)
     {
         // When a license plate is selected, update client and car accordingly.
-        if ($property === 'selectedMat') {
-            $matRecord = matricules::find($value);
-            if ($matRecord) {
-                // Update the selected client and car based on the chosen mat record.
-                $this->selectedClient = $matRecord->client_id;
-                $this->selectedCar = $matRecord->car_id;
+         if ($property === 'selectedMat') {
+             $matRecord = matricules::find($value);
+             if ($matRecord) {
+                 // Update the selected client and car based on the chosen mat record.
+                 $this->selectedClient = $matRecord->client_id;
+                 $this->selectedCar = $matRecord->car_id;
 
-                // Optionally, you might want to update the cars list.
-                // For example, if you want to display only the car that belongs to the mat:
-                $this->allcars = cars::where('id', $matRecord->car_id)->get();
+        //         // Optionally, you might want to update the cars list.
+        //         // For example, if you want to display only the car that belongs to the mat:
+        //         $this->allcars = cars::where('id', $matRecord->car_id)->get();
 
-                // You could also reinitialize the client list if needed,
-                // but often you have a complete list of clients available.
-            }
-        }
-
-        // (Optional) If the user changes the client manually, update available cars.
-        if ($property === 'selectedClient') {
-            // Get cars linked to the selected client (using the matricules table as a pivot).
-            $carIds = matricules::where('client_id', $value)
-                ->pluck('car_id');
-
-            $this->allcars = cars::whereIn('id', $carIds)->get();
+        //         // You could also reinitialize the client list if needed,
+        //         // but often you have a complete list of clients available.
+             }
+         }
 
             // Reset the car and mat selections.
-            $this->selectedCar = null;
-            $this->selectedMat = null;
-            $this->allmat = collect();
-        }
+            // $this->allmat = collect();
 
         // (Optional) If the user changes the car manually, update available matricules.
         if ($property === 'selectedCar') {
@@ -107,6 +122,20 @@ class Facture extends Component
                 ->get();
         }
     }
+
+
+
+    // public function updatedSelectedMat($value)
+    // {
+    // $matRecord = matricules::find($value);
+    // if ($matRecord)
+    //     {
+    //     $this->selectedClient = $matRecord->client_id;
+    //     $this->selectedCar = $matRecord->car_id;
+    //     $this->allcars = cars::where('id', $matRecord->car_id)->get();
+    //     }
+    // }
+
 
 
 
@@ -157,34 +186,50 @@ class Facture extends Component
         }
     }
 
-    public function createMatricule()
+    public function createMatricule($matNumber)
     {
-        if (!$this->client_id || !$this->car_id || !$this->mat) {
-            $this->addError('mat', 'Client and Car must be selected first');
-            return null;
+        // Ensure required selections are made
+        if (empty($this->selectedClient) || empty($this->selectedCar) || empty($matNumber)) {
+            $this->addError('mat', 'Client, Car, and Matricule are required.');
+            return;
         }
 
-        $existingMatricule = matricules::where('mat', $this->mat)
-            ->where('client_id', $this->client_id)
-            ->where('car_id', $this->car_id)
+        // Check if the Matricule already exists
+        $existingMatricule = Matricules::where('mat', $matNumber)
+            ->where('client_id', $this->selectedClient)
+            ->where('car_id', $this->selectedCar)
             ->first();
 
         if ($existingMatricule) {
-            $this->mat_id = $existingMatricule->id;
-            return $existingMatricule->id;
+            $this->selectedMat = $existingMatricule->id;
+            return;
         }
 
-        $matricule = matricules::create([
-            'client_id' => $this->client_id,
-            'car_id' => $this->car_id,
-            'mat' => $this->mat,
+        // Create a new Matricule
+        $matricule = Matricules::create([
+            'client_id' => $this->selectedClient,
+            'car_id' => $this->selectedCar,
+            'mat' => $matNumber,
         ]);
 
-        $this->mat_id = $matricule->id;
-        $this->allmat = matricules::all();
+        // Ensure the list updates correctly
+        $this->allmat = Matricules::where('car_id', $this->selectedCar)
+            ->where('client_id', $this->selectedClient)
+            ->get();
 
-        return $matricule->id;
+        // Set the newly created Matricule as selected
+        $this->selectedMat = $matricule->id;
+
+        // Notify frontend (Alpine.js) of updates
+        $this->dispatch('matriculeCreated', ['id' => $matricule->id, 'mat' => $matricule->mat]);
+
+        return;
     }
+
+
+
+
+
 
     public function fetchBrands()
     {
@@ -267,7 +312,7 @@ class Facture extends Component
         }, $orderItems);
 
         $totalAmount = collect($processedOrderItems)->sum('total') + $this->extraCharge - $this->discountAmount;
-        $matricule_id = $this->mat_id ?? $this->createMatricule();
+        // $matricule_id = $this->mat_id ?? $this->createMatricule();
 
         Factures::create([
             'client_id' => $this->client_id,
