@@ -327,21 +327,18 @@
 <div class="flex items-center space-x-0">
     <select
         id="carSelect"
-        wire:model.lazy="selectedCar"
+        wire:model.live="selectedCar"
         class="block w-full p-2 text-gray-800 bg-white border border-gray-300 rounded-l-lg focus:ring-blue-500 focus:outline-none"
     >
         <option value="">Select Car</option>
         @foreach ($groupedCars as $groupLabel => $cars)
-   @php $groupClasses = $groupLabel == 'Owned Car' ? 'text-green-600' : 'text-red-600'; @endphp
-   <optgroup label="{{ $groupLabel }}" class="font-semibold {{ $groupClasses }}">
+            @php $groupClasses = $groupLabel == 'Owned Car' ? 'text-green-600' : 'text-red-600'; @endphp
+            <optgroup label="{{ $groupLabel }}" class="font-semibold {{ $groupClasses }}">
                 @foreach ($cars as $car)
                     <option class="font-semibold" value="{{ $car->id }}">{{ $car->model }}</option>
                 @endforeach
             </optgroup>
         @endforeach
-
-
-
     </select>
     <button
         type="button"
@@ -357,12 +354,25 @@
 
         {{------------------------------------------------------------------------------------------------}}
         <!-- Mat Dropdown (Dependent on Car) -->
-        <div x-data="{ showNewMat: false }">
-            <!-- Mat Dropdown (Dependent on Car) -->
+        <div x-data="{
+            showNewMat: false,
+            init() {
+                window.addEventListener('matriculeCreated', (event) => {
+                    if (event.detail.carId) {
+                        // Ensure the car selection is maintained
+                        $wire.selectedCar = event.detail.carId;
+                    }
+                });
+            }
+        }" class="relative">
             <label for="mat" class="block mt-4 text-sm font-medium text-gray-700">Matricule</label>
             <div class="flex items-center space-x-0">
-                <select id="matSelect" wire:model.lazy="selectedMat" class="block w-full p-2 border-gray-200 rounded-l-lg">
-                    <option value="">Select Mat</option>
+                <select
+                    id="matSelect"
+                    wire:model.live="selectedMat"
+                    class="block w-full p-2 border-gray-200 rounded-l-lg"
+                >
+                    <option value="">Select Matricule</option>
                     @foreach ($allmat as $mat)
                         <option value="{{ $mat->id }}">{{ $mat->mat }}</option>
                     @endforeach
