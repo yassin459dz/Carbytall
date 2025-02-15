@@ -15,6 +15,9 @@ use App\Http\Controllers\TestingController;
 use App\Livewire\Bl;
 use App\Livewire\ListFacture;
 use App\Livewire\ViewFacture;
+use App\Livewire\FactureHistory;
+use App\Livewire\History;
+
 
 Route::view('/', 'welcome');
 
@@ -73,6 +76,11 @@ Route::view('profile', 'profile')
     Route::get('/Bl', Bl::class)
     ->middleware(['auth', 'verified'])
     ->name('Bl');
+
+
+    Route::get('/history/{clientId}/{carId}/{matId}', History::class)
+    ->middleware(['auth', 'verified'])
+    ->name('history');
 
 
 require __DIR__.'/auth.php';

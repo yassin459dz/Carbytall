@@ -3,28 +3,37 @@
 namespace App\Livewire;
 
 use Livewire\Component;
-use Livewire\Attributes\On;
 use Livewire\WithPagination;
+use Livewire\Attributes\On;
 use App\Models\matricules;
 
 class Matricule extends Component
 {
-    public $matricules;
+    use WithPagination;
+
+    // Removed the public $matricules property from mount()
+
+    public function mount()
+    {
+        // No need to load matricules here since we're paginating in render()
+    }
 
     public function render()
     {
-        return view('livewire.matricule.matricule');
-    }
+        // Fetch matricules with pagination (10 per page)
+        $matricules = matricules::paginate(10);
 
-    public function mount(){
-
-        $this->matricules = matricules::all();
+        return view('livewire.matricule.matricule', compact('matricules'));
     }
 
     #[On('refresh-matricules')]
     public function refreshCar()
     {
-        $this->resetPage(); // This ensures pagination starts on the first page when refreshed
+        $this->resetPage(); // Reset pagination when refreshed
     }
+    public function updatingSearch()
+{
+    $this->resetPage();
+}
 
 }
