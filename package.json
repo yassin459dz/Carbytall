@@ -19,7 +19,6 @@
     },
     "dependencies": {
         "@radix-ui/react-select": "^2.1.6",
-        "alpinejs": "^3.14.3",
-        "preline": "^2.7.0"
+        "alpinejs": "^3.14.3"
     }
 }
