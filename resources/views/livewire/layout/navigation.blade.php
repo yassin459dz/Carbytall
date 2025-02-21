@@ -55,9 +55,30 @@ new class extends Component
                     <x-nav-link :href="route('Bl')" :active="request()->routeIs('Bl')" wire:navigate>
                         {{ __('Bl') }}
                     </x-nav-link>
+    {{-- the tuggle dark mode  --}}
+    <button
+    id="darkModeToggle"
+    class="fixed flex items-center gap-2 p-2 text-white transition-all duration-500 ease-in-out rounded-lg shadow-md right-52 top-4 group hover:scale-110 hover:shadow-lg hover:shadow-orange-500/50"
+    >
+    <svg id="sunIcon" class="w-5 h-5 -mt-1 group-hover:animate-bounce-slow" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+    </svg>
+    <svg id="moonIcon" class="hidden w-5 h-5 group-hover:animate-spin-slow" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <circle cx="12" cy="12" r="5"/>
+        <line x1="12" y1="1" x2="12" y2="3"/>
+        <line x1="12" y1="21" x2="12" y2="23"/>
+        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/>
+        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
+        <line x1="1" y1="12" x2="3" y2="12"/>
+        <line x1="21" y1="12" x2="23" y2="12"/>
+        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/>
+        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+    </svg>
+    <span id="modeText" class="text-sm font-medium">Dark Mode</span>
+    </button>
+    {{-- the tuggle dark mode  --}}
                 </div>
             </div>
-
 
             <!-- Settings Dropdown -->
             <div class="hidden sm:flex sm:items-center sm:ms-6">
@@ -133,3 +154,50 @@ new class extends Component
         </div>
     </div>
 </nav>
+
+<script>
+    const toggle = document.getElementById('darkModeToggle');
+    const moonIcon = document.getElementById('moonIcon');
+    const sunIcon = document.getElementById('sunIcon');
+    const modeText = document.getElementById('modeText');
+
+    // Set initial state based on system preference or localStorage
+    let isDark = localStorage.theme === 'dark' ||
+        (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches);
+
+    // Initial setup
+    updateUI();
+
+    toggle.addEventListener('click', () => {
+        isDark = !isDark;
+        updateUI();
+        updateStorage();
+    });
+
+    function updateUI() {
+        // Update icons
+        moonIcon.classList.toggle('hidden', isDark);
+        sunIcon.classList.toggle('hidden', !isDark);
+
+        // Update text
+        modeText.textContent = !isDark ? 'Light Mode' : 'Dark Mode';
+
+        // Update button colors
+        toggle.classList.toggle('bg-gradient-to-r', true);
+        if (isDark) {
+            toggle.classList.remove('from-yellow-400', 'via-orange-500', 'to-red-500');
+            toggle.classList.add('from-indigo-500', 'via-purple-500', 'to-pink-500');
+        } else {
+
+            toggle.classList.remove('from-indigo-500', 'via-purple-500', 'to-pink-500');
+            toggle.classList.add('from-yellow-400', 'via-orange-500', 'to-red-500');
+        }
+
+        // Update document
+        document.documentElement.classList.toggle('dark', isDark);
+    }
+
+    function updateStorage() {
+        localStorage.theme = isDark ? 'dark' : 'light';
+    }
+    </script>
