@@ -1,11 +1,55 @@
 <x-slot name="header">
     <h2 class="text-xl font-semibold leading-tight text-gray-800">
     @if($factures->isNotEmpty())
-    <h1 class="text-xl font-bold">
-        Facture History For CLIENT : <span class="font-bold text-blue-600">{{ $matricule->client->name }}</span>
-        CAR : <span class="font-bold text-blue-600">{{ $matricule->car->model }}</span>
-        MATRICULE : <span class="font-bold text-blue-600">{{ $matricule->mat }}</span>
-    </h1>
+
+
+
+    <div class="relative p-8 mb-6 overflow-hidden bg-gray-100 border-blue-600 border-x-4 rounded-xl">
+        <!-- Decorative Elements -->
+        <div class="absolute top-0 right-0 w-40 h-40 rounded-full bg-blue-50 blur-3xl opacity-20"></div>
+        <div class="absolute bottom-0 left-0 w-32 h-32 rounded-full bg-indigo-50 blur-3xl opacity-10"></div>
+
+        <h1 class="relative">
+            <!-- Main Title -->
+            <div class="flex items-center gap-2 mb-3 text-base font-semibold tracking-wider text-blue-600 uppercase">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                </svg>
+                Facture History
+            </div>
+
+            <!-- Client Details -->
+            <div class="flex flex-wrap items-center text-2xl gap-x-8 gap-y-4">
+                <div class="flex items-center gap-3 group">
+                    <span class="text-base font-medium tracking-wider text-gray-600 uppercase">Client</span>
+                    <span class="font-bold text-blue-600 transition-colors">
+                        {{ $matricule->client->name }}
+                    </span>
+                </div>
+
+                <div class="hidden text-2xl text-gray-600 transform md:block rotate-12">／</div>
+
+                <div class="flex items-center gap-3 group">
+                    <span class="text-base font-medium tracking-wider text-gray-600 uppercase">Car</span>
+                    <span class="font-bold text-blue-600 transition-colors">
+                        {{ $matricule->car->model }}
+                    </span>
+                </div>
+
+                <div class="hidden text-2xl text-gray-600 transform md:block rotate-12">／</div>
+
+                <div class="flex items-center gap-3 group">
+                    <span class="text-base font-medium tracking-wider text-gray-600 uppercasee">Matricule</span>
+                    <span class="font-bold text-blue-600 transition-colors">
+                        {{ $matricule->mat }}
+                    </span>
+                </div>
+            </div>
+        </h1>
+    </div>
+
+
+
     @else
     <h1 class="text-xl font-bold">
         Facture History for CLIENT : <span class="font-bold text-blue-600">{{ $matricule->client->name }}</span>
@@ -37,12 +81,46 @@
                             @foreach ($factures as $facture)
                             <tr class="odd:bg-white even:bg-gray-50 dark:odd:bg-gray-900 dark:even:bg-gray-800">
                                 <td class="px-3 py-4 font-medium text-center text-gray-900 dark:text-white">#{{ $facture->id }}</td>
-
-                                <td class="px-6 py-4 text-center">{{ $facture->km }}</td>
-                                <td class="px-6 py-4 text-center">{{ $facture->remark }}</td>
+                                <td class="px-3 py-4 text-center" text-center>
+                                    <span class="    inline-flex items-center justify-center
+    gap-x-1
+    rounded-md
+    text-sm font-medium
+    ring-1 ring-inset ring-gray-500
+    px-2 py-1
+    min-w-[1.5rem]
+    bg-black-50 text-black-600
+    dark:bg-black-400/10 dark:text-black-400 dark:ring-black-400/30
+    whitespace-nowrap">{{ $facture->created_at->format('d-M-Y') }}</span>
+                                    </td>
+                                <td class="px-6 py-4 text-center ">
+                                    <span class="
+                                    inline-flex items-center justify-center
+                                    gap-x-1
+                                    rounded-md
+                                    text-sm font-medium
+                                    ring-1 ring-inset ring-blue-600/10
+                                    px-2 py-1
+                                    min-w-[1.5rem]
+                                  bg-blue-50 text-blue-600
+                                  dark:bg-blue-400/10 dark:text-blue-400 dark:ring-blue-400/30
+                                    whitespace-nowrap">{{ $facture->km }}
+                                </span>
+                                </td>
+                                <td class="px-3 py-4 font-medium text-center text-gray-900 dark:text-white">{{ $facture->remark }}</td>
                                 <td class="px-2 py-4 text-center">
-                                    <span class="inline-flex items-center justify-center gap-1 px-2 py-2 text-xs font-medium rounded-full whitespace-nowrap
-                                    {{ $facture->status === 'PAID' ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700' }}">
+                                    <span class="
+    inline-flex items-center justify-center
+    gap-x-1
+    rounded-md
+    text-sm font-medium
+    bg-green-50 text-blue-600
+    ring-1 ring-inset ring-blue-600/10
+    px-2 py-1
+    min-w-[1.5rem]
+    dark:bg-blue-400/10 dark:text-blue-400 dark:ring-blue-400/30
+    whitespace-nowrap
+                                    {{ $facture->status === 'PAID' ? 'bg-blue-50 text-blue-600 ring-1 ring-inset ring-blue-600/10 dark:bg-blue-400/10 dark:text-blue-400 dark:ring-blue-400/30' : 'bg-red-50 text-red-600 ring-1 ring-inset ring-red-600/10 dark:bg-red-400/10 dark:text-red-400 dark:ring-red-400/30' }}">
                                     @if ($facture->status === 'PAID')
                                         <svg class="w-4 h-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
@@ -57,11 +135,22 @@
 
                                 </td>
                                 <td class="px-6 py-4 text-center">
-                                    <span class="inline-flex items-center px-3 py-1 text-sm font-semibold text-center rounded-full bg-emerald-100 text-emerald-700 whitespace-nowrap">
+                                    <span
+                                    class="
+                                        inline-flex items-center justify-center
+                                        gap-x-1
+                                        rounded-md
+                                        text-sm font-medium
+                                        ring-1 ring-inset ring-green-600/10
+                                        px-2 py-1
+                                        min-w-[1.5rem]
+                                      bg-green-50 text-green-600
+                                      dark:bg-green-400/10 dark:text-green-400 dark:ring-green-400/30
+                                        whitespace-nowrap"
+                                    >
                                         {{ $facture->total_amount }} DA
                                     </span>
                                 </td>
-                                <td class="px-4 py-4" text-center>{{ $facture->created_at }}</td>
                                 <td class="py-4 ">
                                     <a wire:navigate href="{{ route('viewfacture', ['id' => $facture->id]) }}"
                                        class="font-medium text-blue-600 dark:text-blue-500 hover:underline">

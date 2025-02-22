@@ -67,6 +67,7 @@
                         <thead class="text-xs font-semibold text-gray-900 uppercase bg-gray-100 dark:bg-gray-800 dark:text-gray-300">
                             <tr>
                                 <th scope="col" class="px-3 py-4 text-center">ID</th>
+                                <th scope="col" class="px-6 py-4 text-center">Time</th>
                                 <th scope="col" class="px-6 py-4 text-center">Client</th>
                                 <th scope="col" class="px-6 py-4 text-center">Car Model</th>
                                 <th scope="col" class="px-6 py-4 text-center">Matricule</th>
@@ -74,22 +75,100 @@
                                 <th scope="col" class="px-6 py-4 text-center">Remark</th>
                                 <th scope="col" class="px-6 py-4 text-center">Status</th>
                                 <th scope="col" class="px-6 py-4 text-center">Total</th>
-                                <th scope="col" class="px-6 py-4 text-center">Time</th>
                                 <th scope="col" class="px-6 py-4 text-center">Action</th>
                             </tr>
                         </thead>
                         <tbody class="divide-y divide-gray-200 dark:divide-gray-700">
                             @foreach ($factures as $facture)
                             <tr class="odd:bg-white even:bg-gray-50 dark:odd:bg-gray-900 dark:even:bg-gray-800">
-                                <td class="px-3 py-4 font-medium text-center text-gray-900 dark:text-white">#{{ $facture->id }}</td>
-                                <td class="px-6 py-4 font-medium text-center text-gray-900 dark:text-white">{{ $facture->client->name }}</td>
-                                <td class="px-6 py-4 text-center">{{ $facture->car->model }}</td>
-                                <td class="px-6 py-4 text-center">{{ $facture->matricule->mat }}</td>
-                                <td class="px-6 py-4 text-center">{{ $facture->km }}</td>
-                                <td class="px-6 py-4 text-center">{{ $facture->remark }}</td>
+                                <td class="px-3 py-4 font-medium text-center dark:text-white">
+                                    <span class="inline-flex items-center justify-center text-sm font-medium whitespace-nowrap">#{{ $facture->id }}</span>
+                                </td>
+                                <td class="px-4 py-4 text-center">
+                                <span class="
+    inline-flex items-center justify-center
+    gap-x-1
+    rounded-md
+    text-sm font-medium
+    ring-1 ring-inset ring-gray-500
+    px-2 py-1
+    min-w-[1.5rem]
+    bg-black-50 text-black-600
+    dark:bg-black-400/10 dark:text-black-400 dark:ring-black-400/30
+    whitespace-nowrap
+  ">{{ $facture->created_at->format('d-M-Y') }}</span></td>
+                                <td class="px-6 py-4 font-medium text-center text-gray-900 dark:text-white">
+                                    <span class="
+                                        inline-flex items-center justify-center
+                                        gap-x-1
+                                        rounded-md
+                                        text-sm font-medium
+                                        ring-1 ring-inset ring-blue-600/10
+                                        px-2 py-1
+                                        min-w-[1.5rem]
+                                      bg-blue-50 text-blue-600
+                                      dark:bg-blue-400/10 dark:text-blue-400 dark:ring-blue-400/30
+                                        whitespace-nowrap">
+                                        {{ $facture->client->name }}
+                                    </span>
+                                </td>
+                                <td class="px-6 py-4 text-center">
+                                <span class="
+    inline-flex items-center justify-center
+    gap-x-1
+    rounded-md
+    text-sm font-medium
+    bg-green-50 text-green-600
+    ring-1 ring-inset ring-green-600/10
+    px-2 py-1
+    min-w-[1.5rem]
+    dark:bg-green-400/10 dark:text-green-400 dark:ring-green-400/30
+    whitespace-nowrap">{{ $facture->car->model }}</span>
+                                </td>
+                                <td class="px-6 py-4 text-center">
+                                <a wire:navigate href="{{ route('history', ['clientId' => $facture->client_id, 'matId' => $facture->matricule_id, 'carId' => $facture->car_id]) }}"
+                                 class="
+    inline-flex items-center justify-center
+    gap-x-1
+    rounded-md
+    text-sm font-medium
+    ring-1 ring-inset ring-red-600/10
+    px-2 py-1
+    min-w-[1.5rem]
+    bg-red-50 text-red-600
+    dark:bg-red-400/10 dark:text-red-400 dark:ring-red-400/30
+    whitespace-nowrap
+  ">{{ $facture->matricule->mat }}</a>
+                                </td>
+                                <td class="px-6 py-4 text-center">
+                                 <span class="
+                                 inline-flex items-center justify-center
+    gap-x-1
+    rounded-md
+    text-sm font-medium
+    ring-1 ring-inset ring-gray-500
+    px-2 py-1
+    min-w-[1.5rem]
+    bg-black-50 text-black-600
+    dark:bg-black-400/10 dark:text-black-400 dark:ring-black-400/30
+    whitespace-nowrap">{{ $facture->km }} </span>
+
+                                </td>
+                                <td class="px-6 py-4 text-center">
+                                    <span class="inline-flex items-center justify-center text-sm font-medium whitespace-nowrap">{{ $facture->remark }}</span></td>
                                 <td class="px-2 py-4 text-center">
-                                    <span class="inline-flex items-center justify-center gap-1 px-2 py-2 text-xs font-medium rounded-full whitespace-nowrap
-                                    {{ $facture->status === 'PAID' ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700' }}">
+                                    <span class="
+    inline-flex items-center justify-center
+    gap-x-1
+    rounded-md
+    text-sm font-medium
+    bg-green-50 text-blue-600
+    ring-1 ring-inset ring-blue-600/10
+    px-2 py-1
+    min-w-[1.5rem]
+    dark:bg-blue-400/10 dark:text-blue-400 dark:ring-blue-400/30
+    whitespace-nowrap
+                                    {{ $facture->status === 'PAID' ? 'bg-blue-50 text-blue-600 ring-1 ring-inset ring-blue-600/10 dark:bg-blue-400/10 dark:text-blue-400 dark:ring-blue-400/30' : 'bg-red-50 text-red-600 ring-1 ring-inset ring-red-600/10 dark:bg-red-400/10 dark:text-red-400 dark:ring-red-400/30' }}">
                                     @if ($facture->status === 'PAID')
                                         <svg class="w-4 h-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
@@ -104,11 +183,24 @@
 
                                 </td>
                                 <td class="px-6 py-4 text-center">
-                                    <span class="inline-flex items-center px-3 py-1 text-sm font-semibold text-center rounded-full bg-emerald-100 text-emerald-700 whitespace-nowrap">
+                                    <span
+                                    class="
+    inline-flex items-center justify-center
+    gap-x-1
+    rounded-md
+    text-sm font-medium
+    ring-1 ring-inset ring-green-600/10
+    px-2 py-1
+    min-w-[1.5rem]
+    bg-green-50 text-green-600
+    dark:bg-green-400/10 dark:text-green-400 dark:ring-green-400/30
+    whitespace-nowrap
+  ">
+
+
                                         {{ $facture->total_amount }} DA
                                     </span>
                                 </td>
-                                <td class="px-4 py-4" text-center>{{ $facture->created_at }}</td>
                                 <td class="py-4 ">
                                     <a wire:navigate href="{{ route('viewfacture', ['id' => $facture->id]) }}"
                                        class="font-medium text-blue-600 dark:text-blue-500 hover:underline">
@@ -145,4 +237,3 @@
 
     </div>
 </div>
-
