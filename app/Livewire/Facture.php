@@ -49,7 +49,6 @@ class Facture extends Component
     public $selectedCar = null;
     public $previousCarSelection = null; // Track previous car selection
 
-
     public function render()
     {
 
@@ -58,15 +57,20 @@ class Facture extends Component
 
     public function mount()
     {
-
-        $this->initializeFactureNumber();
         $this->product = Product::all();
-         $this->allmat = matricules::all();
+        // $this->allmat = collect();
+
+        //  $this->allmat = matricules::all();
 
         $this->fetchClients();
         $this->allcars = collect();
-        // $this->allmat = collect();
         $this->allcars = cars::all();
+    }
+    public function updatedSelectedMat($value)
+    {
+        if (!$value) {
+            $this->mat = '';
+        }
     }
 
     public function getGroupedCarsProperty(): array
@@ -95,32 +99,15 @@ class Facture extends Component
 
     public function updated($property, $value)
     {
-        if ($property === 'selectedClient' || $property === 'selectedCar') {
-            // If both client and car are selected, try to find a matching matricule
-            if ($this->selectedClient && $this->selectedCar) {
-                // Find the first matching matricule
-                $mat = matricules::where('client_id', $this->selectedClient)
-                    ->where('car_id', $this->selectedCar)
-                    ->first();
+        if (in_array($property, ['selectedClient', 'selectedCar'])) {
+            // Reset selected mat when client or car changes
+            $this->selectedMat = null;
 
-                if ($mat) {
-                    $this->selectedMat = $mat->id;
-                } else {
-                    $this->selectedMat = null; // Reset if no match found
-                }
+            // Auto-select if only one matricule exists
+            if ($this->filteredMatricules->count() === 1) {
+                $this->selectedMat = $this->filteredMatricules->first()->id;
             }
         }
-
-        // Your existing mat selection logic
-        if ($property === 'selectedMat') {
-            $matRecord = matricules::find($value);
-            if ($matRecord) {
-                $this->selectedClient = $matRecord->client_id;
-                $this->selectedCar = $matRecord->car_id;
-            }
-        }
-
-
     }
 
 
@@ -137,44 +124,37 @@ class Facture extends Component
 //     }
 // }
 //
+// Add this method to filter matricules
+#[Computed]
+public function filteredMatricules()
+{
+    if ($this->selectedClient && $this->selectedCar) {
+        return Matricules::where('client_id', $this->selectedClient)
+            ->where('car_id', $this->selectedCar)
+            ->get();
+    }
+    return collect();
+}
 
 
     public function createMatricule($matNumber)
     {
-        // Store current car selection
-        $currentCarId = $this->selectedCar;
-
-        if (empty($this->selectedClient) || empty($currentCarId) || empty($matNumber)) {
-            $this->addError('mat', 'Client, Car, and Matricule are required.');
-            return;
-        }
-
-        // Check for existing matricule
-        $existingMatricule = Matricules::where('mat', $matNumber)
-            ->where('client_id', $this->selectedClient)
-            ->where('car_id', $currentCarId)
-            ->first();
-
-        if ($existingMatricule) {
-            $this->selectedMat = $existingMatricule->id;
-            return;
-        }
-
-        // Create new matricule
-        $matricule = Matricules::create([
-            'client_id' => $this->selectedClient,
-            'car_id' => $currentCarId,
-            'mat' => $matNumber,
+        $this->validate([
+            'selectedClient' => 'required|exists:clients,id',
+            'selectedCar' => 'required|exists:cars,id',
+            'mat' => 'required|unique:matricules,mat'
         ]);
 
-        // Force reselect the car and new matricule
-        $this->selectedCar = $currentCarId;
-        $this->selectedMat = $matricule->id;
+        $matricule = Matricules::create([
+            'client_id' => $this->selectedClient,
+            'car_id' => $this->selectedCar,
+            'mat' => $matNumber
+        ]);
 
-        // Update the matricule list
-        $this->allmat = Matricules::where('car_id', $currentCarId)
-            ->where('client_id', $this->selectedClient)
-            ->get();
+        $this->selectedMat = $matricule->id;
+        $this->mat = $matNumber;
+
+
     }
 
     // public function updatedSelectedMat($value)
@@ -222,18 +202,14 @@ class Facture extends Component
     public function validateForm()
     {
         if ($this->currentstep === 1) {
-            $validated = $this->validate([
-                'client_id' => 'required',
+            $this->validate([
+                'selectedClient' => 'required|exists:clients,id',
+                'selectedCar' => 'required|exists:cars,id',
+                'selectedMat' => 'required|exists:matricules,id'
             ], [
-                'client_id.required' => 'Please select a Client',
-            ]);
-        } elseif ($this->currentstep === 2) {
-            $validated = $this->validate([
-                'remark' => 'nullable',
-            ]);
-        } elseif ($this->currentstep === 3) {
-            $validated = $this->validate([
-                // Validation rules for step 3
+                'selectedClient.required' => 'Please select a Client',
+                'selectedCar.required' => 'Please select a Car',
+                'selectedMat.required' => 'Please select a Matricule'
             ]);
         }
     }
@@ -295,11 +271,6 @@ class Facture extends Component
         }
     }
 
-    public function initializeFactureNumber()
-    {
-        // Initialize facture number logic
-    }
-
 
 
 
@@ -329,9 +300,9 @@ class Facture extends Component
         // $matricule_id = $this->mat_id ?? $this->createMatricule();
 
         Factures::create([
-            'client_id' => $this->client_id,
-            'car_id' => $this->car_id,
-            'matricule_id' => $this->mat_id,
+            'client_id' => $this->selectedClient,
+            'car_id' => $this->selectedCar,
+            'matricule_id' => $this->selectedMat,
             'km' => $this->km,
             'remark' => $this->remark,
             'order_items' => json_encode($processedOrderItems, JSON_THROW_ON_ERROR),
