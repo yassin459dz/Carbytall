@@ -21,9 +21,11 @@ class Matricule extends Component
     public function render()
     {
         // Fetch matricules with pagination (10 per page)
-        $matricules = matricules::paginate(10);
+    // Eager load the count of 'factures' for each matricule
+    $matricules = matricules::withCount('factures')->paginate(10);
 
-        return view('livewire.matricule.matricule', compact('matricules'));
+    return view('livewire.matricule.matricule', compact('matricules'));
+
     }
 
     #[On('refresh-matricules')]

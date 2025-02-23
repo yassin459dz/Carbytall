@@ -64,31 +64,34 @@
             <div class="text-gray-900 ">
                 <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
                     <table class="w-full text-sm text-left text-gray-500 rtl:text-right dark:text-gray-400">
-                        <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+                        <thead>
                             <tr>
                                 <th scope="col" class="px-6 py-3">ID</th>
                                 <th scope="col" class="px-6 py-3">Client</th>
                                 <th scope="col" class="px-6 py-3">Model</th>
                                 <th scope="col" class="px-6 py-3">Matricule</th>
+                                <th scope="col" class="px-6 py-3">Facture Count</th> <!-- New Column -->
                                 <th scope="col" class="px-6 py-3">Action</th>
                             </tr>
                         </thead>
                         <tbody>
                             @foreach ($matricules as $matricule)
-                            <tr class="border-b odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800 dark:border-gray-700">
-                                <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">#{{ $matricule->id }}</th>
+                            <tr class="border-b">
+                                <th scope="row" class="px-6 py-4 font-medium">{{ $matricule->id }}</th>
                                 <td class="px-6 py-4">{{ $matricule->client->name }}</td>
                                 <td class="px-6 py-4">{{ $matricule->car->model }}</td>
                                 <td class="px-6 py-4">{{ $matricule->mat }}</td>
+                                <td class="px-6 py-4">{{ $matricule->factures_count }}</td>
                                 <td class="px-6 py-4">
                                     <a wire:navigate href="{{ route('history', ['clientId' => $matricule->client_id, 'matId' => $matricule->id, 'carId' => $matricule->car_id]) }}"
-                                        class="font-medium text-blue-600 dark:text-blue-500 hover:underline">
+                                        class="font-medium text-blue-600 hover:underline">
                                         View
-                                     </a>
+                                    </a>
                                 </td>
                             </tr>
                             @endforeach
                         </tbody>
+
                     </table>
 
                     <!-- If there are no clients -->

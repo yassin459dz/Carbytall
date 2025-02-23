@@ -19,6 +19,7 @@ class matricules extends Model
         'remark',
 
     ];
+    protected $table = 'matricules';
 
 
     public function client()
@@ -31,9 +32,9 @@ class matricules extends Model
          return $this->belongsTo(cars::class);
      }
 
-     public function facture()
+     public function factures()
      {
-         return $this->belongsTo(Factures::class);
+        return $this->hasMany(Factures::class, 'matricule_id');
      }
 
 }
