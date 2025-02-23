@@ -64,25 +64,77 @@
             <div class="text-gray-900 ">
                 <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
                     <table class="w-full text-sm text-left text-gray-500 rtl:text-right dark:text-gray-400">
-                        <thead>
+                        <thead class="text-xs font-semibold text-gray-900 uppercase bg-gray-100 dark:bg-gray-800 dark:text-gray-300">
                             <tr>
-                                <th scope="col" class="px-6 py-3">ID</th>
-                                <th scope="col" class="px-6 py-3">Client</th>
-                                <th scope="col" class="px-6 py-3">Model</th>
-                                <th scope="col" class="px-6 py-3">Matricule</th>
-                                <th scope="col" class="px-6 py-3">Facture Count</th> <!-- New Column -->
-                                <th scope="col" class="px-6 py-3">Action</th>
+                                <th scope="col" class="px-6 py-3 text-center">ID</th>
+                                <th scope="col" class="px-6 py-3 text-center">Client</th>
+                                <th scope="col" class="px-6 py-3 text-center">Model</th>
+                                <th scope="col" class="px-6 py-3 text-center">Matricule</th>
+                                <th scope="col" class="px-6 py-3 text-center">Count</th> <!-- New Column -->
+                                <th scope="col" class="px-6 py-3 text-center">Action</th>
                             </tr>
                         </thead>
-                        <tbody>
+                        <tbody class="divide-y divide-gray-200 dark:divide-gray-700">
                             @foreach ($matricules as $matricule)
-                            <tr class="border-b">
-                                <th scope="row" class="px-6 py-4 font-medium">{{ $matricule->id }}</th>
-                                <td class="px-6 py-4">{{ $matricule->client->name }}</td>
-                                <td class="px-6 py-4">{{ $matricule->car->model }}</td>
-                                <td class="px-6 py-4">{{ $matricule->mat }}</td>
-                                <td class="px-6 py-4">{{ $matricule->factures_count }}</td>
-                                <td class="px-6 py-4">
+                            <tr class="odd:bg-white even:bg-gray-50 dark:odd:bg-gray-900 dark:even:bg-gray-800">
+                                <td class="px-3 py-4 font-medium text-center dark:text-white">
+                                    <span class="inline-flex items-center justify-center text-sm font-medium text-gray-900 dark:text-white whitespace-nowrap">#{{ $matricule->id }}</span>
+                                </span>
+                                    </td>
+                                <td class="px-6 py-4 text-center">
+                                    <span class="
+                                        inline-flex items-center justify-center
+                                        gap-x-1
+                                        rounded-md
+                                        text-sm font-medium
+                                        ring-1 ring-inset ring-blue-600/10
+                                        px-2 py-1
+                                        min-w-[1.5rem]
+                                      bg-blue-50 text-blue-600
+                                      dark:bg-blue-400/10 dark:text-blue-400 dark:ring-blue-400/30
+                                        whitespace-nowrap">
+                                        {{ $matricule->client->name }}</span>
+                                    </td>
+                                <td class="px-6 py-4 text-center">
+                                    <span class="
+    inline-flex items-center justify-center
+    gap-x-1
+    rounded-md
+    text-sm font-medium
+    ring-1 ring-inset ring-green-600/10
+    px-2 py-1
+    min-w-[1.5rem]
+    bg-green-50 text-green-600
+    dark:bg-green-400/10 dark:text-green-400 dark:ring-green-400/30
+    whitespace-nowrap
+    " >{{ $matricule->car->model }}</span>
+                                    </td>
+                                <td class="px-6 py-4 text-center">
+                                    <span class="    inline-flex items-center justify-center
+    gap-x-1
+    rounded-md
+    text-sm font-medium
+    ring-1 ring-inset ring-red-600/10
+    px-2 py-1
+    min-w-[1.5rem]
+    bg-red-50 text-red-600
+    dark:bg-red-400/10 dark:text-red-400 dark:ring-red-400/30
+    whitespace-nowrap" >{{ $matricule->mat }}</span>
+                                </td>
+                                <td class="px-6 py-4 text-center"><span class="
+inline-flex items-center justify-center
+gap-x-1
+rounded-md
+text-sm font-medium
+ring-1 ring-inset ring-yellow-700/30
+min-w-[1.5rem]
+ text-yellow-700
+dark:bg-yellow-400/10 dark:text-yellow-400 dark:ring-yellow-400/30
+whitespace-nowrap" > {{ $matricule->factures_count }}
+
+                                </span>
+                                   </td>
+                                <td class="px-6 py-4 text-center">
                                     <a wire:navigate href="{{ route('history', ['clientId' => $matricule->client_id, 'matId' => $matricule->id, 'carId' => $matricule->car_id]) }}"
                                         class="font-medium text-blue-600 hover:underline">
                                         View

@@ -4,7 +4,7 @@
 
 
 
-    <div class="relative p-8 mb-6 overflow-hidden bg-gray-100 border-blue-600 border-x-4 rounded-xl">
+    <div class="relative p-8 mb-6 overflow-hidden bg-gray-100 border-blue-600 dark:bg-gray-900 border-x-4 rounded-xl">
         <!-- Decorative Elements -->
         <div class="absolute top-0 right-0 w-40 h-40 rounded-full bg-blue-50 blur-3xl opacity-20"></div>
         <div class="absolute bottom-0 left-0 w-32 h-32 rounded-full bg-indigo-50 blur-3xl opacity-10"></div>
@@ -78,11 +78,11 @@
                         <thead class="text-xs font-semibold text-gray-900 uppercase bg-gray-100 dark:bg-gray-800 dark:text-gray-300">
                             <tr>
                                 <th scope="col" class="px-3 py-4 text-center">ID</th>
+                                <th scope="col" class="px-6 py-4 text-center">DATE</th>
                                 <th scope="col" class="px-6 py-4 text-center">KM</th>
                                 <th scope="col" class="px-6 py-4 text-center">Remark</th>
-                                <th scope="col" class="px-6 py-4 text-center">Status</th>
+                                <th scope="col" class="px-6 py-4 text-center">STATUS</th>
                                 <th scope="col" class="px-6 py-4 text-center">Total</th>
-                                <th scope="col" class="px-6 py-4 text-center">Time</th>
                                 <th scope="col" class="px-6 py-4 text-center">Action</th>
                             </tr>
                         </thead>
