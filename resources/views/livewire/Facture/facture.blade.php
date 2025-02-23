@@ -324,7 +324,7 @@
 <!-- Car Dropdown (Dependent on Client) -->
 <!-- Car Dropdown (Dependent on Client) -->
 <label for="carSelect" class="block mt-4 text-sm font-medium text-gray-700">Car</label>
-<div class="flex items-center space-x-0">
+<div  class="flex items-center space-x-0">
     <select
         id="carSelect"
         wire:model.live="selectedCar"
@@ -355,7 +355,15 @@
         {{------------------------------------------------------------------------------------------------}}
         <!-- Mat Dropdown (Dependent on Car) -->
 <!-- Matricule Dropdown -->
-<div x-data="{ showMatInput: false }" class="relative">
+<!-- Matricule Dropdown -->
+<!-- Matricule Dropdown -->
+<div x-data="{
+    showNewMat: false,
+    mat: @entangle('mat'),
+    selectedMat: @entangle('selectedMat'),
+    selectedCar: @entangle('selectedCar'),
+    selectedClient: @entangle('selectedClient')
+}" class="relative">
     <div class="relative max-w-sm">
         <label for="matSelect" class="block text-sm font-medium text-gray-700">Matricule</label>
         <div class="flex items-center space-x-0">
@@ -371,9 +379,12 @@
             </select>
 
             <!-- Create New Matricule Button -->
-            <button type="button"
+            <button
+                type="button"
                 class="px-2.5 py-2 text-white bg-blue-700 hover:bg-blue-800 border-l border-gray-300 rounded-r-lg focus:ring-4 focus:outline-none focus:ring-blue-300"
-                @click="$wire.createMatricule($wire.mat)">
+                @click="showNewMat = !showNewMat"
+                :disabled="!selectedClient || !selectedCar"
+            >
                 <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" viewBox="0 0 20 20" fill="currentColor">
                     <path fill-rule="evenodd" d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z" clip-rule="evenodd"/>
                 </svg>
@@ -381,6 +392,70 @@
         </div>
     </div>
 
+    <!-- New Matricule Input Section -->
+    <div
+        class="relative max-w-sm mt-2"
+        x-show="showNewMat"
+        x-transition:enter="transition ease-out duration-300"
+        x-transition:enter-start="opacity-0 transform scale-95"
+        x-transition:enter-end="opacity-100 transform scale-100"
+        x-transition:leave="transition ease-in duration-200"
+        x-transition:leave-start="opacity-100 transform scale-100"
+        x-transition:leave-end="opacity-0 transform scale-95"
+    >
+        <div class="relative max-w-sm">
+            <label for="NewMat" class="block text-sm font-medium text-gray-700">New Matricule</label>
+            <div class="relative flex items-center">
+                <div class="relative flex w-full">
+                    <input
+                        id="NewMat"
+                        type="text"
+                        class="block w-full p-2 text-sm text-gray-800 placeholder-gray-400 bg-white border border-gray-200 rounded-l-lg focus:border-blue-500 focus:ring-blue-500"
+                        x-model="mat"
+                        placeholder="Enter new matricule"
+                    />
+                    <button
+                        type="button"
+                        class="px-2.5 py-2 text-white bg-blue-700 hover:bg-blue-800 border-l border-gray-300 rounded-r-lg focus:ring-4 focus:outline-none focus:ring-blue-300"
+                        @click="
+                            if (mat && mat.length > 0) {
+                                const currentCar = selectedCar;
+                                $wire.createMatricule(mat).then(() => {
+                                    mat = '';
+                                    showNewMat = false;
+                                    $wire.set('selectedCar', currentCar);
+                                });
+                            }
+                        "
+                    >
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 20 20">
+                            <path fill="currentColor" d="M3 5a2 2 0 0 1 2-2h1v3.5A1.5 1.5 0 0 0 7.5 8h4A1.5 1.5 0 0 0 13 6.5V3h.379a2 2 0 0 1 1.414.586l1.621 1.621A2 2 0 0 1 17 6.621V15a2 2 0 0 1-2 2v-5.5a1.5 1.5 0 0 0-1.5-1.5h-7A1.5 1.5 0 0 0 5 11.5V17a2 2 0 0 1-2-2zm9-2H7v3.5a.5.5 0 0 0 .5.5h4a.5.5 0 0 0 .5-.5zm2 8.5V17H6v-5.5a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 .5.5" />
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+        {{------------------------------------------------------------------------------------------------}}
+
+        {{------------------------------------------------------------------------------------------------}}
+        <!-- Mat Dropdown (Dependent on Car) -->
+<!-- Matricule Dropdown -->
+<!-- Matricule Dropdown -->
+
 
 
 
@@ -392,10 +467,9 @@
 
 
 
-
-    </div>
 
 </div>
+
 
                     @endif
                     <!-- Vehicle Details (Livewire Step 2) -->
