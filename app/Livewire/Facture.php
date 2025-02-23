@@ -72,7 +72,7 @@ class Facture extends Component
             $this->mat = '';
         }
     }
-
+    #[Computed()]
     public function getGroupedCarsProperty(): array
     {
         // Get IDs of cars associated with the selected client, if any.
@@ -129,7 +129,7 @@ class Facture extends Component
 public function filteredMatricules()
 {
     if ($this->selectedClient && $this->selectedCar) {
-        return Matricules::where('client_id', $this->selectedClient)
+        return matricules::where('client_id', $this->selectedClient)
             ->where('car_id', $this->selectedCar)
             ->get();
     }
@@ -137,25 +137,20 @@ public function filteredMatricules()
 }
 
 
-    public function createMatricule($matNumber)
-    {
-        $this->validate([
-            'selectedClient' => 'required|exists:clients,id',
-            'selectedCar' => 'required|exists:cars,id',
-            'mat' => 'required|unique:matricules,mat'
-        ]);
-
-        $matricule = Matricules::create([
-            'client_id' => $this->selectedClient,
-            'car_id' => $this->selectedCar,
-            'mat' => $matNumber
-        ]);
-
-        $this->selectedMat = $matricule->id;
-        $this->mat = $matNumber;
+public function createMatricule($matNumber)
+{
 
 
-    }
+    $matricule = Matricules::create([
+        'client_id' => $this->selectedClient,
+        'car_id'    => $this->selectedCar,
+        'mat'       => $matNumber
+    ]);
+
+    $this->selectedMat = $matricule->id;
+    $this->mat         = $matNumber;
+
+}
 
     // public function updatedSelectedMat($value)
     // {
