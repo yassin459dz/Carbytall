@@ -297,8 +297,10 @@
                                 <div class="flex items-center justify-between">
                                     <span class="text-xl font-bold text-gray-800">Total:</span>
                                     <span
-                                        class="text-2xl font-bold text-blue-600"
+                                        class="text-2xl font-bold text-blue-600 cursor-pointer"
                                         {{-- x-text="(totalPrice() + extraCharge).toFixed(2) + ' DA'"> --}}
+                                        @click="openOverrideModal"
+
                                         x-text="(totalPrice() + extraCharge - discountAmount).toFixed(2) + ' DA'">
 
                                     </span>
@@ -314,7 +316,52 @@
                             </div>
                         </div>
                     </div>
+<!-- Override Total Modal -->
+<div
+    x-show="overrideTotalModalOpen"
+    x-transition:enter="transition ease-out duration-300"
+    x-transition:enter-start="opacity-0 scale-90"
+    x-transition:enter-end="opacity-100 scale-100"
+    x-transition:leave="transition ease-in duration-200"
+    x-transition:leave-start="opacity-100 scale-100"
+    x-transition:leave-end="opacity-0 scale-90"
+    class="fixed inset-0 z-50 flex items-center justify-center bg-black/50"
+    x-cloak
+>
+    <div class="relative p-6 bg-white rounded-lg shadow-xl w-96">
+        <button @click="overrideTotalModalOpen = false"
+            class="absolute text-gray-600 top-4 right-4 hover:text-red-700">
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="none" viewBox="0 0 24 24"
+                stroke-width="1.5" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
+            </svg>
+        </button>
+
+        <h2 class="mb-4 text-2xl font-bold">Change Total</h2>
+
+        <div class="mb-4">
+            <label class="block mb-2 text-sm font-bold text-gray-700">New Total (DA)</label>
+            <input
+                type="number"
+                step="0.01"
+                min="0"
+                x-model.number="overriddenTotal"
+                class="w-full px-3 py-2 border rounded focus:outline-none focus:shadow-outline"
+            />
+        </div>
+
+        <div class="flex justify-between mt-6">
+            <button
+                @click="applyOverriddenTotal"
+                class="px-4 py-2 font-bold text-white bg-blue-600 rounded hover:bg-blue-700">
+                Update
+            </button>
+        </div>
+    </div>
+
+</div>
                     @endif
+
                 </div>
             </div>
         </div>
@@ -340,6 +387,32 @@ function orderApp(products) {
         editingItem: null,
         editedItem: null,
         isSubmitted: false,  // This flag ensures submission only once
+        overrideTotalModalOpen: false,
+        overriddenTotal: null,
+        customTotalEnabled: false,
+        customTotalValue: null,
+
+        openOverrideModal() {
+    this.overriddenTotal = this.calculateTotal();
+    this.overrideTotalModalOpen = true;
+    },
+
+    applyOverriddenTotal() {
+    const baseTotal = this.totalPrice() + this.extraCharge;
+    const difference = baseTotal - this.overriddenTotal;
+
+    if (difference >= 0) {
+        // Treat as discount
+        this.discountAmount = difference;
+        this.extraCharge = 0;
+    } else {
+        // Treat as extra charge
+        this.extraCharge = Math.abs(difference);
+        this.discountAmount = 0;
+    }
+
+    this.overrideTotalModalOpen = false;
+    },
 
         get filteredProducts() {
             if (!this.searchTerm) return this.products;

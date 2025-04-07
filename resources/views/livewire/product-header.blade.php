@@ -1,5 +1,5 @@
 <!-- Group heading and search input together -->
-<div class="flex items-center justify-between mb-6">
+<div wire:ignore.self class="flex items-center justify-between mb-6">
     <!-- Left: Heading -->
     <h2 class="text-2xl font-bold text-gray-800">
       Available Products
@@ -20,7 +20,7 @@ stroke="currentColor" class="size-6">
 <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
 </svg>
 </button>
-<div wire:ignore>
+<div >
 <livewire:create-edit-product />
 </div>
 </div>

@@ -172,12 +172,12 @@ public function createMatricule($matNumber)
         if ($this->currentstep === 1) {
             $this->validate([
                 'selectedClient' => 'required|exists:clients,id',
-                'selectedCar' => 'required|exists:cars,id',
-                 'selectedMat' => 'required|exists:matricules,id'
+                 'selectedCar' => 'required|exists:cars,id',
+                  'selectedMat' => 'required|exists:matricules,id'
             ], [
                 'selectedClient.required' => 'Please select a Client',
-                'selectedCar.required' => 'Please select a Car',
-                 'selectedMat.required' => 'Please select a Matricule'
+                 'selectedCar.required' => 'Please select a Car',
+                  'selectedMat.required' => 'Please select a Matricule'
             ]);
         }
     }
