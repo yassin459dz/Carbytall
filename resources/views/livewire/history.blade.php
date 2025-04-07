@@ -21,34 +21,59 @@
             <!-- Client Details -->
             <div class="flex flex-wrap items-center text-2xl gap-x-8 gap-y-4">
                 <div class="flex items-center gap-3 group">
+<<<<<<< HEAD
                     <span class="text-xl font-semibold tracking-wider text-gray-600 uppercase dark:text-gray-300">Client</span>
+=======
+                    <span class="text-base font-medium tracking-wider text-gray-600 uppercase">Client</span>
+>>>>>>> 5c4e5b47f7a1ad8f121ef0402d01777a94a9fe87
                     <span class="inline-flex items-center justify-center px-2 py-1 text-2xl font-bold min-w-[2.5rem] text-blue-600 rounded-md gap-x-1 bg-green-50 ring-1 ring-inset ring-blue-600/10 dark:bg-blue-400/10 dark:text-blue-400 dark:ring-blue-400/30">
                         {{ $matricule->client->name }}
                     </span>
                 </div>
 
+<<<<<<< HEAD
                 <div class="hidden text-3xl font-bold text-gray-900 transform md:block dark:text-white">|</div>
 
                 <div class="flex items-center gap-3 group">
                     <span class="text-xl font-semibold tracking-wider text-gray-600 uppercase dark:text-gray-300">Car</span>
+=======
+                <div class="hidden text-3xl font-bold text-gray-900 transform md:block ">|</div>
+
+                <div class="flex items-center gap-3 group">
+                    <span class="text-base font-medium tracking-wider text-gray-600 uppercase">Car</span>
+>>>>>>> 5c4e5b47f7a1ad8f121ef0402d01777a94a9fe87
                     <span class="inline-flex items-center justify-center px-2 py-1 text-2xl min-w-[2.5rem] font-bold text-blue-600 rounded-md gap-x-1 bg-green-50 ring-1 ring-inset ring-blue-600/10 dark:bg-blue-400/10 dark:text-blue-400 dark:ring-blue-400/30">
                         {{ $matricule->car->model }}
                     </span>
                 </div>
 
+<<<<<<< HEAD
                 <div class="hidden text-3xl font-bold text-gray-900 transform md:block dark:text-white">|</div>
 
                 <div class="flex items-center gap-3 group">
                     <span class="text-xl font-semibold tracking-wider text-gray-600 uppercase dark:text-gray-300">Matricule</span>
+=======
+                <div class="hidden text-3xl font-bold text-gray-900 transform md:block ">|</div>
+
+                <div class="flex items-center gap-3 group">
+                    <span class="text-base font-medium tracking-wider text-gray-600 uppercasee">Matricule</span>
+>>>>>>> 5c4e5b47f7a1ad8f121ef0402d01777a94a9fe87
                     <span class="inline-flex items-center justify-center px-2 py-1 text-2xl min-w-[2.5rem] font-bold text-blue-600 rounded-md gap-x-1 bg-green-50 ring-1 ring-inset ring-blue-600/10 dark:bg-blue-400/10 dark:text-blue-400 dark:ring-blue-400/30">
                         {{ $matricule->mat }}
                     </span>
                 </div>
 
+<<<<<<< HEAD
                 <div class="hidden text-3xl font-bold text-gray-900 transform md:block dark:text-white">|</div>
                 
                 <div class="flex items-center gap-3 group">
                     <span class="text-xl font-semibold tracking-wider text-gray-600 uppercase dark:text-gray-300">Count</span>
+=======
+                <div class="hidden text-3xl font-bold text-gray-900 transform md:block ">|</div>
+
+                <div class="flex items-center gap-3 group">
+                    <span class="text-base font-medium tracking-wider text-gray-600 uppercasee">Facture Count</span>
+>>>>>>> 5c4e5b47f7a1ad8f121ef0402d01777a94a9fe87
                     <span class="inline-flex items-center justify-center px-2 py-1 text-2xl font-bold min-w-[2.5rem] text-blue-600 rounded-md gap-x-1 bg-green-50 ring-1 ring-inset ring-blue-600/10 dark:bg-blue-400/10 dark:text-blue-400 dark:ring-blue-400/30">
                         {{ $matricule->factures_count }}
                     </span>

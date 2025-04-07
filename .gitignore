@@ -21,5 +21,9 @@ yarn-error.log
 /.vscode
 /.zed
 
+<<<<<<< HEAD
 .codegpt
 .qodo
+=======
+.codegpt
+>>>>>>> 5c4e5b47f7a1ad8f121ef0402d01777a94a9fe87

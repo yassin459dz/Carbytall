@@ -17,7 +17,11 @@ use App\Livewire\ListFacture;
 use App\Livewire\ViewFacture;
 use App\Livewire\FactureHistory;
 use App\Livewire\History;
+<<<<<<< HEAD
 use App\Livewire\Product;
+=======
+
+>>>>>>> 5c4e5b47f7a1ad8f121ef0402d01777a94a9fe87
 
 Route::view('/', 'welcome');
 
@@ -82,10 +86,13 @@ Route::view('profile', 'profile')
     ->middleware(['auth', 'verified'])
     ->name('history');
 
+<<<<<<< HEAD
     Route::get('/product', Product::class)
     ->middleware(['auth', 'verified'])
     ->name('product');
 
+=======
+>>>>>>> 5c4e5b47f7a1ad8f121ef0402d01777a94a9fe87
 
 require __DIR__.'/auth.php';
 

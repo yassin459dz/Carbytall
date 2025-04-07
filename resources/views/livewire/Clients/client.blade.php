@@ -52,17 +52,26 @@
         </div>
     </div>
 <!-- Search Form -->
+<<<<<<< HEAD
 <div class="relative flex max-w-md mx-auto mb-8">
     <input wire:model.live="search" type="search" id="location-search"
         class="block w-96 pl-4 pr-12 py-2.5 text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500"
         placeholder="Search Client or Phone N°" required />
 </div>
+=======
+    <div class="relative flex max-w-md mx-auto mb-8">
+        <input wire:modal.live="search" type="search" id="location-search"
+            class="block w-96 pl-4 pr-12 py-2.5 text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500"
+            placeholder="Search Client or Phone N°" required />
+    </div>
+>>>>>>> 5c4e5b47f7a1ad8f121ef0402d01777a94a9fe87
     <!-- Client table -->
     <div class="mx-auto max-w-7xl sm:px-6 lg:px-8">
         <div class="overflow-hidden bg-white shadow-sm sm:rounded-lg">
             <div class="text-gray-900 ">
                 <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
                     <table class="w-full text-sm text-left text-gray-500 rtl:text-right dark:text-gray-400">
+<<<<<<< HEAD
                         <thead class="text-xs font-semibold text-gray-900 uppercase bg-gray-100 dark:bg-gray-800 dark:text-gray-300">
                             <tr>
                                 <th scope="col" class="px-6 py-3 text-center">ID</th>
@@ -109,6 +118,24 @@
                                     </td>
 
                                 <td wire:ignore class="px-6 py-4 text-center">
+=======
+                        <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+                            <tr>
+                                <th scope="col" class="px-6 py-3">ID</th>
+                                <th scope="col" class="px-6 py-3">Client Name</th>
+                                <th scope="col" class="px-6 py-3">Phone N°</th>
+                                <th scope="col" class="px-6 py-3">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach ($clients as $client)
+                            <tr class="border-b odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800 dark:border-gray-700">
+                                <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">{{ $loop->index + 1 }}</th>
+                                <td class="px-6 py-4">{{ $client->name }}</td>
+                                <td class="px-6 py-4">{{ $client->phone }}</td>
+
+                                <td wire:ignore class="px-6 py-4">
+>>>>>>> 5c4e5b47f7a1ad8f121ef0402d01777a94a9fe87
                                     <!-- Modal toggle -->
                                     <button
                                     wire:dispatch="showClient"
@@ -131,6 +158,53 @@
                             @endforeach
                         </tbody>
                     </table>
+<<<<<<< HEAD
+=======
+                    <!-- Pagination Links -->
+
+                    <div>
+                        <div  class="flex justify-center">
+
+                            <nav aria-label="Page navigation example">
+
+                                <ul class="inline-flex justify-center p-4 pb-2 -space-x-px">
+
+                                    <button class="flex items-center justify-center h-8 px-3 leading-tight text-gray-500 bg-white border border-gray-300 rounded-l-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">
+                                        <svg class="w-3.5 h-3.5  rtl:rotate-180" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 10">
+                                          <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 5H1m0 0 4 4M1 5l4-4"/>
+                                        </svg>
+                                    </button>
+                                    <li>
+                                        <a href="#" class="flex items-center justify-center h-8 px-3 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">1</a>
+                                    </li>
+                                    <li>
+                                        <a href="#" class="flex items-center justify-center h-8 px-3 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">2</a>
+                                    </li>
+                                    <li>
+                                        <a href="#"  class="flex items-center justify-center h-8 px-3 text-blue-600 border border-gray-300 bg-blue-50 hover:bg-blue-100 hover:text-blue-700 dark:border-gray-700 dark:bg-gray-700 dark:text-white">3</a>
+                                    </li>
+                                    <li>
+                                        <a href="#" class="flex items-center justify-center h-8 px-3 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">4</a>
+                                    </li>
+                                    <li>
+                                        <a href="#" class="flex items-center justify-center h-8 px-3 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">5</a>
+                                    </li>
+                                    <button class="flex items-center justify-center h-8 px-3 leading-tight text-gray-500 bg-white border border-gray-300 rounded-r-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">
+                                        <svg class="w-3.5 h-3.5  rtl:rotate-180" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 10">
+                                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M1 5h12m0 0L9 1m4 4L9 9"/>
+                                      </svg>
+                                    </button>
+                                </ul>
+                            </nav>
+
+                        </div>
+                        <div class="flex justify-center ">
+                            <span class="text-sm text-gray-700 dark:text-gray-400">
+                                Showing <span class="font-semibold text-gray-900 dark:text-white">1</span> to <span class="font-semibold text-gray-900 dark:text-white">10</span> of <span class="font-semibold text-gray-900 dark:text-white">100</span> Entries
+                            </span>
+                        </div>
+                    </div>
+>>>>>>> 5c4e5b47f7a1ad8f121ef0402d01777a94a9fe87
                     <!-- If there are no clients -->
                      @if ($clients->isEmpty())
                         <p class="p-4 text-gray-500">No clients available.</p>
@@ -139,7 +213,10 @@
             </div>
         </div>
     </div>
+<<<<<<< HEAD
     {{ $clients->links('vendor.pagination.custom') }}
 
+=======
+>>>>>>> 5c4e5b47f7a1ad8f121ef0402d01777a94a9fe87
 </div>
 

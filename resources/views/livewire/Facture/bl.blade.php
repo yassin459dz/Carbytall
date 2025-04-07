@@ -8,11 +8,27 @@
             <div class="flex flex-col md:flex-row">
                 <!-- Left Section: Product List (mostly unchanged) -->
                 <div class="w-full p-6 md:w-3/5 bg-gray-50">
+<<<<<<< HEAD
                 <!-- THIS HOW TO CALL THE SEARCH AND CREATE A NEW PRODUCT -->
                     <livewire:product-header />
                 <!-- THIS HOW TO CALL THE SEARCH AND CREATE A NEW PRODUCT -->
 
 
+=======
+                    <div class="flex items-center justify-between mb-6">
+                        <h2 class="text-2xl font-bold text-gray-800">
+                            Available Products
+                        </h2>
+                        <div class="flex items-center space-x-2">
+                            <input
+                                type="text"
+                                placeholder="Search products..."
+                                class="px-4 py-2 transition duration-300 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                                x-model="searchTerm"
+                            >
+                        </div>
+                    </div>
+>>>>>>> 5c4e5b47f7a1ad8f121ef0402d01777a94a9fe87
 
                     <div class="grid grid-cols-2 lg:grid-cols-3 gap-4 overflow-y-scroll no-scrollbar max-h-[100vh]">
                         <template x-for="product in filteredProducts" :key="product.id">
@@ -37,7 +53,11 @@
                         <div class="flex items-center justify-between mb-6">
                             <h2 class="text-2xl font-bold text-gray-800">Current Order</h2>
                             <button
+<<<<<<< HEAD
                             class="px-4 py-2 font-semibold text-red-500 bg-red-200 rounded-md hover:bg-red-600 hover:text-white focus:ring-4 focus:outline-none focus:ring-red-300"
+=======
+                            class="px-4 py-2 text-red-500 bg-red-200 rounded-md hover:bg-red-600 hover:text-white focus:ring-4 focus:outline-none focus:ring-red-300"
+>>>>>>> 5c4e5b47f7a1ad8f121ef0402d01777a94a9fe87
                             @click="clearOrder">
                                 Clear All
                             </button>
@@ -297,10 +317,15 @@
                                 <div class="flex items-center justify-between">
                                     <span class="text-xl font-bold text-gray-800">Total:</span>
                                     <span
+<<<<<<< HEAD
                                         class="text-2xl font-bold text-blue-600 cursor-pointer"
                                         {{-- x-text="(totalPrice() + extraCharge).toFixed(2) + ' DA'"> --}}
                                         @click="openOverrideModal"
 
+=======
+                                        class="text-2xl font-bold text-blue-600"
+                                        {{-- x-text="(totalPrice() + extraCharge).toFixed(2) + ' DA'"> --}}
+>>>>>>> 5c4e5b47f7a1ad8f121ef0402d01777a94a9fe87
                                         x-text="(totalPrice() + extraCharge - discountAmount).toFixed(2) + ' DA'">
 
                                     </span>
@@ -316,6 +341,7 @@
                             </div>
                         </div>
                     </div>
+<<<<<<< HEAD
 <!-- Override Total Modal -->
 <div
     x-show="overrideTotalModalOpen"
@@ -362,6 +388,9 @@
 </div>
                     @endif
 
+=======
+                    @endif
+>>>>>>> 5c4e5b47f7a1ad8f121ef0402d01777a94a9fe87
                 </div>
             </div>
         </div>
@@ -387,6 +416,7 @@ function orderApp(products) {
         editingItem: null,
         editedItem: null,
         isSubmitted: false,  // This flag ensures submission only once
+<<<<<<< HEAD
         overrideTotalModalOpen: false,
         overriddenTotal: null,
         customTotalEnabled: false,
@@ -413,6 +443,8 @@ function orderApp(products) {
 
     this.overrideTotalModalOpen = false;
     },
+=======
+>>>>>>> 5c4e5b47f7a1ad8f121ef0402d01777a94a9fe87
 
         get filteredProducts() {
             if (!this.searchTerm) return this.products;

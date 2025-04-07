@@ -18,9 +18,25 @@ class="mx-auto max-w-7xl"
             <div class="flex flex-col md:flex-row">
                 <!-- Left Section: Product List (mostly unchanged) -->
                 <div class="w-full p-6 md:w-3/5 bg-gray-50">
+<<<<<<< HEAD
                 <!-- THIS HOW TO CALL THE SEARCH AND CREATE A NEW PRODUCT -->
                     <livewire:product-header />
                 <!-- THIS HOW TO CALL THE SEARCH AND CREATE A NEW PRODUCT -->
+=======
+                    <div class="flex items-center justify-between mb-6">
+                        <h2 class="text-2xl font-bold text-gray-800">
+                            Available Products
+                        </h2>
+                        <div class="flex items-center space-x-2">
+                            <input
+                                type="text"
+                                placeholder="Search products..."
+                                class="px-4 py-2 transition duration-300 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                                x-model="searchTerm"
+                            >
+                        </div>
+                    </div>
+>>>>>>> 5c4e5b47f7a1ad8f121ef0402d01777a94a9fe87
 
                     <div class="grid grid-cols-2 lg:grid-cols-3 gap-4 overflow-y-scroll no-scrollbar max-h-[100vh]">
                         <template x-for="product in filteredProducts" :key="product.id">
@@ -646,6 +662,7 @@ function orderApp(products) {
         },
 
         addToOrder(product) {
+<<<<<<< HEAD
     const productId = product.id ?? product.product_id;
 
     const existingItem = this.orderItems.find(item =>
@@ -662,6 +679,18 @@ function orderApp(products) {
         });
     }
 },
+=======
+            const existingItem = this.orderItems.find(item => item.id === product.id);
+            if (existingItem) {
+                existingItem.quantity++;
+            } else {
+                this.orderItems.push({
+                    ...product,
+                    quantity: 1
+                });
+            }
+        },
+>>>>>>> 5c4e5b47f7a1ad8f121ef0402d01777a94a9fe87
 
         updateQuantity(index, change) {
             if (this.orderItems[index].quantity + change <= 0) {

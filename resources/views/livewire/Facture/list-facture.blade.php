@@ -39,7 +39,10 @@
     </button>
   </div>
 @endif
+<<<<<<< HEAD
 
+=======
+>>>>>>> 5c4e5b47f7a1ad8f121ef0402d01777a94a9fe87
     <!-- Session Status Alert -->
 
     <div>
@@ -47,13 +50,19 @@
             <button data-modal-target="authentication-modal" data-modal-toggle="authentication-modal" class="block text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" type="button">
                 Create Client
             </button>
+<<<<<<< HEAD
 
+=======
+>>>>>>> 5c4e5b47f7a1ad8f121ef0402d01777a94a9fe87
         </div>
         <div wire:ignore>
             <livewire:create-edit-client />
         </div>
     </div>
+<<<<<<< HEAD
 
+=======
+>>>>>>> 5c4e5b47f7a1ad8f121ef0402d01777a94a9fe87
 <!-- Search Form -->
     <div class="relative flex max-w-md mx-auto mb-8">
         <input wire:modal.live="search" type="search" id="location-search"
@@ -224,11 +233,21 @@
                         </tbody>
                     </table>
 
+<<<<<<< HEAD
 
+=======
+                    <!-- Pagination Links -->
+
+                    <!-- If there are no clients -->
+                     {{-- @if ($clients->isEmpty())
+                        <p class="p-4 text-gray-500">No clients available.</p>
+                    @endif --}}
+>>>>>>> 5c4e5b47f7a1ad8f121ef0402d01777a94a9fe87
                 </div>
 
             </div>
 
+<<<<<<< HEAD
 
         </div>
     </div>
@@ -247,4 +266,11 @@
 </div>
 
 
+=======
+        </div>
+    </div>
+    <div>
+
+    </div>
+>>>>>>> 5c4e5b47f7a1ad8f121ef0402d01777a94a9fe87
 </div>

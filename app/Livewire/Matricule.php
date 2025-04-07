@@ -11,6 +11,7 @@ class Matricule extends Component
 {
     use WithPagination;
 
+<<<<<<< HEAD
     // Add this to specify which pagination theme to use
     protected $paginationTheme = 'tailwind';
 
@@ -35,6 +36,23 @@ class Matricule extends Component
             ->paginate(10);
 
         return view('livewire.matricule.matricule', compact('matricules'));
+=======
+    // Removed the public $matricules property from mount()
+
+    public function mount()
+    {
+        // No need to load matricules here since we're paginating in render()
+    }
+
+    public function render()
+    {
+        // Fetch matricules with pagination (10 per page)
+    // Eager load the count of 'factures' for each matricule
+    $matricules = matricules::withCount('factures')->paginate(10);
+
+    return view('livewire.matricule.matricule', compact('matricules'));
+
+>>>>>>> 5c4e5b47f7a1ad8f121ef0402d01777a94a9fe87
     }
 
     #[On('refresh-matricules')]
@@ -42,9 +60,17 @@ class Matricule extends Component
     {
         $this->resetPage(); // Reset pagination when refreshed
     }
+<<<<<<< HEAD
 
     public function updatingSearch()
     {
         $this->resetPage();
     }
+=======
+    public function updatingSearch()
+{
+    $this->resetPage();
+}
+
+>>>>>>> 5c4e5b47f7a1ad8f121ef0402d01777a94a9fe87
 }

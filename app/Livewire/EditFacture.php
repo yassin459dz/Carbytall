@@ -6,7 +6,11 @@ use App\Models\brands;
 use App\Models\cars;
 use App\Models\clients;
 use App\Models\matricules;
+<<<<<<< HEAD
 use App\Models\Products;
+=======
+use App\Models\Product;
+>>>>>>> 5c4e5b47f7a1ad8f121ef0402d01777a94a9fe87
 use Livewire\Component;
 use Illuminate\Support\Facades\Log;
 
@@ -58,7 +62,11 @@ class EditFacture extends Component
     public function mount($edit = null)
     {
         $this->factureId = $edit;
+<<<<<<< HEAD
         $this->product = Products::all();
+=======
+        $this->product = Product::all();
+>>>>>>> 5c4e5b47f7a1ad8f121ef0402d01777a94a9fe87
         $this->allcars = cars::all();
         $this->allclients = clients::all();
         $this->allmat = matricules::all();

@@ -55,9 +55,12 @@ new class extends Component
                     <x-nav-link :href="route('ListFacture')" :active="request()->routeIs('allfacture')" wire:navigate>
                         {{ __('ALL Facture') }}
                     </x-nav-link>
+<<<<<<< HEAD
                     <x-nav-link :href="route('product')" :active="request()->routeIs('product')" wire:navigate>
                         {{ __('ALL PRODUCT') }}
                     </x-nav-link>
+=======
+>>>>>>> 5c4e5b47f7a1ad8f121ef0402d01777a94a9fe87
 
     {{-- the tuggle dark mode  --}}
     <button

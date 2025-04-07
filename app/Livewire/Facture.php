@@ -6,7 +6,11 @@ use App\Models\brands;
 use App\Models\cars;
 use App\Models\clients;
 use App\Models\matricules;
+<<<<<<< HEAD
 use App\Models\Products;
+=======
+use App\Models\Product;
+>>>>>>> 5c4e5b47f7a1ad8f121ef0402d01777a94a9fe87
 use Livewire\Component;
 use Illuminate\Support\Facades\Log;
 use Livewire\Attributes\Computed;
@@ -57,7 +61,11 @@ class Facture extends Component
 
     public function mount()
     {
+<<<<<<< HEAD
         $this->product = Products::all();
+=======
+        $this->product = Product::all();
+>>>>>>> 5c4e5b47f7a1ad8f121ef0402d01777a94a9fe87
         // $this->allmat = collect();
 
         //  $this->allmat = matricules::all();
@@ -110,6 +118,24 @@ class Facture extends Component
         }
     }
 
+<<<<<<< HEAD
+=======
+
+//
+// public function updatedd($property, $value)
+// {
+
+
+//     // (Optional) If the user changes the car manually, update available matricules.
+//     if ($property === 'selectedCar') {
+//         $this->allmat = matricules::where('car_id', $value)
+//             ->where('client_id', $this->selectedClient) // filter by selected client
+//             ->get();
+//     }
+// }
+//
+// Add this method to filter matricules
+>>>>>>> 5c4e5b47f7a1ad8f121ef0402d01777a94a9fe87
 #[Computed]
 public function filteredMatricules()
 {
@@ -122,6 +148,7 @@ public function filteredMatricules()
 }
 
 
+<<<<<<< HEAD
 // public function createMatricule($matNumber)
 // {
 
@@ -138,12 +165,19 @@ public function filteredMatricules()
 // }
 public function createMatricule($matNumber)
 {
+=======
+public function createMatricule($matNumber)
+{
+
+
+>>>>>>> 5c4e5b47f7a1ad8f121ef0402d01777a94a9fe87
     $matricule = Matricules::create([
         'client_id' => $this->selectedClient,
         'car_id'    => $this->selectedCar,
         'mat'       => $matNumber
     ]);
 
+<<<<<<< HEAD
     // $this->selectedMat = $matricule->id;
     // $this->mat         = $matNumber;
 
@@ -151,6 +185,39 @@ public function createMatricule($matNumber)
     // $this->dispatch('car-restored', id: $this->selectedCar);
 }
 
+=======
+    $this->selectedMat = $matricule->id;
+    $this->mat         = $matNumber;
+
+}
+
+    // public function updatedSelectedMat($value)
+    // {
+    // $matRecord = matricules::find($value);
+    // if ($matRecord)
+    //     {
+    //     $this->selectedClient = $matRecord->client_id;
+    //     $this->selectedCar = $matRecord->car_id;
+    //     $this->allcars = cars::where('id', $matRecord->car_id)->get();
+    //     }
+    // }
+
+
+
+
+    // public function updatedSelectedMat($value)
+    // {
+    // $matRecord = matricules::find($value);
+    // if ($matRecord)
+    //     {
+    //     $this->selectedClient = $matRecord->client_id;
+    //     $this->selectedCar = $matRecord->car_id;
+    //     $this->allcars = cars::where('id', $matRecord->car_id)->get();
+    //     }
+    // }
+
+
+>>>>>>> 5c4e5b47f7a1ad8f121ef0402d01777a94a9fe87
 
     public function incrementstep()
     {
@@ -172,12 +239,21 @@ public function createMatricule($matNumber)
         if ($this->currentstep === 1) {
             $this->validate([
                 'selectedClient' => 'required|exists:clients,id',
+<<<<<<< HEAD
                  'selectedCar' => 'required|exists:cars,id',
                   'selectedMat' => 'required|exists:matricules,id'
             ], [
                 'selectedClient.required' => 'Please select a Client',
                  'selectedCar.required' => 'Please select a Car',
                   'selectedMat.required' => 'Please select a Matricule'
+=======
+                'selectedCar' => 'required|exists:cars,id',
+                'selectedMat' => 'required|exists:matricules,id'
+            ], [
+                'selectedClient.required' => 'Please select a Client',
+                'selectedCar.required' => 'Please select a Car',
+                'selectedMat.required' => 'Please select a Matricule'
+>>>>>>> 5c4e5b47f7a1ad8f121ef0402d01777a94a9fe87
             ]);
         }
     }
@@ -206,7 +282,11 @@ public function createMatricule($matNumber)
 
     public function fetchProduct()
     {
+<<<<<<< HEAD
         $this->product = Products::all();
+=======
+        $this->product = Product::all();
+>>>>>>> 5c4e5b47f7a1ad8f121ef0402d01777a94a9fe87
     }
 
     public function boot()
@@ -215,7 +295,11 @@ public function createMatricule($matNumber)
         $this->allbrands = brands::all();
         // $this->allcars = cars::all();
         // $this->allmat = matricules::all();
+<<<<<<< HEAD
         $this->product = Products::all();
+=======
+        $this->product = Product::all();
+>>>>>>> 5c4e5b47f7a1ad8f121ef0402d01777a94a9fe87
 
         if ($this->client_id) {
             $selectedClient = $this->allclients->where('id', $this->client_id)->first();

@@ -6,7 +6,11 @@ use App\Models\brands;
 use App\Models\cars;
 use App\Models\clients;
 use App\Models\matricules;
+<<<<<<< HEAD
 use App\Models\Products;
+=======
+use App\Models\Product;
+>>>>>>> 5c4e5b47f7a1ad8f121ef0402d01777a94a9fe87
 use Livewire\Component;
 use Illuminate\Support\Facades\Log;
 
@@ -46,23 +50,39 @@ class Bl extends Component
 
     public function render()
     {
+<<<<<<< HEAD
         return view('livewire.Facture.bl');
+=======
+        return view('livewire.facture.bl');
+>>>>>>> 5c4e5b47f7a1ad8f121ef0402d01777a94a9fe87
     }
 
     public function mount()
     {
         $this->initializeFactureNumber();
+<<<<<<< HEAD
         $this->product = Products::all();
+=======
+        $this->product = Product::all();
+>>>>>>> 5c4e5b47f7a1ad8f121ef0402d01777a94a9fe87
     }
 
     public function fetchProduct()
     {
+<<<<<<< HEAD
         $this->product = Products::all();
+=======
+        $this->product = Product::all();
+>>>>>>> 5c4e5b47f7a1ad8f121ef0402d01777a94a9fe87
     }
 
     public function boot()
     {
+<<<<<<< HEAD
         $this->product = Products::all();
+=======
+        $this->product = Product::all();
+>>>>>>> 5c4e5b47f7a1ad8f121ef0402d01777a94a9fe87
     }
 
     public function initializeFactureNumber()

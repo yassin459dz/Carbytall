@@ -53,6 +53,7 @@
         </div>
     </div>
 <!-- Search Form -->
+<<<<<<< HEAD
 <!-- Search Form -->
 <div class="relative flex max-w-md mx-auto mb-8">
     <input wire:model.live="search" type="search" id="location-search"
@@ -61,6 +62,13 @@
 </div>
 
 
+=======
+    <div class="relative flex max-w-md mx-auto mb-8">
+        <input wire:modal.live="search" type="search" id="location-search"
+            class="block w-96 pl-4 pr-12 py-2.5 text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500"
+            placeholder="Search Client or Phone N°" required />
+    </div>
+>>>>>>> 5c4e5b47f7a1ad8f121ef0402d01777a94a9fe87
     <!-- Client table -->
     <div class="mx-auto max-w-7xl sm:px-6 lg:px-8">
         <div class="overflow-hidden bg-white shadow-sm sm:rounded-lg">

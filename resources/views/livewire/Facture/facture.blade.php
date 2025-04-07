@@ -8,11 +8,27 @@
             <div class="flex flex-col md:flex-row">
                 <!-- Left Section: Product List (mostly unchanged) -->
                 <div class="w-full p-6 md:w-3/5 bg-gray-50">
+<<<<<<< HEAD
                 <!-- THIS HOW TO CALL THE SEARCH AND CREATE A NEW PRODUCT -->
                     <div wire:ignore>
                         <livewire:product-header  />
                     </div>
                 <!-- THIS HOW TO CALL THE SEARCH AND CREATE A NEW PRODUCT -->
+=======
+                    <div class="flex items-center justify-between mb-6">
+                        <h2 class="text-2xl font-bold text-gray-800">
+                            Available Products
+                        </h2>
+                        <div class="flex items-center space-x-2">
+                            <input
+                                type="text"
+                                placeholder="Search products..."
+                                class="px-4 py-2 transition duration-300 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                                x-model="searchTerm"
+                            >
+                        </div>
+                    </div>
+>>>>>>> 5c4e5b47f7a1ad8f121ef0402d01777a94a9fe87
 
                     <div class="grid grid-cols-2 lg:grid-cols-3 gap-4 overflow-y-scroll no-scrollbar max-h-[100vh]">
                         <template x-for="product in filteredProducts" :key="product.id">
@@ -35,13 +51,238 @@
                     @if($currentstep === 1)
                     <div class="mb-6">
 {{-------------------------------Client START----------------------------}}
+<<<<<<< HEAD
 <div>
+=======
+{{-- <div class="relative max-w-sm">
+
+    <button
+    class="mt-2 block w-full text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center">
+    Create Client
+    </button>
+
+    <label for="client" class="block text-sm font-medium text-gray-700">Client Name</label>
+    <div x-data="{ search: '', open: false }" class="relative">
+        <!-- Searchable Input -->
+        <input
+            type="text"
+            x-model="search"
+            @focus="open = true"
+            @input="open = true"
+            class="block w-full p-2 text-sm text-gray-800 placeholder-gray-400 bg-white border border-gray-200 rounded-lg focus:border-blue-500 focus:ring-blue-500"
+            placeholder="Search Client..."
+        />
+
+        <!-- Dropdown -->
+        <div class="absolute z-50 w-full mt-2 bg-white border border-gray-200 rounded-lg shadow-lg"
+             x-show="open && search.length > 0">
+            <div class="overflow-hidden overflow-y-auto max-h-72">
+                <template x-for="client in [...document.querySelectorAll('#clientSelect option')].filter(c => c.innerText.toLowerCase().includes(search.toLowerCase()))">
+                    <div
+                        class="flex items-center w-full px-4 py-2 text-sm text-gray-800 cursor-pointer hover:bg-blue-600 hover:text-white"
+                        @click="
+                            search = client.innerText;
+                            document.querySelector('#clientSelect').value = client.value;
+                            open = false;
+                        ">
+                        <span x-text="client.innerText"></span>
+                    </div>
+                </template>
+            </div>
+        </div>
+
+        <!-- Select Dropdown (Hidden) -->
+        <select id="clientSelect" wire:model.lazy="selectedClient" class="">
+            <option value="">Select Client</option>
+            @foreach ($allclients as $client)
+                <option value="{{ $client->id }}">{{ $client->name }}</option>
+            @endforeach
+        </select>
+    </div>
+
+    <!-- Create Client Button -->
+
+</div> --}}
+{{-------------------------------Client END----------------------------}}
+{{-------------------------------CAR START----------------------------}}
+{{-- <div class="relative max-w-sm">
+    <div
+        x-data="{
+            open: false,
+            search: @js($search),
+            allCars: @js($allcars), // Bind the filtered cars list
+            setCarName() {
+                this.search = this.allCars.find(car => car.id === @js($car_id))?.model || '';
+            },
+        }"
+        x-init="setCarName()"
+        @click.away="open = false"
+        class="relative"
+    >
+        <!-- Create Car Button -->
+        <div class="mb-2">
+            <button
+                @click="open = false; $dispatch('lite-mode')"
+                data-modal-target="authentication-modal"
+                data-modal-toggle="authentication-modal"
+                class="mt-2 block w-full text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+                type="button"
+            >
+                Create Car
+            </button>
+            <div wire:ignore>
+                <livewire:create-edit-client />
+            </div>
+        </div>
+
+        <!-- Input Field -->
+        <label for="NewCar" class="block text-sm font-medium text-gray-700">Car Model</label>
+        <input
+            id="NewCar"
+            type="text"
+            class="block w-full p-2 text-sm text-gray-800 placeholder-gray-400 placeholder-gray-500 bg-white border-gray-200 rounded-lg focus:border-blue-500 focus:ring-blue-500"
+            x-model="search"
+            @focus="open = true"
+            @input.debounce.100ms="
+                open = true;
+                $wire.set('search', search);
+            "
+        />
+
+        <!-- Dropdown List -->
+        <div
+            class="absolute z-50 w-full mt-2 bg-white border border-gray-200 rounded-lg dark:bg-neutral-800 dark:border-neutral-700"
+            x-show="open && search.length > 0"
+            x-transition
+        >
+            <div class="overflow-hidden overflow-y-auto max-h-72">
+                <template x-for="car in allCars" :key="car.id">
+                    <div
+                        class="flex items-center w-full px-4 py-2 text-sm text-gray-800 cursor-pointer hover:bg-blue-600 hover:text-white"
+                        @click="
+                            $wire.set('car_id', car.id);
+                            search = car.model;
+                            open = false;
+                        "
+                        x-show="car.model.toLowerCase().includes(search.toLowerCase())"
+                    >
+                        <span x-text="car.model"></span>
+                    </div>
+                </template>
+            </div>
+        </div>
+
+        <!-- Error Message -->
+        @error('car_id')
+            <span class="mt-1 text-xs text-red-500">{{ $message }}</span>
+        @enderror
+    </div>
+</div> --}}
+{{-------------------------------CAR END----------------------------}}
+{{-------------------------------Matriquelle START----------------------------}}
+{{-- <div class="relative max-w-sm">
+    <div
+        x-data="{
+            open: false,
+            search: @js($mat),
+            allMat: @js($allmat),
+            setMatName() {
+                this.search = this.allMat.find(m => m.id === @js($mat_id))?.mat || '';
+            },
+            hasExactMatch() {
+                return this.allMat.some(m => m.mat.toLowerCase() === this.search.toLowerCase());
+            },
+            hasPartialMatches() {
+                return this.allMat.some(m => m.mat.toLowerCase().includes(this.search.toLowerCase()));
+            },
+            addNewMatricule(newMat) {
+                this.allMat = [...this.allMat, newMat];
+                this.search = newMat.mat;
+                $wire.set('mat_id', newMat.id);
+                this.open = false;
+            }
+        }"
+        x-init="setMatName();
+                $wire.on('matriculeCreated', (newMat) => {
+                    addNewMatricule(newMat);
+                });"
+        @click.away="open = false"
+        class="relative"
+    >
+        <label for="NewMat" class="block text-sm font-medium text-gray-700">Matricule</label>
+        <input
+            id="NewMat"
+            type="text"
+            class="block w-full p-2 text-sm text-gray-800 placeholder-gray-400 placeholder-gray-500 bg-white border-gray-200 rounded-lg focus:border-blue-500 focus:ring-blue-500"
+            x-model="search"
+            @focus="open = true"
+            @input.debounce.100ms="
+                open = true;
+                $wire.set('mat', search);
+                if (!hasPartialMatches()) {
+                    $wire.set('mat', search);
+                }
+            "
+            @keydown.enter.prevent="
+                if (!hasExactMatch()) {
+                    $wire.createMatricule();
+                }
+            "
+        />
+
+        <div
+            class="absolute z-50 w-full mt-2 bg-white border border-gray-200 rounded-lg dark:bg-neutral-800 dark:border-neutral-700"
+            x-show="open && search.length > 0"
+            x-transition
+        >
+            <div class="overflow-hidden overflow-y-auto max-h-72">
+                <template x-for="matricule in allMat" :key="matricule.id">
+                    <div
+                        class="flex items-center w-full px-4 py-2 text-sm text-gray-800 cursor-pointer hover:bg-blue-600 hover:text-white"
+                        @click="
+                            $wire.set('mat_id', matricule.id);
+                            search = matricule.mat;
+                            open = false;
+                        "
+                        x-show="matricule.mat.toLowerCase().includes(search.toLowerCase())"
+                    >
+                        <span x-text="matricule.mat"></span>
+                    </div>
+                </template>
+
+                <div
+                x-show="!allMat.some(m => m.mat.toLowerCase() === search.toLowerCase()) && search.length > 0"
+                class="px-4 py-2 text-sm text-blue-600 cursor-pointer hover:bg-blue-50"
+                @click="
+                    $wire.createMatricule();
+                    open = false; // Close the dropdown
+                    search = ''; // Clear the search input (optional)
+                "
+            >
+                Create A New Matricule
+            </div>
+            </div>
+        </div>
+
+        @error('mat')
+            <span class="mt-1 text-xs text-red-500">{{ $message }}</span>
+        @enderror
+        @error('mat_id')
+            <span class="mt-1 text-xs text-red-500">{{ $message }}</span>
+        @enderror
+    </div>
+</div> --}}
+{{-------------------------------Matriquelle END----------------------------}}
+<div>
+
+>>>>>>> 5c4e5b47f7a1ad8f121ef0402d01777a94a9fe87
     <div class="relative max-w-sm ">
         <label for="client" class="block text-sm font-medium text-gray-700">Client Name</label>
         <div class="flex items-center space-x-0">
             <div x-data="{ search: '', open: false }" class="relative w-full">
                 <!-- Searchable Input -->
                 <input
+<<<<<<< HEAD
                 id="NewClient"
 
                     type="text"
@@ -50,6 +291,14 @@
                     placeholder="Client"
                     @focus="open = true"
 
+=======
+                    type="text"
+                    x-model="search"
+                    @focus="open = true"
+                    @input="open = true"
+                    class="block w-full p-2 text-gray-800 placeholder-gray-400 bg-white border-gray-300 rounded-l-lg focus:ring-blue-500 focus:outline-none"
+                    placeholder="Search Client..."
+>>>>>>> 5c4e5b47f7a1ad8f121ef0402d01777a94a9fe87
                 />
 
                 <!-- Dropdown -->
@@ -83,18 +332,26 @@
 
             <!-- Button on the right side -->
             <div>
+<<<<<<< HEAD
                 <button data-modal-target="authentication-modal" data-modal-toggle="authentication-modal" type="button"
                         class="px-2.5 py-2 text-white bg-blue-700 hover:bg-blue-800 border-l border-gray-300 rounded-r-lg focus:ring-4 focus:outline-none focus:ring-blue-300"
                         @click="console.log('Authentication modal triggered')">
+=======
+                <button data-modal-target="authentication-modal" data-modal-toggle="authentication-modal" type="button" class="px-2.5 py-2 text-white bg-blue-700 hover:bg-blue-800 border-l border-gray-300 rounded-r-lg focus:ring-4 focus:outline-none focus:ring-blue-300">
+>>>>>>> 5c4e5b47f7a1ad8f121ef0402d01777a94a9fe87
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
                     </svg>
                 </button>
+<<<<<<< HEAD
 
+=======
+>>>>>>> 5c4e5b47f7a1ad8f121ef0402d01777a94a9fe87
                 <div wire:ignore>
                     <livewire:create-edit-client />
                 </div>
             </div>
+<<<<<<< HEAD
 
         </div>
 <!-- Validation Error -->
@@ -235,11 +492,162 @@
     </div>
     </div>
     </div>
+=======
+        </div>
+
+        <!-- Car Dropdown (Dependent on Client) -->
+<!-- Car Dropdown (Dependent on Client) -->
+<!-- Car Dropdown (Dependent on Client) -->
+<label for="carSelect" class="block mt-4 text-sm font-medium text-gray-700">Car</label>
+<div  class="flex items-center space-x-0">
+    <select
+        id="carSelect"
+        wire:model.live="selectedCar"
+        class="block w-full p-2 text-gray-800 bg-white border border-gray-300 rounded-l-lg focus:ring-blue-500 focus:outline-none"
+    >
+        <option value="">Select Car</option>
+        @foreach ($groupedCars as $groupLabel => $cars)
+            @php $groupClasses = $groupLabel == 'Owned Car' ? 'text-green-600' : 'text-red-600'; @endphp
+            <optgroup label="{{ $groupLabel }}" class="font-semibold {{ $groupClasses }}">
+                @foreach ($cars as $car)
+                    <option class="font-semibold" value="{{ $car->id }}">{{ $car->model }}</option>
+                @endforeach
+            </optgroup>
+        @endforeach
+    </select>
+    <button
+        type="button"
+        class="px-2.5 py-2 text-white bg-blue-700 hover:bg-blue-800 border-l border-gray-300 rounded-r-lg focus:ring-4 focus:outline-none focus:ring-blue-300"
+    >
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+        </svg>
+    </button>
+</div>
+
+        {{------------------------------------------------------------------------------------------------}}
+
+        {{------------------------------------------------------------------------------------------------}}
+        <!-- Mat Dropdown (Dependent on Car) -->
+<!-- Matricule Dropdown -->
+<!-- Matricule Dropdown -->
+<!-- Matricule Dropdown -->
+<div x-data="{
+    showNewMat: false,
+    mat: @entangle('mat'),
+    selectedMat: @entangle('selectedMat'),
+    selectedCar: @entangle('selectedCar'),
+    selectedClient: @entangle('selectedClient')
+}" class="relative">
+    <div class="relative max-w-sm">
+        <label for="matSelect" class="block text-sm font-medium text-gray-700">Matricule</label>
+        <div class="flex items-center space-x-0">
+            <select
+                id="matSelect"
+                wire:model.live="selectedMat"
+                class="block w-full p-2 border-gray-200 rounded-l-lg"
+            >
+                <option value="">Select Matricule</option>
+                @foreach ($this->filteredMatricules as $mat)
+                    <option value="{{ $mat->id }}">{{ $mat->mat }}</option>
+                @endforeach
+            </select>
+
+            <!-- Create New Matricule Button -->
+            <button
+                type="button"
+                class="px-2.5 py-2 text-white bg-blue-700 hover:bg-blue-800 border-l border-gray-300 rounded-r-lg focus:ring-4 focus:outline-none focus:ring-blue-300"
+                @click="showNewMat = !showNewMat"
+                :disabled="!selectedClient || !selectedCar"
+            >
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" viewBox="0 0 20 20" fill="currentColor">
+                    <path fill-rule="evenodd" d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z" clip-rule="evenodd"/>
+                </svg>
+            </button>
+        </div>
+    </div>
+
+    <!-- New Matricule Input Section -->
+    <div
+        class="relative max-w-sm mt-2"
+        x-show="showNewMat"
+        x-transition:enter="transition ease-out duration-300"
+        x-transition:enter-start="opacity-0 transform scale-95"
+        x-transition:enter-end="opacity-100 transform scale-100"
+        x-transition:leave="transition ease-in duration-200"
+        x-transition:leave-start="opacity-100 transform scale-100"
+        x-transition:leave-end="opacity-0 transform scale-95"
+    >
+        <div class="relative max-w-sm">
+            <label for="NewMat" class="block text-sm font-medium text-gray-700">New Matricule</label>
+            <div class="relative flex items-center">
+                <div class="relative flex w-full">
+                    <input
+                        id="NewMat"
+                        type="text"
+                        class="block w-full p-2 text-sm text-gray-800 placeholder-gray-400 bg-white border border-gray-200 rounded-l-lg focus:border-blue-500 focus:ring-blue-500"
+                        x-model="mat"
+                        placeholder="Enter new matricule"
+                    />
+                    <button
+                        type="button"
+                        class="px-2.5 py-2 text-white bg-blue-700 hover:bg-blue-800 border-l border-gray-300 rounded-r-lg focus:ring-4 focus:outline-none focus:ring-blue-300"
+                        @click="
+                            if (mat && mat.length > 0) {
+                                const currentCar = selectedCar;
+                                $wire.createMatricule(mat).then(() => {
+                                    mat = '';
+                                    showNewMat = false;
+                                    $wire.set('selectedCar', currentCar);
+                                });
+                            }
+                        "
+                    >
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 20 20">
+                            <path fill="currentColor" d="M3 5a2 2 0 0 1 2-2h1v3.5A1.5 1.5 0 0 0 7.5 8h4A1.5 1.5 0 0 0 13 6.5V3h.379a2 2 0 0 1 1.414.586l1.621 1.621A2 2 0 0 1 17 6.621V15a2 2 0 0 1-2 2v-5.5a1.5 1.5 0 0 0-1.5-1.5h-7A1.5 1.5 0 0 0 5 11.5V17a2 2 0 0 1-2-2zm9-2H7v3.5a.5.5 0 0 0 .5.5h4a.5.5 0 0 0 .5-.5zm2 8.5V17H6v-5.5a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 .5.5" />
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+        {{------------------------------------------------------------------------------------------------}}
+
+        {{------------------------------------------------------------------------------------------------}}
+        <!-- Mat Dropdown (Dependent on Car) -->
+<!-- Matricule Dropdown -->
+<!-- Matricule Dropdown -->
+
+
+
+
+
+
+
+
+>>>>>>> 5c4e5b47f7a1ad8f121ef0402d01777a94a9fe87
     </div>
 
 
 
 
+<<<<<<< HEAD
+=======
+</div>
+>>>>>>> 5c4e5b47f7a1ad8f121ef0402d01777a94a9fe87
 
 
                     @endif
@@ -275,7 +683,11 @@
                         <div class="flex items-center justify-between mb-6">
                             <h2 class="text-2xl font-bold text-gray-800">Current Order</h2>
                             <button
+<<<<<<< HEAD
                             class="px-4 py-2 font-semibold text-red-500 bg-red-200 rounded-md hover:bg-red-600 hover:text-white focus:ring-4 focus:outline-none focus:ring-red-300"
+=======
+                            class="px-4 py-2 text-red-500 bg-red-200 rounded-md hover:bg-red-600 hover:text-white focus:ring-4 focus:outline-none focus:ring-red-300"
+>>>>>>> 5c4e5b47f7a1ad8f121ef0402d01777a94a9fe87
                             @click="clearOrder">
                                 Clear All
                             </button>
@@ -535,11 +947,19 @@
                                 <div class="flex items-center justify-between">
                                     <span class="text-xl font-bold text-gray-800">Total:</span>
                                     <span
+<<<<<<< HEAD
                                     class="text-2xl font-bold text-blue-600 cursor-pointer"
                                     @click="openOverrideModal"
                                     x-text="(totalPrice() + extraCharge - discountAmount).toFixed(2) + ' DA'">
                                 </span>
 
+=======
+                                        class="text-2xl font-bold text-blue-600"
+                                        {{-- x-text="(totalPrice() + extraCharge).toFixed(2) + ' DA'"> --}}
+                                        x-text="(totalPrice() + extraCharge - discountAmount).toFixed(2) + ' DA'">
+
+                                    </span>
+>>>>>>> 5c4e5b47f7a1ad8f121ef0402d01777a94a9fe87
                                 </div>
                                 {{-- <button
                                     class="w-full py-3 mt-4 font-semibold text-white transition bg-blue-600 rounded-lg hover:bg-blue-700"
@@ -552,6 +972,7 @@
                             </div>
                         </div>
                     </div>
+<<<<<<< HEAD
 <!-- Override Total Modal -->
 <div
     x-show="overrideTotalModalOpen"
@@ -596,6 +1017,8 @@
     </div>
 
 </div>
+=======
+>>>>>>> 5c4e5b47f7a1ad8f121ef0402d01777a94a9fe87
 
                     @endif
 
@@ -658,10 +1081,14 @@ function orderApp(products) {
         editingItem: null,
         editedItem: null,
         isSubmitted: false,  // This flag ensures submission only once
+<<<<<<< HEAD
         overrideTotalModalOpen: false,
         overriddenTotal: null,
         customTotalEnabled: false,
         customTotalValue: null,
+=======
+
+>>>>>>> 5c4e5b47f7a1ad8f121ef0402d01777a94a9fe87
         // initializeState() {
         //     // Ensure everything is reset on page load
         //     this.editModalOpen = false;
@@ -673,6 +1100,7 @@ function orderApp(products) {
         //     };
         // },
         // Existing methods...
+<<<<<<< HEAD
     openOverrideModal() {
     this.overriddenTotal = this.calculateTotal();
     this.overrideTotalModalOpen = true;
@@ -694,6 +1122,8 @@ function orderApp(products) {
 
     this.overrideTotalModalOpen = false;
     },
+=======
+>>>>>>> 5c4e5b47f7a1ad8f121ef0402d01777a94a9fe87
         get filteredProducts() {
             if (!this.searchTerm) return this.products;
 
