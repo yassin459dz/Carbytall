@@ -9,7 +9,9 @@
                 <!-- Left Section: Product List (mostly unchanged) -->
                 <div class="w-full p-6 md:w-3/5 bg-gray-50">
                 <!-- THIS HOW TO CALL THE SEARCH AND CREATE A NEW PRODUCT -->
-                    <livewire:product-header />
+                    <div wire:ignore>
+                        <livewire:product-header />
+                    </div>
                 <!-- THIS HOW TO CALL THE SEARCH AND CREATE A NEW PRODUCT -->
 
                     <div class="grid grid-cols-2 lg:grid-cols-3 gap-4 overflow-y-scroll no-scrollbar max-h-[100vh]">
@@ -49,6 +51,7 @@
                     @focus="open = true"
 
                 />
+
 
                 <!-- Dropdown -->
                 <div class="absolute z-50 w-full mt-1.5 bg-white border border-gray-200 rounded-lg shadow-lg"
@@ -93,7 +96,9 @@
                 </div>
             </div>
         </div>
-
+        @error('selectedClient')
+        <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+    @enderror
         <!-- Car Dropdown (Dependent on Client) -->
         <label for="carSelect" class="block mt-4 text-sm font-medium text-gray-700">Car</label>
         <div class="flex items-center space-x-0">
@@ -119,7 +124,10 @@
                 </svg>
             </button>
         </div>
-
+    <!-- Validation Error Message -->
+    @error('selectedCar')
+        <p class="text-sm text-red-600">{{ $message }}</p>
+    @enderror
         <!-- Matricule Dropdown (Dependent on Car) -->
         <div x-data="{
             showNewMat: false,
@@ -162,7 +170,10 @@
                     </button>
                 </div>
             </div>
-
+    <!-- Validation Error Message -->
+    @error('selectedMat')
+        <p class="text-sm text-red-600">{{ $message }}</p>
+    @enderror
  <!-- New Matricule Input Section -->
  <div
  class="relative max-w-sm mt-2"
@@ -516,9 +527,10 @@
                                 <div class="flex items-center justify-between">
                                     <span class="text-xl font-bold text-gray-800">Total:</span>
                                     <span
-                                        class="text-2xl font-bold text-blue-600"
-                                        {{-- x-text="(totalPrice() + extraCharge).toFixed(2) + ' DA'"> --}}
-                                        x-text="(totalPrice() + extraCharge - discountAmount).toFixed(2) + ' DA'">
+                                    class="text-2xl font-bold cursor-pointer"
+                                    :class="customTotalEnabled ? 'text-red-600' : 'text-blue-600'"
+                                    @click="openOverrideModal"
+                                    x-text="calculateTotal().toFixed(2) + ' DA'">
 
                                     </span>
                                 </div>
@@ -567,7 +579,51 @@
         <span x-text="isSubmitted ? 'Reset' : 'Submit Order'"></span>
     </button> --}}
 
+
                         </div>
+                        <!-- Override Total Modal -->
+<div
+x-show="overrideTotalModalOpen"
+x-transition:enter="transition ease-out duration-300"
+x-transition:enter-start="opacity-0 scale-90"
+x-transition:enter-end="opacity-100 scale-100"
+x-transition:leave="transition ease-in duration-200"
+x-transition:leave-start="opacity-100 scale-100"
+x-transition:leave-end="opacity-0 scale-90"
+class="fixed inset-0 z-50 flex items-center justify-center bg-black/50"
+x-cloak
+>
+<div class="relative p-6 bg-white rounded-lg shadow-xl w-96">
+    <button @click="overrideTotalModalOpen = false"
+        class="absolute text-gray-600 top-4 right-4 hover:text-red-700">
+        <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="none" viewBox="0 0 24 24"
+            stroke-width="1.5" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
+        </svg>
+    </button>
+
+    <h2 class="mb-4 text-2xl font-bold">Override Total</h2>
+
+    <div class="mb-4">
+        <label class="block mb-2 text-sm font-bold text-gray-700">New Total (DA)</label>
+        <input
+            type="number"
+            step="0.01"
+            min="0"
+            x-model.number="overriddenTotal"
+            class="w-full px-3 py-2 border rounded focus:outline-none focus:shadow-outline"
+        />
+    </div>
+
+    <div class="flex justify-between mt-6">
+        <button
+            @click="applyOverriddenTotal"
+            class="px-4 py-2 font-bold text-white bg-blue-600 rounded hover:bg-blue-700">
+            Update
+        </button>
+    </div>
+</div>
+</div>
                         @endif
                     </div>
                 </div>
@@ -595,7 +651,33 @@ function orderApp(products) {
         editingItem: null,
         editedItem: null,
         isSubmitted: false,  // This flag ensures submission only once
+        overrideTotalModalOpen: false,
+overriddenTotal: null,
+customTotalEnabled: false,
+customTotalValue: null,
+        // Function to open the override modal
+openOverrideModal() {
+    this.overriddenTotal = this.calculateTotal(); // Set current total as the overridden total
+    this.overrideTotalModalOpen = true; // Open the modal
+},
 
+// Function to apply the overridden total
+applyOverriddenTotal() {
+    const baseTotal = this.totalPrice() + this.extraCharge; // Calculate the total without any discounts
+    const difference = baseTotal - this.overriddenTotal; // Find the difference between the new and current total
+
+    if (difference >= 0) {
+        // If the new total is lower, treat it as a discount
+        this.discountAmount = difference;
+        // The extra charge stays as is, so no change
+    } else {
+        // If the new total is higher, treat it as an extra charge
+        this.extraCharge = Math.abs(difference); // Set the absolute value of the difference as the extra charge
+        this.discountAmount = 0; // Reset discount when applying an extra charge
+    }
+
+    this.overrideTotalModalOpen = false; // Close the modal after applying the override
+},
         // initializeState() {
         //     // Ensure everything is reset on page load
         //     this.editModalOpen = false;
@@ -792,9 +874,9 @@ function orderApp(products) {
         },
 
         calculateTotal() {
-            const subtotal = this.totalPrice();
-            return Math.max(0, subtotal + this.extraCharge - this.discountAmount);
-        },
+    const subtotal = this.totalPrice(); // Get the subtotal
+    return Math.max(0, subtotal + this.extraCharge - this.discountAmount); // Ensure the total is never negative
+},
 
         totalPrice() {
             return this.orderItems.reduce((total, item) => total + item.price * item.quantity, 0);

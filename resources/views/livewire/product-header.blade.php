@@ -1,5 +1,5 @@
 <!-- Group heading and search input together -->
-<div class="flex items-center justify-between mb-6">
+<div wire:ignore class="flex items-center justify-between mb-6">
     <!-- Left: Heading -->
     <h2 class="text-2xl font-bold text-gray-800">
       Available Products
