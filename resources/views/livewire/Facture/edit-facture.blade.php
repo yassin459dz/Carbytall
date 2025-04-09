@@ -19,10 +19,13 @@ class="mx-auto max-w-7xl"
                 <!-- Left Section: Product List (mostly unchanged) -->
                 <div class="w-full p-6 md:w-3/5 bg-gray-50">
                 <!-- THIS HOW TO CALL THE SEARCH AND CREATE A NEW PRODUCT -->
+                <div wire:ignore>
                     <livewire:product-header />
+                </div>
                 <!-- THIS HOW TO CALL THE SEARCH AND CREATE A NEW PRODUCT -->
 
-                    <div class="grid grid-cols-2 lg:grid-cols-3 gap-4 overflow-y-scroll no-scrollbar max-h-[100vh]">
+                    {{-- THE OLD DESIGN --}}
+                    {{-- <div class="grid grid-cols-2 lg:grid-cols-3 gap-4 overflow-y-scroll no-scrollbar max-h-[100vh]">
                         <template x-for="product in filteredProducts" :key="product.id">
                             <div
                                 class="p-4 text-center transition duration-300 transform bg-white border border-gray-200 rounded-lg cursor-pointer hover:scale-105 hover:shadow-lg"
@@ -34,7 +37,29 @@ class="mx-auto max-w-7xl"
                                 <div class="text-xl font-semibold text-red-500" x-text="`${product.price} DA`"></div>
                             </div>
                         </template>
-                    </div>
+                    </div> --}}
+                    {{-- THE OLD DESIGN --}}
+                    <div class="grid max-h-screen grid-cols-1 gap-4 p-3 overflow-y-auto sm:grid-cols-2 lg:grid-cols-3 no-scrollbar">
+                        <template x-for="product in filteredProducts" :key="product.id">
+                          <div
+                            @click="addToOrder(product)"
+                            class="flex flex-col p-6 transition-transform bg-white border border-gray-100 shadow-md cursor-pointer dark:bg-gray-900 rounded-2xl hover:shadow-xl dark:border-gray-800 hover:-translate-y-1 group"
+                          >
+
+                            <!-- Product Name -->
+                            <h3 class="mb-2 text-lg font-bold text-center text-gray-800" x-text="product.name"></h3>
+
+                            <!-- Description Badge -->
+                            <span class="self-center px-3 mb-2 text-[15px] font-semibold text-red-600 bg-gray-100 rounded-full " x-text="product.description"></span>
+
+                            <!-- Price -->
+                            <div class="mt-auto text-center">
+                              <span class="text-lg font-bold text-blue-600 " x-text="`${product.price}.00 DA`"></span>
+                            </div>
+
+                          </div>
+                        </template>
+                      </div>
                 </div>
 
                 <!-- Right Section: Order Summary -->
@@ -322,7 +347,7 @@ class="mx-auto max-w-7xl"
                                     >
                                         <div class="flex-grow">
                                             <div class="font-semibold text-gray-800" x-text="item.name"></div>
-                                            <div class="text-sm font-bold text-blue-600" x-text="item.description"></div>
+                                            <div class="text-sm font-bold text-red-500" x-text="item.description"></div>
                                         </div>
                                         <div class="flex items-center space-x-2">
                                             <button
@@ -472,9 +497,9 @@ class="mx-auto max-w-7xl"
     to { opacity: 1; }
 }
 
-.animate-fade-in {
+/* .animate-fade-in {
     animation: fade-in 0.3s ease-out;
-}
+} */
 </style>
 
                             <!-- Extra Charge Buttons -->
@@ -677,10 +702,11 @@ function orderApp(products) {
         editModalOpen: false,
         editingItem: null,
         editedItem: null,
-        isSubmitted: false,  // This flag ensures submission only once
+        overrideTotalModalOpen: false,
         overriddenTotal: null,
-customTotalEnabled: false,
-customTotalValue: null,
+        customTotalEnabled: false,
+        customTotalValue: null,
+        isSubmitted: false,  // This flag ensures submission only once
 
 openOverrideModal() {
     this.overriddenTotal = this.calculateTotal();

@@ -12,7 +12,6 @@
     <script src="https://cdn.jsdelivr.net/npm/flowbite@2.5.2/dist/flowbite.min.js"></script>
     <link href="https://cdn.jsdelivr.net/npm/tom-select/dist/css/tom-select.bootstrap4.min.css" rel="stylesheet">
     @vite(['resources/css/app.css', 'resources/js/app.js'])
-    <wireui:scripts />
     <script src="//unpkg.com/alpinejs" defer></script>
   </head>
     <body class="font-sans antialiased">

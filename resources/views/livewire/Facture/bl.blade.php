@@ -3,8 +3,9 @@
     x-init="initializeState()"
     class="mx-auto max-w-7xl"
 >
-    <form wire:submit.prevent="submit">
-        <div class="bg-white shadow-2xl rounded-xl">
+<form wire:submit.prevent="submit" x-ref="form">
+
+    <div class="bg-white shadow-2xl rounded-xl">
             <div class="flex flex-col md:flex-row">
                 <!-- Left Section: Product List (mostly unchanged) -->
                 <div class="w-full p-6 md:w-3/5 bg-gray-50">
@@ -16,7 +17,8 @@
 
 
 
-                    <div class="grid grid-cols-2 lg:grid-cols-3 gap-4 overflow-y-scroll no-scrollbar max-h-[100vh]">
+                    {{-- THE OLD DESIGN --}}
+                    {{-- <div class="grid grid-cols-2 lg:grid-cols-3 gap-4 overflow-y-scroll no-scrollbar max-h-[100vh]">
                         <template x-for="product in filteredProducts" :key="product.id">
                             <div
                                 class="p-4 text-center transition duration-300 transform bg-white border border-gray-200 rounded-lg cursor-pointer hover:scale-105 hover:shadow-lg"
@@ -28,12 +30,33 @@
                                 <div class="text-xl font-semibold text-red-500" x-text="`${product.price} DA`"></div>
                             </div>
                         </template>
-                    </div>
+                    </div> --}}
+                    {{-- THE OLD DESIGN --}}
+                    <div class="grid max-h-screen grid-cols-1 gap-4 p-3 overflow-y-auto sm:grid-cols-2 lg:grid-cols-3 no-scrollbar">
+                        <template x-for="product in filteredProducts" :key="product.id">
+                          <div
+                            @click="addToOrder(product)"
+                            class="flex flex-col p-6 transition-transform bg-white border border-gray-100 shadow-md cursor-pointer dark:bg-gray-900 rounded-2xl hover:shadow-xl dark:border-gray-800 hover:-translate-y-1 group"
+                          >
+
+                            <!-- Product Name -->
+                            <h3 class="mb-2 text-lg font-bold text-center text-gray-800" x-text="product.name"></h3>
+
+                            <!-- Description Badge -->
+                            <span class="self-center px-3 mb-2 text-[15px] font-medium text-red-600 bg-gray-100 rounded-full " x-text="product.description"></span>
+
+                            <!-- Price -->
+                            <div class="mt-auto text-center">
+                              <span class="text-lg font-bold text-blue-600 " x-text="`${product.price}.00 DA`"></span>
+                            </div>
+
+                          </div>
+                        </template>
+                      </div>
                 </div>
 
                 <!-- Right Section: Order Summary -->
                 <div class="w-full p-6 bg-white md:w-2/5">
-                    @if($currentstep === 3)
                     <div>
                         <!-- Entire Component Content Goes Here -->
                         <div class="flex items-center justify-between mb-6">
@@ -75,7 +98,7 @@
                                     >
                                         <div class="flex-grow">
                                             <div class="font-semibold text-gray-800" x-text="item.name"></div>
-                                            <div class="text-sm font-bold text-blue-600" x-text="item.description"></div>
+                                            <div class="text-sm font-bold text-red-600" x-text="item.description"></div>
                                         </div>
                                         <div class="flex items-center space-x-2">
                                             <button
@@ -225,9 +248,9 @@
     to { opacity: 1; }
 }
 
-.animate-fade-in {
+/* .animate-fade-in {
     animation: fade-in 0.3s ease-out;
-}
+} */
 </style>
 
                             <!-- Extra Charge Buttons -->
@@ -311,9 +334,10 @@
                                     @click="validateOrder">
                                     Validate Order
                                 </button> --}}
-                                <button @click="prepareSubmission" class="w-full py-3 mt-4 font-semibold text-white transition bg-blue-600 rounded-lg focus:ring-8 hover:bg-blue-700">
+                                <button type="button" @click="prepareSubmission()" class="w-full py-3 mt-4 font-semibold text-white transition bg-blue-600 rounded-lg focus:ring-8 hover:bg-blue-700">
                                     <span x-text="isSubmitted ? 'Reset' : 'Validate Order'"></span>
                                 </button>
+
                             </div>
                         </div>
                     </div>
@@ -362,7 +386,6 @@ x-cloak
 </div>
 </div>
 
-                    @endif
                 </div>
             </div>
         </div>
@@ -374,6 +397,7 @@ function orderApp(products) {
     return {
         products: products,
         orderItems: [],
+
         extraCharge: 0,
         discountAmount: 0,
         searchTerm: '',
@@ -388,15 +412,15 @@ function orderApp(products) {
         editingItem: null,
         editedItem: null,
         overrideTotalModalOpen: false,
-overriddenTotal: null,
-customTotalEnabled: false,
-customTotalValue: null,
-isSubmitted: false,  // This flag ensures submission only once
+        overriddenTotal: null,
+        customTotalEnabled: false,
+        customTotalValue: null,
+        isSubmitted: false,  // This flag ensures submission only once
 
-openOverrideModal() {
-    this.overriddenTotal = this.calculateTotal();
-    this.overrideTotalModalOpen = true;
-},
+        openOverrideModal() {
+        this.overriddenTotal = this.calculateTotal();
+        this.overrideTotalModalOpen = true;
+        },
 
 
 
@@ -489,19 +513,14 @@ applyOverriddenTotal() {
                 return;
             }
 
-            // Prepare and submit
+            // Only send all the data to Livewire when actually submitting
             @this.set('orderItems', JSON.stringify(this.orderItems));
             @this.set('total_amount', this.calculateTotal());
-            @this.set('extraCharge', this.extraCharge);
-            @this.set('discountAmount', this.discountAmount);
+            @this.set('extraCharge', Number(this.extraCharge));
+            @this.set('discountAmount', Number(this.discountAmount));
 
-            // Automatically reset after a short delay
-            setTimeout(() => {
-                @this.set('orderItems', null);
-                @this.set('total_amount', 0);
-                @this.set('extraCharge', 0);
-                @this.set('discountAmount', 0);
-            }, 100);
+            // Call the update method
+            @this.submit();
         },
   // Drag methods remain the same as previous implementation...
   handleDragEnd(event) {

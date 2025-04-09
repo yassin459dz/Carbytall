@@ -13,8 +13,8 @@
                         <livewire:product-header />
                     </div>
                 <!-- THIS HOW TO CALL THE SEARCH AND CREATE A NEW PRODUCT -->
-
-                    <div class="grid grid-cols-2 lg:grid-cols-3 gap-4 overflow-y-scroll no-scrollbar max-h-[100vh]">
+                    {{-- THE OLD DESIGN --}}
+                    {{-- <div class="grid grid-cols-2 lg:grid-cols-3 gap-4 overflow-y-scroll no-scrollbar max-h-[100vh]">
                         <template x-for="product in filteredProducts" :key="product.id">
                             <div
                                 class="p-4 text-center transition duration-300 transform bg-white border border-gray-200 rounded-lg cursor-pointer hover:scale-105 hover:shadow-lg"
@@ -26,7 +26,29 @@
                                 <div class="text-xl font-semibold text-red-500" x-text="`${product.price} DA`"></div>
                             </div>
                         </template>
-                    </div>
+                    </div> --}}
+                    {{-- THE OLD DESIGN --}}
+                    <div class="grid max-h-screen grid-cols-1 gap-4 p-3 overflow-y-auto sm:grid-cols-2 lg:grid-cols-3 no-scrollbar">
+                        <template x-for="product in filteredProducts" :key="product.id">
+                          <div
+                            @click="addToOrder(product)"
+                            class="flex flex-col p-6 transition-transform bg-white border border-gray-100 shadow-md cursor-pointer dark:bg-gray-900 rounded-2xl hover:shadow-xl dark:border-gray-800 hover:-translate-y-1 group"
+                          >
+
+                            <!-- Product Name -->
+                            <h3 class="mb-2 text-lg font-bold text-center text-gray-800" x-text="product.name"></h3>
+
+                            <!-- Description Badge -->
+                            <span class="self-center px-3 mb-2 text-[15px] font-medium text-red-600 bg-gray-100 rounded-full " x-text="product.description"></span>
+
+                            <!-- Price -->
+                            <div class="mt-auto text-center">
+                              <span class="text-lg font-bold text-blue-600 " x-text="`${product.price}.00 DA`"></span>
+                            </div>
+
+                          </div>
+                        </template>
+                      </div>
                 </div>
 
                 <!-- Right Section: Order Summary -->
@@ -303,7 +325,7 @@
                                     >
                                         <div class="flex-grow">
                                             <div class="font-semibold text-gray-800" x-text="item.name"></div>
-                                            <div class="text-sm font-bold text-blue-600" x-text="item.description"></div>
+                                            <div class="text-sm font-bold text-red-500" x-text="item.description"></div>
                                         </div>
                                         <div class="flex items-center space-x-2">
                                             <button
@@ -761,14 +783,16 @@ applyOverriddenTotal() {
                 return;
             }
 
-            // Prepare and submit
+            // Only send all the data to Livewire when actually submitting
             @this.set('orderItems', JSON.stringify(this.orderItems));
             @this.set('total_amount', this.calculateTotal());
-            @this.set('extraCharge', this.extraCharge);
-            @this.set('discountAmount', this.discountAmount);
+            @this.set('extraCharge', Number(this.extraCharge));
+            @this.set('discountAmount', Number(this.discountAmount));
 
-            // Automatically reset after a short delay
-            setTimeout(() => {
+            // Call the update method
+            @this.submit();
+                        // Automatically reset after a short delay
+                        setTimeout(() => {
                 @this.set('orderItems', null);
                 @this.set('total_amount', 0);
                 @this.set('extraCharge', 0);
