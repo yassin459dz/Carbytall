@@ -158,7 +158,7 @@
 
                                 </td>
                                 <td class="px-6 py-4 text-center">
-                                    <span class="inline-flex items-center justify-center text-sm font-medium whitespace-nowrap">{{ $facture->remark }}</span></td>
+                                    <span class="inline-flex items-center justify-center overflow-hidden text-sm font-medium whitespace-nowrap ">{{ $facture->remark }}</span></td>
                                 <td class="px-2 py-4 text-center">
                                     <span class="
     inline-flex items-center justify-center

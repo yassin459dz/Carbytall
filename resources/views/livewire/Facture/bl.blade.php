@@ -40,10 +40,10 @@
                           >
 
                             <!-- Product Name -->
-                            <h3 class="mb-2 text-lg font-bold text-center text-gray-800" x-text="product.name"></h3>
+                            <h3 class="mb-2 text-lg font-bold text-center text-gray-800 capitalize" x-text="product.name"></h3>
 
                             <!-- Description Badge -->
-                            <span class="self-center px-3 mb-2 text-[15px] font-medium text-red-600 bg-gray-100 rounded-full " x-text="product.description"></span>
+                            <span class="self-center px-3 mb-2 text-base font-bold text-red-600 rounded-full " x-text="product.description"></span>
 
                             <!-- Price -->
                             <div class="mt-auto text-center">
@@ -97,7 +97,7 @@
                                         }"
                                     >
                                         <div class="flex-grow">
-                                            <div class="font-semibold text-gray-800" x-text="item.name"></div>
+                                            <div class="font-semibold text-gray-800 capitalize" x-text="item.name"></div>
                                             <div class="text-sm font-bold text-red-600" x-text="item.description"></div>
                                         </div>
                                         <div class="flex items-center space-x-2">

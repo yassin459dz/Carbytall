@@ -17,8 +17,8 @@ class="mx-auto max-w-7xl"
         <div class="bg-white shadow-2xl rounded-xl">
             <div class="flex flex-col md:flex-row">
                 <!-- Left Section: Product List (mostly unchanged) -->
-                <div class="w-full p-6 md:w-3/5 bg-gray-50">
-                <!-- THIS HOW TO CALL THE SEARCH AND CREATE A NEW PRODUCT -->
+                <div class="relative w-full p-6 md:w-3/5 bg-gray-50">
+                    <!-- THIS HOW TO CALL THE SEARCH AND CREATE A NEW PRODUCT -->
                 <div wire:ignore>
                     <livewire:product-header />
                 </div>
@@ -41,25 +41,24 @@ class="mx-auto max-w-7xl"
                     {{-- THE OLD DESIGN --}}
                     <div class="grid max-h-screen grid-cols-1 gap-4 p-3 overflow-y-auto sm:grid-cols-2 lg:grid-cols-3 no-scrollbar">
                         <template x-for="product in filteredProducts" :key="product.id">
-                          <div
-                            @click="addToOrder(product)"
-                            class="flex flex-col p-6 transition-transform bg-white border border-gray-100 shadow-md cursor-pointer dark:bg-gray-900 rounded-2xl hover:shadow-xl dark:border-gray-800 hover:-translate-y-1 group"
-                          >
+                            <div
+                                @click="$wire.currentstep === 3 ? addToOrder(product) : null"
+                                class="flex flex-col p-6 transition-transform bg-white border border-gray-100 shadow-md dark:bg-gray-900 rounded-2xl dark:border-gray-800 group"
+                                :class="$wire.currentstep === 3 ? 'cursor-pointer hover:shadow-xl hover:-translate-y-1' : 'cursor-not-allowed bg-gray-100 opacity-70'"
+                            >
+                                <!-- Product Name -->
+                                <h3 class="mb-2 text-lg font-bold text-center text-gray-800 capitalize" x-text="product.name"></h3>
 
-                            <!-- Product Name -->
-                            <h3 class="mb-2 text-lg font-bold text-center text-gray-800" x-text="product.name"></h3>
+                                <!-- Description Badge -->
+                                <span class="self-center px-3 mb-2 text-[15px] font-medium text-red-600 bg-gray-100 rounded-full" x-text="product.description"></span>
 
-                            <!-- Description Badge -->
-                            <span class="self-center px-3 mb-2 text-[15px] font-semibold text-red-600 bg-gray-100 rounded-full " x-text="product.description"></span>
-
-                            <!-- Price -->
-                            <div class="mt-auto text-center">
-                              <span class="text-lg font-bold text-blue-600 " x-text="`${product.price}.00 DA`"></span>
+                                <!-- Price -->
+                                <div class="mt-auto text-center">
+                                    <span class="text-lg font-bold text-blue-600" x-text="`${product.price}.00 DA`"></span>
+                                </div>
                             </div>
-
-                          </div>
                         </template>
-                      </div>
+                    </div>
                 </div>
 
                 <!-- Right Section: Order Summary -->
@@ -346,7 +345,7 @@ class="mx-auto max-w-7xl"
                                         }"
                                     >
                                         <div class="flex-grow">
-                                            <div class="font-semibold text-gray-800" x-text="item.name"></div>
+                                            <div class="font-semibold text-gray-800 capitalize" x-text="item.name"></div>
                                             <div class="text-sm font-bold text-red-500" x-text="item.description"></div>
                                         </div>
                                         <div class="flex items-center space-x-2">

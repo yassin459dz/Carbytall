@@ -90,6 +90,7 @@
                                         inline-flex items-center justify-center
                                         gap-x-1
                                         rounded-md
+                                        capitalize
                                         text-[0.925rem] font-medium
                                         ring-1 ring-inset ring-blue-600/10
                                         px-2 py-1
