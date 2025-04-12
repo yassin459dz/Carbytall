@@ -41,9 +41,9 @@
 
                         <label for="product" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Product</label>
                         <input wire:model="name" type="text" name="brand"  class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white" required />
-                        @error('Product Name')
-                            <span class="text-danger"> {{$message}} </span>
-                        @enderror
+                        @error('name')
+                        <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                    @enderror
                         <label for="desc" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Description</label>
                         <input wire:model="description" type="text" name="image"  class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white" required />
                         @error('Description')
@@ -51,7 +51,7 @@
                         @enderror
                         <label for="price" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Price</label>
                         <input wire:model="price" type="number" name="price"  class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white" required />
-                        @error('Price')
+                        @error('price')
                             <span class="text-danger"> {{$message}} </span>
                         @enderror
                     </div>
@@ -68,9 +68,12 @@
 </div>
 <script>
     function resetProductModal() {
-        // Reset form fields
+        // Reset form fields when click on close button
         document.querySelector('input[wire\\:model="name"]').value = '';
         document.querySelector('input[wire\\:model="description"]').value = '';
         document.querySelector('input[wire\\:model="price"]').value = '';
     }
+
+
+
 </script>

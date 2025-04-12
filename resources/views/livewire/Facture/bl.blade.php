@@ -16,8 +16,7 @@
                 <!-- THIS HOW TO CALL THE SEARCH AND CREATE A NEW PRODUCT -->
 
 
-
-                    {{-- THE OLD DESIGN --}}
+{{-- THE OLD DESIGN --}}
                     {{-- <div class="grid grid-cols-2 lg:grid-cols-3 gap-4 overflow-y-scroll no-scrollbar max-h-[100vh]">
                         <template x-for="product in filteredProducts" :key="product.id">
                             <div
@@ -31,26 +30,24 @@
                             </div>
                         </template>
                     </div> --}}
-                    {{-- THE OLD DESIGN --}}
+
                     <div class="grid max-h-screen grid-cols-1 gap-4 p-3 overflow-y-auto sm:grid-cols-2 lg:grid-cols-3 no-scrollbar">
                         <template x-for="product in filteredProducts" :key="product.id">
-                          <div
-                            @click="addToOrder(product)"
-                            class="flex flex-col p-6 transition-transform bg-white border border-gray-100 shadow-md cursor-pointer dark:bg-gray-900 rounded-2xl hover:shadow-xl dark:border-gray-800 hover:-translate-y-1 group"
-                          >
+                            <div
+                                @click="addToOrder(product)"
+                                class="flex flex-col p-6 transition-transform bg-white border border-gray-100 shadow-md cursor-pointer dark:bg-gray-900 rounded-2xl hover:shadow-xl dark:border-gray-800 hover:-translate-y-1 group"
+                            >
+                                <!-- Product Name -->
+                                <h3 class="mb-2 text-lg font-bold text-center text-gray-800 capitalize" x-text="product.name"></h3>
 
-                            <!-- Product Name -->
-                            <h3 class="mb-2 text-lg font-bold text-center text-gray-800 capitalize" x-text="product.name"></h3>
+                                <!-- Description Badge -->
+                                <span class="self-center px-3 mb-2 text-base font-bold text-red-600 rounded-full" x-text="product.description"></span>
 
-                            <!-- Description Badge -->
-                            <span class="self-center px-3 mb-2 text-base font-bold text-red-600 rounded-full " x-text="product.description"></span>
-
-                            <!-- Price -->
-                            <div class="mt-auto text-center">
-                              <span class="text-lg font-bold text-blue-600 " x-text="`${product.price}.00 DA`"></span>
+                                <!-- Price -->
+                                <div class="mt-auto text-center">
+                                    <span class="text-lg font-bold text-blue-600" x-text="`${product.price}.00 DA`"></span>
+                                </div>
                             </div>
-
-                          </div>
                         </template>
                       </div>
                 </div>

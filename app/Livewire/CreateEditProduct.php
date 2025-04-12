@@ -5,14 +5,12 @@ use App\Models\Products;
 use Livewire\Attributes\On;
 use Livewire\Attributes\Rule;
 use Livewire\Component;
-use Illuminate\Support\Facades\Route;
 
 class CreateEditProduct extends Component
 {
     public $formtitle='New Product';
     public $editform=false;
     public $viewform=false;
-
 
     public $productss;
 
@@ -23,44 +21,41 @@ class CreateEditProduct extends Component
     public $price;
     public $product_id;
 
-
     public function render()
     {
         return view('livewire.products.create-edit-product');
     }
+
     public function save()
     {
-    // Try To Validate With Array
+        // Validate inputs
+        $this->validate([
+            'name' => 'required|string|max:255',
+            'price' => 'required|numeric',
+        ], [
+            'name.required' => 'Product Name is Required',
+            'price.required' => 'Price is Required'
+        ]);
+        // Create new product
+        Products::create([
+            'name' => $this->name,
+            'description' => $this->description,
+            'price' => $this->price,
+        ]);
 
-     Products::create([
-         'name' => $this->name,
-         'description' => $this->description,
-         'price' => $this->price,
+        // Reset form fields
+        // $this->reset(['name', 'description', 'price']);
+        return $this->redirect(request()->header('Referer'), navigate: true);
 
-    ]);
-    // $this->dispatch('refresh-products');
-    // $this->close(); // Reset fields
+        // Flash success message
+        session()->flash('status-created', 'Product created successfully!');
 
-    // Redirect or close modal if needed
-    // $this->dispatch('browser', 'close-modal');
-    // return $this->redirect('/product', navigate: true);
-    return $this->redirect(request()->header('Referer'), navigate: true);
+        // Dispatch event to refresh products in parent component
+        // $this->dispatch('product-created');
 
-    session()->flash('status-created', 'Product created successfully!');
-
-    // public function save (){
-    //     $validated=$this->validate();
-    //     Products::create($validated);
-        // $this->dispatch('refresh-products');
-        // dd();
-        // session()->flash('status', 'Client Created');
-        // session()->flash('status-created', 'Client Created');
-        // $this->close();// ADD THIS TO REFRESH PAGE WITH PHP
-        // $this->dispatch('browser', 'close-modal');
-        // return $this->redirect('/product', navigate:true);
-     }
-
-
+        // // Close modal
+        // $this->dispatch('closeModal');
+    }
 
     #[On('reset-modal')]
     public function close()
@@ -73,45 +68,55 @@ class CreateEditProduct extends Component
     {
         $this->editform = true;
         $this->formtitle = 'Edit Product';
-        $this->productss =Products::findOrFail($id); // Fetch the car data by ID
+        $this->productss = Products::findOrFail($id);
         $this->name = $this->productss->name;
         $this->description = $this->productss->description;
         $this->price = $this->productss->price;
-        $this->product_id = $id;  // Store the ID for use in the update
+        $this->product_id = $id;
     }
+
     #[On('view-mode')]
     public function view($id)
     {
         $this->viewform = true;
         $this->formtitle = 'View Product';
-        $this->productss =Products::findOrFail($id); // Fetch the car data by ID
+        $this->productss = Products::findOrFail($id);
         $this->name = $this->productss->name;
         $this->description = $this->productss->description;
         $this->price = $this->productss->price;
-        $this->product_id = $id;  // Store the ID for use in the update
+        $this->product_id = $id;
     }
 
     public function update()
     {
-    // Validate the incoming request data
         // Validate the incoming request data
-        // Validate input data (you can add more validation rules as needed)
         $this->validate([
             'name' => 'required|string|max:255',
+            'description' => 'required|string',
+            'price' => 'required|numeric',
         ]);
-        // Find the car entry by ID and update it with the new data
+
+        // Find the product by ID and update it
         $product = Products::findOrFail($this->product_id);
         $product->name = $this->name;
         $product->description = $this->description;
         $product->price = $this->price;
 
-        // Save the changes to the database
+        // Save changes
         $product->save();
-        //  reset the form  after updating
-        $this->dispatch('refresh-cars');
-        //success message or perform other actions
+
+        // Reset form fields
+        $this->reset(['name', 'description', 'price', 'editform']);
+        $this->formtitle = 'New Product';
+
+        // Flash success message
         session()->flash('status-updated', 'Product Updated');
-        $this->dispatch('browser', 'close-modal');
+
+        // Dispatch event to refresh products in parent component
+        $this->dispatch('product-updated');
+
+        // Close modal
+        $this->dispatch('closeModal');
     }
     public function refreshPage()
     {

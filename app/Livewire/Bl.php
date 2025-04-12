@@ -9,7 +9,8 @@ use App\Models\matricules;
 use App\Models\Products;
 use Livewire\Component;
 use Illuminate\Support\Facades\Log;
-
+use Livewire\Attributes\On;
+use Livewire\Attributes\OnUpdate;
 class Bl extends Component
 {
     public $currentstep = 3;
