@@ -18,6 +18,8 @@ use App\Livewire\ViewFacture;
 use App\Livewire\FactureHistory;
 use App\Livewire\History;
 use App\Livewire\Product;
+use App\Livewire\Caisse;
+use App\Livewire\Deponse;
 
 Route::view('/', 'welcome');
 
@@ -86,6 +88,13 @@ Route::view('profile', 'profile')
     ->middleware(['auth', 'verified'])
     ->name('product');
 
+    Route::get('/caisse', Caisse::class)
+    ->middleware(['auth', 'verified'])
+    ->name('caisse');
+
+    Route::get('/deponse', Deponse::class)
+    ->middleware(['auth', 'verified'])
+    ->name('deponse');
 
 require __DIR__.'/auth.php';
 
