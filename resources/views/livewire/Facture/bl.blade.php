@@ -31,11 +31,11 @@
                         </template>
                     </div> --}}
 
-                    <div class="grid max-h-screen grid-cols-1 gap-4 p-3 overflow-y-auto sm:grid-cols-2 lg:grid-cols-3 no-scrollbar">
+                    <div class="grid max-h-screen grid-cols-1 gap-4 p-3 overflow-y-auto sm:grid-cols-2 lg:grid-cols-3 no-scrollbar ">
                         <template x-for="product in filteredProducts" :key="product.id">
                             <div
                                 @click="addToOrder(product)"
-                                class="flex flex-col p-6 transition-transform bg-white border border-gray-100 shadow-md cursor-pointer dark:bg-gray-900 rounded-2xl hover:shadow-xl dark:border-gray-800 hover:-translate-y-1 group"
+                                class="flex flex-col p-6 transition-transform duration-100 ease-in-out bg-white border border-gray-100 shadow-md cursor-pointer dark:bg-gray-900 rounded-2xl hover:shadow-xl dark:border-gray-800 hover:-translate-y-1 group active:scale-90"
                             >
                                 <!-- Product Name -->
                                 <h3 class="mb-2 text-lg font-bold text-center text-gray-800 capitalize" x-text="product.name"></h3>
@@ -59,7 +59,7 @@
                         <div class="flex items-center justify-between mb-6">
                             <h2 class="text-2xl font-bold text-gray-800">Current Order</h2>
                             <button
-                            class="px-4 py-2 font-semibold text-red-500 bg-red-200 rounded-md hover:bg-red-600 hover:text-white focus:ring-4 focus:outline-none focus:ring-red-300"
+                            class="px-4 py-2 font-semibold text-red-500 transition-transform duration-100 ease-in-out bg-red-200 rounded-md hover:bg-red-600 active:scale-90 hover:text-white "
                             @click="clearOrder">
                                 Clear All
                             </button>
@@ -99,7 +99,7 @@
                                         </div>
                                         <div class="flex items-center space-x-2">
                                             <button
-                                                class="flex items-center justify-center w-8 h-8 bg-gray-200 rounded-full"
+                                                class="flex items-center justify-center w-8 h-8 transition-transform duration-100 ease-in-out bg-gray-200 rounded-full active:scale-90"
                                                 @click="updateQuantity(index, -1)"
                                             >
                                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="black" class="size-4">
@@ -108,7 +108,7 @@
                                             </button>
                                             <span class="px-2 font-semibold" x-text="item.quantity"></span>
                                             <button
-                                                class="flex items-center justify-center w-8 h-8 bg-gray-200 rounded-full"
+                                                class="flex items-center justify-center w-8 h-8 transition-transform duration-100 ease-in-out bg-gray-200 rounded-full active:scale-90"
                                                 @click="updateQuantity(index, 1)"
                                             >
                                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="black" class="size-4">
@@ -254,17 +254,17 @@
                             <div class="mt-8 space-y-4">
                                 <div class="flex justify-center space-x-3">
                                     <button
-                                    class="px-4 py-2 font-semibold text-white bg-green-500 rounded-md focus:ring-4 hover:bg-green-600"
+                                    class="px-4 py-2 font-semibold text-white transition-transform duration-100 ease-in-out bg-green-500 rounded-md active:scale-90 hover:bg-green-600"
                                     @click="addExtraCharge(2000)">
                                     +2000 DA
                                     </button>
                                     <button
-                                    class="px-4 py-2 font-semibold text-white bg-green-500 rounded-md focus:ring-4 hover:bg-green-600"
+                                    class="px-4 py-2 font-semibold text-white transition-transform duration-100 ease-in-out bg-green-500 rounded-md active:scale-90 hover:bg-green-600"
                                     @click="addExtraCharge(1000)">
                                     +1000 DA
                                     </button>
                                     <button
-                                    class="px-4 py-2 font-semibold text-white bg-green-500 rounded-md focus:ring-4 hover:bg-green-600"
+                                    class="px-4 py-2 font-semibold text-white transition-transform duration-100 ease-in-out bg-green-500 rounded-md active:scale-90 hover:bg-green-600"
                                     @click="addExtraCharge(500)">
                                     +500 DA
                                     </button>
@@ -272,21 +272,21 @@
                                 </div>
                                 <div class="flex justify-center space-x-3">
                                     <button
-                                    class="px-4 py-2 font-semibold text-white bg-red-500 rounded-md focus:ring-4 hover:bg-red-600"
+                                    class="px-4 py-2 font-semibold text-white transition-transform duration-100 ease-in-out bg-red-500 rounded-md active:scale-90 hover:bg-red-600"
                                     @click="discount(2000)"
                                     :disabled="!canApplyDiscount(2000)"
                                     :class="{'opacity-50 cursor-not-allowed': !canApplyDiscount(2000)}">
                                     -2000 DA
                                 </button>
                                 <button
-                                    class="px-4 py-2 font-semibold text-white bg-red-500 rounded-md focus:ring-4 hover:bg-red-600"
+                                    class="px-4 py-2 font-semibold text-white transition-transform duration-100 ease-in-out bg-red-500 rounded-md active:scale-90 hover:bg-red-600"
                                     @click="discount(1000)"
                                     :disabled="!canApplyDiscount(1000)"
                                     :class="{'opacity-50 cursor-not-allowed': !canApplyDiscount(1000)}">
                                     -1000 DA
                                 </button>
                                 <button
-                                    class="px-4 py-2 font-semibold text-white bg-red-500 rounded-md focus:ring-4 hover:bg-red-600"
+                                    class="px-4 py-2 font-semibold text-white transition-transform duration-100 ease-in-out bg-red-500 rounded-md active:scale-90 hover:bg-red-600"
                                     @click="discount(500)"
                                     :disabled="!canApplyDiscount(500)"
                                     :class="{'opacity-50 cursor-not-allowed': !canApplyDiscount(500)}">
@@ -331,7 +331,7 @@
                                     @click="validateOrder">
                                     Validate Order
                                 </button> --}}
-                                <button type="button" @click="prepareSubmission()" class="w-full py-3 mt-4 font-semibold text-white transition bg-blue-600 rounded-lg focus:ring-8 hover:bg-blue-700">
+                                <button type="button" @click="prepareSubmission()" class="w-full py-3 mt-4 font-semibold text-white transition-transform duration-100 ease-in-out bg-blue-600 rounded-lg active:scale-90 hover:bg-blue-700">
                                     <span x-text="isSubmitted ? 'Reset' : 'Validate Order'"></span>
                                 </button>
 
@@ -376,7 +376,7 @@ x-cloak
     <div class="flex justify-between mt-6">
         <button
             @click="applyOverriddenTotal"
-            class="px-4 py-2 font-bold text-white bg-blue-600 rounded hover:bg-blue-700">
+            class="px-4 py-2 font-bold text-white transition-transform duration-100 ease-in-out bg-blue-600 rounded hover:bg-blue-700 active:scale-90">
             Update
         </button>
     </div>

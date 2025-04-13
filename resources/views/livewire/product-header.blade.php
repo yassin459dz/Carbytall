@@ -13,7 +13,7 @@ class="px-4 py-2 transition duration-300 border border-gray-300 rounded-l-lg foc
 x-model="searchTerm"
 >
 <button data-modal-target="authentication-modal-Product" data-modal-toggle="authentication-modal-Product" type="button"
-class="px-2.5 py-2 text-white bg-blue-700 hover:bg-blue-800 border-l border-gray-300 rounded-r-lg focus:ring-4 focus:outline-none focus:ring-blue-300"
+class="px-2.5 py-2 text-white bg-blue-700 hover:bg-blue-800 border-l border-gray-300 rounded-r-lg transition-transform duration-100 ease-in-out active:scale-90"
 @click="console.log('Authentication modal triggered')">
 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
 stroke="currentColor" class="size-6">

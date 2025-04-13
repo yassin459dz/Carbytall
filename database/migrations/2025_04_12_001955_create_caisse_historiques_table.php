@@ -16,7 +16,6 @@ return new class extends Migration
             $table->enum('type', ['ENTRÉE', 'SORTIE'])->index();
             $table->decimal('montant', 15, 2);
             $table->string('description')->nullable();
-            // si vous voulez relier à une facture
             $table->foreignId('facture_id')->nullable()->constrained('factures')->onDelete('set null');
             $table->timestamps();
         });

@@ -302,7 +302,7 @@ class="mx-auto max-w-7xl"
                         <div class="flex items-center justify-between mb-6">
                             <h2 class="text-2xl font-bold text-gray-800">Current Order</h2>
                             <button
-                            class="px-4 py-2 text-red-500 bg-red-200 rounded-md hover:bg-red-600 hover:text-white focus:ring-4 focus:outline-none focus:ring-red-300"
+                            class="px-4 py-2 text-red-500 transition-transform duration-100 ease-in-out bg-red-200 rounded-md hover:bg-red-600 hover:text-white active:scale-90"
                             @click="clearOrder">
                                 Clear All
                             </button>
@@ -350,7 +350,7 @@ class="mx-auto max-w-7xl"
                                         </div>
                                         <div class="flex items-center space-x-2">
                                             <button
-                                                class="flex items-center justify-center w-8 h-8 bg-gray-200 rounded-full"
+                                                class="flex items-center justify-center w-8 h-8 transition-transform duration-100 ease-in-out bg-gray-200 rounded-full active:scale-90"
                                                 @click="updateQuantity(index, -1)"
                                             >
                                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="black" class="size-4">
@@ -359,7 +359,7 @@ class="mx-auto max-w-7xl"
                                             </button>
                                             <span class="px-2 font-semibold" x-text="item.quantity"></span>
                                             <button
-                                                class="flex items-center justify-center w-8 h-8 bg-gray-200 rounded-full"
+                                                class="flex items-center justify-center w-8 h-8 transition-transform duration-100 ease-in-out bg-gray-200 rounded-full active:scale-90"
                                                 @click="updateQuantity(index, 1)"
                                             >
                                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="black" class="size-4">
@@ -505,17 +505,17 @@ class="mx-auto max-w-7xl"
                             <div class="mt-8 space-y-4">
                                 <div class="flex justify-center space-x-3">
                                     <button
-                                    class="px-4 py-2 font-semibold text-white bg-green-500 rounded-md hover:bg-green-600"
+                                    class="px-4 py-2 font-semibold text-white transition-transform duration-100 ease-in-out bg-green-500 rounded-md hover:bg-green-600 active:scale-90"
                                     @click="addExtraCharge(2000)">
                                     +2000 DA
                                     </button>
                                     <button
-                                    class="px-4 py-2 font-semibold text-white bg-green-500 rounded-md hover:bg-green-600"
+                                    class="px-4 py-2 font-semibold text-white transition-transform duration-100 ease-in-out bg-green-500 rounded-md hover:bg-green-600 active:scale-90"
                                     @click="addExtraCharge(1000)">
                                     +1000 DA
                                     </button>
                                     <button
-                                    class="px-4 py-2 font-semibold text-white bg-green-500 rounded-md hover:bg-green-600"
+                                    class="px-4 py-2 font-semibold text-white transition-transform duration-100 ease-in-out bg-green-500 rounded-md hover:bg-green-600 active:scale-90"
                                     @click="addExtraCharge(500)">
                                     +500 DA
                                     </button>
@@ -523,21 +523,21 @@ class="mx-auto max-w-7xl"
                                 </div>
                                 <div class="flex justify-center space-x-3">
                                     <button
-                                    class="px-4 py-2 font-semibold text-white bg-red-500 rounded-md hover:bg-red-600"
+                                    class="px-4 py-2 font-semibold text-white transition-transform duration-100 ease-in-out bg-red-500 rounded-md hover:bg-red-600 active:scale-90"
                                     @click="discount(2000)"
                                     :disabled="!canApplyDiscount(2000)"
                                     :class="{'opacity-50 cursor-not-allowed': !canApplyDiscount(2000)}">
                                     -2000 DA
                                 </button>
                                 <button
-                                    class="px-4 py-2 font-semibold text-white bg-red-500 rounded-md hover:bg-red-600"
+                                    class="px-4 py-2 font-semibold text-white transition-transform duration-100 ease-in-out bg-red-500 rounded-md hover:bg-red-600 active:scale-90"
                                     @click="discount(1000)"
                                     :disabled="!canApplyDiscount(1000)"
                                     :class="{'opacity-50 cursor-not-allowed': !canApplyDiscount(1000)}">
                                     -1000 DA
                                 </button>
                                 <button
-                                    class="px-4 py-2 font-semibold text-white bg-red-500 rounded-md hover:bg-red-600"
+                                    class="px-4 py-2 font-semibold text-white transition-transform duration-100 ease-in-out bg-red-500 rounded-md hover:bg-red-600 active:scale-90"
                                     @click="discount(500)"
                                     :disabled="!canApplyDiscount(500)"
                                     :class="{'opacity-50 cursor-not-allowed': !canApplyDiscount(500)}">
@@ -591,7 +591,7 @@ class="mx-auto max-w-7xl"
                                     @click="validateOrder">
                                     Validate Order
                                 </button> --}}
-                                <button @click="prepareSubmission" class="w-full py-3 mt-4 font-semibold text-white transition bg-blue-600 rounded-lg hover:bg-blue-700">
+                                <button @click="prepareSubmission" class="w-full py-3 mt-4 font-semibold text-white transition-transform duration-100 ease-in-out bg-blue-600 rounded-lg active:scale-90 hover:bg-blue-700">
                                     <span x-text="isSubmitted ? 'Reset' : 'Validate Order'"></span>
                                 </button>
                             </div>
@@ -634,7 +634,7 @@ class="mx-auto max-w-7xl"
                         <div class="flex justify-between mt-6">
                             <button
                                 @click="applyOverriddenTotal"
-                                class="px-4 py-2 font-bold text-white bg-blue-600 rounded hover:bg-blue-700">
+                                class="px-4 py-2 font-bold text-white transition-transform duration-100 ease-in-out bg-blue-600 rounded hover:bg-blue-700 active:scale-90">
                                 Update
                             </button>
                         </div>
@@ -646,23 +646,23 @@ class="mx-auto max-w-7xl"
                     <!-- Navigation Buttons -->
                     <div class="flex justify-between mt-6">
                         @if($currentstep > 1)
-                            <button
-                                wire:click="decrementstep"
-                                type="button"
-                                class="px-4 py-2 text-white bg-gray-400 rounded-md hover:bg-gray-500"
-                            >
-                                Back
-                            </button>
+                        <button
+                        wire:click="decrementstep"
+                        type="button"
+                        class="px-4 py-2 text-white transition-transform duration-100 ease-in-out bg-gray-400 rounded-md hover:bg-gray-500 active:scale-90"
+                    >
+                        Back
+                    </button>
                         @endif
 
                         @if($currentstep < $totalstep)
-                            <button
-                                wire:click="incrementstep"
-                                type="button"
-                                class="px-4 py-2 text-white bg-indigo-600 rounded-md hover:bg-indigo-700"
-                            >
-                                Next
-                            </button>
+                        <button
+                        wire:click="incrementstep"
+                        type="button"
+                        class="px-4 py-2 font-medium text-white transition-transform duration-100 ease-in-out bg-blue-700 rounded-lg hover:bg-blue-800 active:scale-90 "
+                        >
+                        Next
+                    </button>
                         @endif
 
                         @if($currentstep === $totalstep)
