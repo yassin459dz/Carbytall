@@ -7,19 +7,25 @@
                     <th class="px-4 py-2">Start</th>
                     <th class="px-4 py-2 text-green-600">Inflow</th>
                     <th class="px-4 py-2 text-red-600">Outflow</th>
-                    <th class="px-4 py-2">Balance</th>
+                    <th class="px-4 py-2">NET</th>
+                    <th class="px-4 py-2">END</th>
                     <th class="px-4 py-2">Action</th>
                 </tr>
             </thead>
             <tbody>
                 @forelse($dailyBalances as $date => $data)
                     <tr class="border-t">
+
                         <td class="px-4 py-2 font-medium">{{ \Carbon\Carbon::parse($date)->format('d/m/Y') }}</td>
                         <td class="px-4 py-2">{{ number_format($data['start'], 2, ',', ' ') }} DA</td>
                         <td class="px-4 py-2 text-green-700">{{ number_format($data['entree'], 2, ',', ' ') }} DA</td>
                         <td class="px-4 py-2 text-red-700">{{ number_format($data['sortie'], 2, ',', ' ') }} DA</td>
                         <td class="px-4 py-2 font-semibold">{{ number_format($data['solde'], 2, ',', ' ') }} DA</td>
+                        <td class="px-4 py-2 font-medium text-orange-600"> {{ number_format($data['solde'], 2, ',', ' ') }}</td>
+
                         <td class="px-4 py-2">
+                            <button wire:click="editEndValue('{{ $date }}')">Test End Value</button>
+
                             <button wire:click="view('{{ $date }}')" class="font-medium text-blue-600 hover:underline">
                                 Details
                             </button>
@@ -129,7 +135,6 @@
                                         whitespace-nowrap">{{ number_format($facture->total_amount,2,',',' ') }} DA
                                         </span>
                                     </td>
-
                                 </tr>
                             @empty
                                 <tr><td colspan="4" class="px-4 py-2 text-center">No invoices</td></tr>

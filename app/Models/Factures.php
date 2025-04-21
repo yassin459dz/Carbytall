@@ -38,4 +38,9 @@ class Factures extends Model
     {
         return $this->belongsTo(matricules::class); // Changed from hasMany to belongsTo
     }
+
+    public function cashbox()
+    {
+        return $this->belongsTo(Cashbox::class, 'date', 'date');
+    }
 }

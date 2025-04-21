@@ -13,13 +13,14 @@ return new class extends Migration
     {
         Schema::create('caisse_historiques', function (Blueprint $table) {
             $table->id();
-            $table->enum('type', ['ENTRÉE', 'SORTIE'])->index();
-            $table->decimal('montant', 15, 2);
-            $table->string('description')->nullable();
-            $table->decimal('start_value', 15, 2)->nullable(); // ✅ New column
-            $table->decimal('end_value', 15, 2)->nullable(); // ✅ New column
+            $table->foreignId('cashbox_id')
+                  ->nullable()
+                  ->constrained('cashboxes')
+                  ->onDelete('set null');
+                  $table->decimal('montant', 15, 2)->default(0);
+                  $table->string('type')->nullable(); // e.g., 'SORTIE' or 'ENTREE'
+                  $table->timestamps(); // created_at = date of movement
 
-            $table->timestamps();
         });
     }
 

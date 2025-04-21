@@ -25,12 +25,12 @@ class Deponse extends Component
         try {
             // Validate with array
             $validated = $this->validate([
-                'type' => 'required',
+                // 'type' => 'required',
                 'montant' => 'required|numeric',
             ]);
 
             CaisseHistorique::create([
-                'type' => $this->type,
+                // 'type' => $this->type,
                 'montant' => $this->montant,
                 'description' => $this->desc,
             ]);
@@ -45,14 +45,14 @@ class Deponse extends Component
             $errorMessage = $errors->first();
 
             // Customize the message
-            $customMessage = "Error: Select Entrée Or Sortie ." ; // Example of customization
+            // $customMessage = "Error: Select Entrée Or Sortie ." ; // Example of customization
             // Or you could do more specific customization:
             // if (str_contains($errorMessage, 'type')) {
             //     $customMessage = "Please select a type before proceeding.";
             // }
 
             // Dispatch with custom message
-            $this->dispatch('showAlert', message: $customMessage);
+            // $this->dispatch('showAlert', message: $customMessage);
 
             throw $e;
         }
